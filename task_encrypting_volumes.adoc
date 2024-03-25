@@ -1,0 +1,47 @@
+---
+sidebar: sidebar 
+permalink: task_encrypting_volumes.html 
+keywords: encrypt, encryption, data, volumes, netapp volume encryption, volume encryption, nve, key managers, kmip, key management servers, license, ssl certificates, nae, netapp aggregate encryption 
+summary: 'O Cloud Volumes ONTAP é compatível com criptografia de volume NetApp (NVE) e criptografia agregada NetApp (NAE) com um gerenciador de chaves externo. O NVE e o NAE são ativados por padrão se você configurar um gerenciador de chaves externo.' 
+---
+= Criptografando volumes com soluções de criptografia NetApp
+:toc: macro
+:hardbreaks:
+:allow-uri-read: 
+:toc: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+:toc-position: content
+
+
+[role="lead"]
+O Cloud Volumes ONTAP é compatível com criptografia de volume NetApp (NVE) e criptografia agregada NetApp (NAE) com um gerenciador de chaves externo. NVE e NAE são soluções baseadas em software que permitem a criptografia de volumes em repouso compatível com FIPS (140-2) em conformidade com dados em repouso de volumes. link:concept_security.html["Saiba mais sobre essas soluções de criptografia"].
+
+A partir do Cloud Volumes ONTAP 9,7, novos agregados terão NAE ativado por padrão depois de configurar um gerenciador de chaves externo. Novos volumes que não fazem parte de um agregado NAE terão o NVE ativado por padrão (por exemplo, se você tiver agregados existentes que foram criados antes de configurar um gerenciador de chaves externo).
+
+O Cloud Volumes ONTAP não é compatível com o gerenciamento de chaves integrado.
+
+.O que você vai precisar
+Seu sistema Cloud Volumes ONTAP deve ser registrado com o suporte da NetApp. A partir do Cloud Manager 3,7.1, uma licença de criptografia de volume do NetApp é instalada automaticamente em cada sistema Cloud Volumes ONTAP registrado no suporte do NetApp.
+
+* link:task_adding_nss_accounts.html["Adicionar contas do site de suporte da NetApp ao Cloud Manager"]
+* link:task_registering.html["Registar sistemas de pagamento conforme o uso"]
+
+
+
+NOTE: O Cloud Manager não instala a licença NVE em sistemas que residem na região da China.
+
+.Passos
+. Reveja a lista de gestores-chave suportados no http://mysupport.netapp.com/matrix["Ferramenta de Matriz de interoperabilidade do NetApp"^].
++
+
+TIP: Procure a solução *Key Managers*.
+
+. link:task_connecting_to_otc.html["Conete-se à CLI do Cloud Volumes ONTAP"^].
+. Instale certificados SSL e conete-se aos servidores externos de gerenciamento de chaves.
++
+http://docs.netapp.com/ontap-9/topic/com.netapp.doc.pow-nve/GUID-DD718B42-038D-4009-84FF-20BBD6530BC2.html["Guia de alimentação de criptografia ONTAP 9 NetApp: Configuração do gerenciamento de chaves externas"^]
+
+

@@ -1,0 +1,68 @@
+---
+sidebar: sidebar 
+permalink: concept_licensing.html 
+keywords: licenses, licensing, byol, license, subscription, renewal, expire, netapp support site, account, credentials, file, license file, upload, nlf, backup to cloud license, byol backup, license for backup to cloud 
+summary: Cada sistema BYOL do Cloud Volumes ONTAP deve ter uma licença de sistema instalada com uma assinatura ativa. O Cloud Manager simplifica o processo gerenciando licenças para você e notificando-o antes que elas expirem. As licenças BYOL também estão disponíveis para o Backup to Cloud. 
+---
+= Licenciamento
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Cada sistema BYOL do Cloud Volumes ONTAP deve ter uma licença de sistema instalada com uma assinatura ativa. O Cloud Manager simplifica o processo gerenciando licenças para você e notificando-o antes que elas expirem. As licenças BYOL também estão disponíveis para o Backup to Cloud.
+
+
+
+== Licenças de sistema BYOL
+
+Você pode comprar várias licenças para um sistema BYOL da Cloud Volumes ONTAP para alocar mais de 368 TB de capacidade. Por exemplo, você pode comprar duas licenças para alocar até 736 TB de capacidade para o Cloud Volumes ONTAP. Ou você pode comprar quatro licenças para obter até 1,4 PB.
+
+O número de licenças que você pode comprar para um único sistema de nó ou par de HA é ilimitado.
+
+Esteja ciente de que os limites de disco podem impedir que você alcance o limite de capacidade usando discos sozinhos. Você pode ir além do limite de disco pelo link:concept_data_tiering.html["disposição em camadas dos dados inativos no storage de objetos"]. Para obter informações sobre limites de disco, https://docs.netapp.com/us-en/cloud-volumes-ontap/["Limites de armazenamento nas Notas de versão do Cloud Volumes ONTAP"^] consulte .
+
+
+
+=== Gerenciamento de licenças para um novo sistema
+
+Quando você cria um sistema BYOL, o Cloud Manager solicita o número de série da licença e da conta do site de suporte da NetApp. O Cloud Manager usa a conta para baixar o arquivo de licença do NetApp e instalá-lo no sistema Cloud Volumes ONTAP.
+
+link:task_adding_nss_accounts.html["Saiba como adicionar contas do site de suporte da NetApp ao Cloud Manager"].
+
+Se o Cloud Manager não puder acessar o arquivo de licença pela conexão segura à Internet, você poderá obter o arquivo sozinho e, em seguida, fazer o upload manual do arquivo para o Cloud Manager. Para obter instruções, link:task_managing_licenses.html["Gerenciamento de licenças BYOL para Cloud Volumes ONTAP"]consulte .
+
+
+
+=== Aviso de expiração da licença
+
+O Cloud Manager avisa-o 30 dias antes de uma licença expirar e novamente quando a licença expirar. A imagem a seguir mostra um aviso de expiração de 30 dias:
+
+image:screenshot_warning.gif["Captura de tela: Mostra um ambiente de trabalho do Cloud Volumes ONTAP que inclui um ícone de aviso. O ícone indica que é necessária uma ação."]
+
+Pode selecionar o ambiente de trabalho para rever a mensagem.
+
+Se não renovar a licença a tempo, o sistema Cloud Volumes ONTAP desliga-se. Se você reiniciá-lo, ele se desliga novamente.
+
+
+NOTE: O Cloud Volumes ONTAP também pode notificá-lo por e-mail, um traphost SNMP ou servidor syslog usando notificações de eventos do EMS (sistema de Gerenciamento de Eventos). Para obter instruções, consulte http://docs.netapp.com/ontap-9/topic/com.netapp.doc.exp-ems/home.html["Guia expresso de configuração de EMS do ONTAP 9"^] .
+
+
+
+=== Renovação da licença
+
+Quando você renova uma assinatura BYOL entrando em Contato com um representante da NetApp, o Cloud Manager obtém automaticamente a nova licença do NetApp e a instala no sistema Cloud Volumes ONTAP.
+
+Se o Cloud Manager não puder acessar o arquivo de licença pela conexão segura à Internet, você poderá obter o arquivo sozinho e, em seguida, fazer o upload manual do arquivo para o Cloud Manager. Para obter instruções, link:task_managing_licenses.html["Gerenciamento de licenças BYOL para Cloud Volumes ONTAP"]consulte .
+
+
+
+== Licenças de backup BYOL
+
+Uma licença de backup BYOL permite que você compre uma licença da NetApp para usar o backup na nuvem por um determinado período de tempo e por um espaço máximo de backup. Quando um dos limites for atingido, você precisará renovar a licença.
+
+link:concept_backup_to_cloud.html#cost["Saiba mais sobre a licença BYOL do Backup to Cloud"].

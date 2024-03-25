@@ -1,0 +1,177 @@
+---
+sidebar: sidebar 
+permalink: concept_ha.html 
+keywords: high availability, HA, mediator, concepts, understanding, overview, availability zones, AZs, takeover, giveback, rpo, rto, floating ip, nondisruptive, ha pairs, node, nodes, synchronous, resync, recovery point objective, recovery time objective, nas, nfs, cifs, floating ip address, route tables, iscsi, mpio, alua, failover, mount, remount, failure, data access, access, ip address, performance 
+summary: 'Uma configuração de alta disponibilidade (HA) do Cloud Volumes ONTAP fornece operações ininterruptas e tolerância de falhas. Na AWS, os dados são espelhados de forma síncrona entre os dois nós.' 
+---
+= Pares de alta disponibilidade na AWS
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Uma configuração de alta disponibilidade (HA) do Cloud Volumes ONTAP fornece operações ininterruptas e tolerância de falhas. Na AWS, os dados são espelhados de forma síncrona entre os dois nós.
+
+
+
+== Visão geral
+
+Na AWS, as configurações do Cloud Volumes ONTAP HA incluem os seguintes componentes:
+
+* Dois nós de Cloud Volumes ONTAP cujos dados são espelhados de forma síncrona entre si.
+* Uma instância de mediador que fornece um canal de comunicação entre os nós para auxiliar nos processos de takeover do storage e giveback.
+
+
+
+NOTE: A instância mediadora executa o sistema operacional Linux em uma instância T2.micro e usa um disco magnético EBS que é de aproximadamente 8 GB.
+
+
+
+=== Takeover de storage e giveback
+
+Se um nó ficar inativo, o outro nó poderá fornecer dados para que seu parceiro forneça serviços de dados contínuos. Os clientes podem acessar os mesmos dados do nó do parceiro porque os dados foram espelhados de forma síncrona para o parceiro.
+
+Depois que o nó for reiniciado, o parceiro deverá sincronizar novamente os dados antes que ele possa retornar o armazenamento. O tempo necessário para sincronizar novamente os dados depende da quantidade de dados alterados enquanto o nó estava inativo.
+
+
+
+=== RPO e rto
+
+Uma configuração de HA mantém a alta disponibilidade dos dados da seguinte forma:
+
+* O objetivo do ponto de restauração (RPO) é de 0 segundos. Seus dados são consistentes transacionalmente, sem perda de dados.
+* O objetivo de tempo de recuperação (rto) é de 60 segundos. Em caso de interrupção, os dados devem estar disponíveis em 60 segundos ou menos.
+
+
+
+
+=== Modelos de IMPLANTAÇÃO DE HA
+
+Você pode garantir a alta disponibilidade de seus dados implantando uma configuração de HA em várias zonas de disponibilidade (AZs) ou em uma única AZ. Você deve rever mais detalhes sobre cada configuração para escolher qual melhor se adapta às suas necessidades.
+
+
+
+== Cloud Volumes ONTAP HA em várias zonas de disponibilidade
+
+A implantação de uma configuração de HA em várias zonas de disponibilidade (AZs) garante alta disponibilidade de seus dados se ocorrer uma falha com uma AZ ou uma instância que execute um nó Cloud Volumes ONTAP. Você deve entender como os endereços IP nas afetam o acesso aos dados e o failover de storage.
+
+
+
+=== Acesso a dados NFS e CIFS
+
+Quando uma configuração de HA é espalhada por várias zonas de disponibilidade, _endereços IP flutuantes_ ativa o acesso do cliente nas. Os endereços IP flutuantes, que devem estar fora dos blocos CIDR para todos os VPCs na região, podem migrar entre nós quando ocorrem falhas. Eles não são acessíveis nativamente para clientes que estão fora da VPC, a menos que você link:task_setting_up_transit_gateway.html["Configure um gateway de trânsito da AWS"].
+
+Se não for possível configurar um gateway de trânsito, os endereços IP privados estarão disponíveis para clientes nas que estejam fora da VPC. No entanto, esses endereços IP são estáticos – eles não podem fazer failover entre nós.
+
+Você deve analisar os requisitos para endereços IP flutuantes e tabelas de rota antes de implantar uma configuração de HA em várias zonas de disponibilidade. Você deve especificar os endereços IP flutuantes ao implantar a configuração. Os endereços IP privados são criados automaticamente pelo Cloud Manager.
+
+Para obter detalhes, link:reference_networking_aws.html#aws-networking-requirements-for-cloud-volumes-ontap-ha-in-multiple-azs["Requisitos de rede da AWS para o Cloud Volumes ONTAP HA em vários AZs"]consulte .
+
+
+
+=== Acesso a dados iSCSI
+
+A comunicação de dados entre VPC não é um problema, uma vez que o iSCSI não usa endereços IP flutuantes.
+
+
+
+=== Takeover de storage e giveback para iSCSI
+
+Para iSCSI, o Cloud Volumes ONTAP usa e/S multipath (MPIO) e Acesso de Unidade lógica assimétrica (ALUA) para gerenciar o failover de caminho entre os caminhos otimizados para ativos e não otimizados.
+
+
+NOTE: Para obter informações sobre quais configurações de host específicas suportam ALUA, consulte o http://mysupport.netapp.com/matrix["Ferramenta de Matriz de interoperabilidade do NetApp"^] e o Guia de instalação e configuração de Utilitários de host do sistema operacional do seu host.
+
+
+
+=== Takeover de storage e giveback para nas
+
+Quando o controle ocorre em uma configuração nas usando IPs flutuantes, o endereço IP flutuante do nó que os clientes usam para acessar dados se move para o outro nó. A imagem a seguir mostra a aquisição de armazenamento em uma configuração nas usando IPs flutuantes. Se o nó 2 descer, o endereço IP flutuante do nó 2 será movido para o nó 1.
+
+image:diagram_takeover_giveback.png["Imagem conceitual que mostra o controle de storage em um par de HA do Cloud Volumes ONTAP: Os endereços IP flutuantes do nó 1 passam para o nó 2."]
+
+Os IPs de dados nas usados para acesso VPC externo não podem migrar entre nós se ocorrerem falhas. Se um nó ficar offline, você deverá remontar manualmente os volumes para clientes fora da VPC usando o endereço IP no outro nó.
+
+Depois que o nó com falha voltar online, remonte os clientes para volumes usando o endereço IP original. Essa etapa é necessária para evitar a transferência de dados desnecessários entre dois nós de HA, o que pode causar impactos significativo no desempenho e na estabilidade.
+
+Você pode identificar facilmente o endereço IP correto do Cloud Manager selecionando o volume e clicando em *Mount Command*.
+
+
+
+== Cloud Volumes ONTAP HA em uma única zona de disponibilidade
+
+A implantação de uma configuração de HA em uma única zona de disponibilidade (AZ) pode garantir alta disponibilidade de seus dados se uma instância que executa um nó Cloud Volumes ONTAP falhar. Todos os dados podem ser acessados de forma nativa de fora da VPC.
+
+
+NOTE: O Cloud Manager cria um https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/placement-groups.html["Grupo de posicionamento do AWS Spread"^] e lança os dois nós de HA nesse grupo de posicionamento. O grupo de posicionamento reduz o risco de falhas simultâneas, espalhando as instâncias por um hardware subjacente distinto. Esse recurso melhora a redundância do ponto de vista da computação e não do ponto de vista da falha de disco.
+
+
+
+=== Acesso a dados
+
+Como essa configuração está em uma única AZ, ela não requer endereços IP flutuantes. Você pode usar o mesmo endereço IP para acesso a dados a partir da VPC e de fora da VPC.
+
+A imagem a seguir mostra uma configuração de HA em uma única AZ. Os dados são acessíveis a partir da VPC e de fora da VPC.
+
+image:diagram_single_az.png["Imagem conceitual que mostra uma configuração do ONTAP HA em uma única zona de disponibilidade que permite o acesso a dados de fora da VPC."]
+
+
+
+=== Takeover de storage e giveback
+
+Para iSCSI, o Cloud Volumes ONTAP usa e/S multipath (MPIO) e Acesso de Unidade lógica assimétrica (ALUA) para gerenciar o failover de caminho entre os caminhos otimizados para ativos e não otimizados.
+
+
+NOTE: Para obter informações sobre quais configurações de host específicas suportam ALUA, consulte o http://mysupport.netapp.com/matrix["Ferramenta de Matriz de interoperabilidade do NetApp"^] e o Guia de instalação e configuração de Utilitários de host do sistema operacional do seu host.
+
+Para configurações nas, os endereços IP de dados podem migrar entre nós de HA se ocorrerem falhas. Isso garante o acesso do cliente ao armazenamento.
+
+
+
+== Como o storage funciona em um par de HA
+
+Ao contrário de um cluster do ONTAP, o storage em um par de HA do Cloud Volumes ONTAP não é compartilhado entre nós. Em vez disso, os dados são espelhados de forma síncrona entre os nós para que os dados estejam disponíveis em caso de falha.
+
+
+
+=== Alocação de armazenamento
+
+Quando você cria um novo volume e são necessários discos adicionais, o Cloud Manager aloca o mesmo número de discos para ambos os nós, cria um agregado espelhado e cria o novo volume. Por exemplo, se forem necessários dois discos para o volume, o Cloud Manager aloca dois discos por nó para um total de quatro discos.
+
+
+
+=== Configurações de storage
+
+Você pode usar um par de HA como uma configuração ativo-ativo, na qual ambos os nós fornecem dados aos clientes ou como uma configuração ativo-passivo, na qual o nó passivo responde a solicitações de dados somente se ele tiver ocupado o storage para o nó ativo.
+
+
+NOTE: Você só pode configurar uma configuração ativo-ativo quando usar o Cloud Manager na visualização do sistema de armazenamento.
+
+
+
+=== Expectativas de performance para uma configuração de HA
+
+Uma configuração do Cloud Volumes ONTAP HA replica sincronamente os dados entre nós, o que consome a largura de banda da rede. Como resultado, você pode esperar o seguinte desempenho em comparação com uma configuração de Cloud Volumes ONTAP de nó único:
+
+* Para configurações de HA que atendem dados de apenas um nó, a performance de leitura é comparável à performance de leitura de uma configuração de nó único, enquanto a performance de gravação é menor.
+* Para configurações de HA que atendem dados de ambos os nós, a performance de leitura é superior à performance de leitura de uma configuração de nó único, e a performance de gravação é igual ou superior.
+
+
+Para obter mais detalhes sobre o desempenho do Cloud Volumes ONTAP, link:concept_performance.html["Desempenho"]consulte .
+
+
+
+=== Acesso do cliente ao armazenamento
+
+Os clientes devem acessar volumes NFS e CIFS usando o endereço IP de dados do nó no qual o volume reside. Se os clientes nas acessarem um volume usando o endereço IP do nó do parceiro, o tráfego vai entre os dois nós, o que reduz o desempenho.
+
+
+IMPORTANT: Se você mover um volume entre nós em um par de HA, remonte o volume usando o endereço IP do outro nó. Caso contrário, você pode experimentar desempenho reduzido. Se os clientes suportarem referências NFSv4 ou redirecionamento de pastas para CIFS, você pode habilitar esses recursos nos sistemas Cloud Volumes ONTAP para evitar a reinstalação do volume. Para obter detalhes, consulte a documentação do ONTAP.
+
+Você pode identificar facilmente o endereço IP correto do Cloud Manager:
+
+image:screenshot_mount.gif["Captura de tela: Mostra o comando de montagem que está disponível quando você seleciona um volume."]

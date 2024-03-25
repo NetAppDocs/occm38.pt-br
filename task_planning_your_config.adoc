@@ -1,0 +1,195 @@
+---
+sidebar: sidebar 
+permalink: task_planning_your_config.html 
+keywords: license, disk, ebs, storage, size, write speed, volume usage, explore, standard, premium, byol, ec2, capacity, limit, configurations, virtual machine, vm, regions, supported disks, disk types, general purpose, gp2 provisioned IOPS, piops, throughput optimized, cold, SSD, HDD, st1, sc1, use profile, thin provisioning, deduplication, compression, Cloud Volumes ONTAP explore, Cloud Volumes ONTAP standard, Cloud Volumes ONTAP premium, Cloud Volumes ONTAP byol, shared instance, dedicated instance, write speed, high write speed, normal write speed, network information, worksheet, limit, limits, storage limits, volume limit, aggregate limit, maximum volume size, maximum aggregate size 
+summary: Ao implantar o Cloud Volumes ONTAP na AWS, você pode escolher um sistema pré-configurado que corresponda aos requisitos de workload ou criar sua própria configuração. Se você escolher sua própria configuração, você deve entender as opções disponíveis para você. 
+---
+= Planejando sua configuração do Cloud Volumes ONTAP na AWS
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Ao implantar o Cloud Volumes ONTAP na AWS, você pode escolher um sistema pré-configurado que corresponda aos requisitos de workload ou criar sua própria configuração. Se você escolher sua própria configuração, você deve entender as opções disponíveis para você.
+
+
+
+== Escolhendo um tipo de licença
+
+O Cloud Volumes ONTAP está disponível em duas opções de preço: Pagamento conforme o uso e traga sua própria licença (BYOL). Para pagamento conforme o uso, você pode escolher entre três licenças: Explore, Standard ou Premium. Cada licença oferece diferentes opções de computação e capacidade.
+
+https://docs.netapp.com/us-en/cloud-volumes-ontap/reference_configs_aws_97.html["Configurações compatíveis com o Cloud Volumes ONTAP 9,7 na AWS"^]
+
+
+
+== Compreender os limites de armazenamento
+
+O limite de capacidade bruta de um sistema Cloud Volumes ONTAP está vinculado à licença. Limites adicionais afetam o tamanho dos agregados e volumes. Você deve estar ciente desses limites à medida que planeja sua configuração.
+
+https://docs.netapp.com/us-en/cloud-volumes-ontap/reference_limits_aws_97.html["Limites de storage para o Cloud Volumes ONTAP 9,7 na AWS"]
+
+
+
+== Dimensionamento do seu sistema na AWS
+
+O dimensionamento do seu sistema Cloud Volumes ONTAP pode ajudar você a atender aos requisitos de performance e capacidade. Você deve estar ciente de alguns pontos-chave ao escolher um tipo de instância, tipo de disco e tamanho de disco:
+
+Tipo de instância::
++
+--
+* Faça a correspondência dos requisitos de workload com a taxa de transferência máxima e IOPS para cada tipo de instância do EC2.
+* Se vários usuários gravarem no sistema ao mesmo tempo, escolha um tipo de instância que tenha CPUs suficientes para gerenciar as solicitações.
+* Se você tem um aplicativo que é principalmente lido, então escolha um sistema com RAM suficiente.
++
+** https://aws.amazon.com/ec2/instance-types/["Documentação da AWS: Tipos de instância do Amazon EC2"^]
+** https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSOptimized.html["Documentação da AWS: Instâncias otimizadas do Amazon EBS"^]
+
+
+
+
+--
+Tipo de disco EBS:: SSDs de uso geral são o tipo de disco mais comum para Cloud Volumes ONTAP. Para visualizar os casos de uso de discos EBS, http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html["Documentação da AWS: Tipos de volume do EBS"^] consulte .
+Tamanho do disco EBS:: Você precisa escolher um tamanho de disco inicial ao iniciar um sistema Cloud Volumes ONTAP. Depois disso, você pode link:concept_storage_management.html["Deixe o Cloud Manager gerenciar a capacidade de um sistema para você"], mas se quiser link:task_provisioning_storage.html#creating-aggregates["construa agregados você mesmo"], estar ciente do seguinte:
++
+--
+* Todos os discos em um agregado devem ter o mesmo tamanho.
+* O desempenho dos discos EBS está ligado ao tamanho do disco. O tamanho determina o IOPS de linha de base e a duração máxima de intermitência para discos SSD e a taxa de transferência de linha de base e de intermitência para discos HDD.
+* Em última análise, você deve escolher o tamanho do disco que lhe dá o _desempenho sustentado_ que você precisa.
+* Mesmo que você escolha discos maiores (por exemplo, seis discos de 4 TB), talvez não consiga todo o IOPS porque a instância do EC2 pode atingir seu limite de largura de banda.
++
+Para obter mais detalhes sobre o desempenho do disco EBS, http://docs.aws.amazon.com/AWSEC2/latest/UserGuide/EBSVolumeTypes.html["Documentação da AWS: Tipos de volume do EBS"^] consulte .
+
+
+
+--
+
+
+Assista ao vídeo a seguir para obter mais detalhes sobre como dimensionar seu sistema Cloud Volumes ONTAP na AWS:
+
+video::GELcXmOuYPw[youtube,width=848,height=480]
+
+
+== Escolhendo uma configuração compatível com Flash Cache
+
+Algumas configurações do Cloud Volumes ONTAP na AWS incluem o storage NVMe local, que o Cloud Volumes ONTAP usa como _Flash Cache_ para obter melhor desempenho. link:concept_flash_cache.html["Saiba mais sobre o Flash Cache"].
+
+
+
+== Planilha de informações de rede da AWS
+
+Ao iniciar o Cloud Volumes ONTAP na AWS, você precisa especificar detalhes sobre sua rede VPC. Você pode usar uma Planilha para coletar as informações do administrador.
+
+
+
+==== Informações de rede para Cloud Volumes ONTAP
+
+[cols="30,70"]
+|===
+| Informações da AWS | O seu valor 
+
+
+| Região |  
+
+
+| VPC |  
+
+
+| Sub-rede |  
+
+
+| Grupo de segurança (se estiver usando o seu próprio) |  
+|===
+
+
+==== Informações de rede para um par de HA em várias AZs
+
+[cols="30,70"]
+|===
+| Informações da AWS | O seu valor 
+
+
+| Região |  
+
+
+| VPC |  
+
+
+| Grupo de segurança (se estiver usando o seu próprio) |  
+
+
+| Zona de disponibilidade do nó 1 |  
+
+
+| Sub-rede do nó 1 |  
+
+
+| Zona de disponibilidade do nó 2 |  
+
+
+| Sub-rede do nó 2 |  
+
+
+| Zona de disponibilidade do mediador |  
+
+
+| Sub-rede do mediador |  
+
+
+| Par de chaves para o mediador |  
+
+
+| Endereço IP flutuante para porta de gerenciamento de cluster |  
+
+
+| Endereço IP flutuante para dados no nó 1 |  
+
+
+| Endereço IP flutuante para dados no nó 2 |  
+
+
+| Tabelas de rota para endereços IP flutuantes |  
+|===
+
+
+== Escolhendo uma velocidade de escrita
+
+O Cloud Manager permite escolher uma configuração de velocidade de gravação para sistemas Cloud Volumes ONTAP de nó único. Antes de escolher uma velocidade de gravação, você deve entender as diferenças entre as configurações normal e alta e os riscos e recomendações ao usar alta velocidade de gravação.
+
+
+
+==== Diferença entre velocidade de gravação normal e alta velocidade de gravação
+
+Quando você escolhe a velocidade de gravação normal, os dados são gravados diretamente no disco, reduzindo assim a probabilidade de perda de dados no caso de uma falha não planejada do sistema.
+
+Quando você escolhe alta velocidade de gravação, os dados são armazenados em buffer na memória antes de serem gravados no disco, o que proporciona um desempenho de gravação mais rápido. Devido a esse armazenamento em cache, existe o potencial de perda de dados se ocorrer uma falha não planejada do sistema.
+
+A quantidade de dados que pode ser perdida no caso de uma falha não planejada do sistema é a extensão dos dois últimos pontos de consistência. Um ponto de consistência é o ato de gravar dados armazenados em buffer no disco. Um ponto de consistência ocorre quando o log de gravação está cheio ou após 10 segundos (o que ocorrer primeiro). No entanto, o desempenho do volume do AWS EBS pode afetar o tempo de processamento do ponto de consistência.
+
+
+
+==== Quando usar alta velocidade de gravação
+
+A alta velocidade de gravação é uma boa opção se for necessário um desempenho de gravação rápido para sua carga de trabalho e você pode resistir ao risco de perda de dados no caso de uma interrupção não planejada do sistema.
+
+
+
+==== Recomendações ao usar alta velocidade de gravação
+
+Se você ativar alta velocidade de gravação, deve garantir a proteção contra gravação na camada de aplicação.
+
+
+
+== Escolhendo um perfil de uso de volume
+
+O ONTAP inclui vários recursos de eficiência de storage que podem reduzir a quantidade total de storage de que você precisa. Ao criar um volume no Cloud Manager, você pode escolher um perfil que ative esses recursos ou um perfil que os desabilite. Você deve aprender mais sobre esses recursos para ajudá-lo a decidir qual perfil usar.
+
+Os recursos de eficiência de storage da NetApp oferecem os seguintes benefícios:
+
+Thin Provisioning:: Apresenta storage mais lógico para hosts ou usuários do que você realmente tem no pool de storage físico. Em vez de pré-alocar espaço de armazenamento, o espaço de armazenamento é alocado dinamicamente a cada volume à medida que os dados são gravados.
+Deduplicação:: Melhora a eficiência localizando blocos idênticos de dados e substituindo-os por referências a um único bloco compartilhado. Essa técnica reduz os requisitos de capacidade de storage eliminando blocos redundantes de dados que residem no mesmo volume.
+Compactação:: Reduz a capacidade física necessária para armazenar dados comprimindo dados dentro de um volume em armazenamento primário, secundário e de arquivo.
+

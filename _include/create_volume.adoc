@@ -1,0 +1,26 @@
+= 
+:allow-uri-read: 
+
+
+[cols="25,75"]
+|===
+| Campo | Descrição 
+
+
+| Tamanho | O tamanho máximo que você pode inserir depende, em grande parte, se você ativar o provisionamento de thin, o que permite criar um volume maior do que o armazenamento físico atualmente disponível para ele. 
+
+
+| Controle de acesso (somente para NFS) | Uma política de exportação define os clientes na sub-rede que podem acessar o volume. Por padrão, o Cloud Manager insere um valor que fornece acesso a todas as instâncias na sub-rede. 
+
+
+| Permissões e utilizadores/grupos (apenas para CIFS) | Esses campos permitem controlar o nível de acesso a um compartilhamento para usuários e grupos (também chamados de listas de controle de acesso ou ACLs). Você pode especificar usuários ou grupos do Windows locais ou de domínio, ou usuários ou grupos UNIX. Se você especificar um nome de usuário do domínio do Windows, você deve incluir o domínio do usuário usando o nome de domínio do formato. 
+
+
+| Política de instantâneos | Uma política de cópia Snapshot especifica a frequência e o número de cópias snapshot do NetApp criadas automaticamente. Uma cópia Snapshot do NetApp é uma imagem pontual do sistema de arquivos que não afeta a performance e exige o mínimo de storage. Você pode escolher a política padrão ou nenhuma. Você pode escolher nenhum para dados transitórios: Por exemplo, tempdb para Microsoft SQL Server. 
+
+
+| Opções avançadas (somente para NFS) | Selecione uma versão NFS para o volume: NFSv3 ou NFSv4. 
+
+
+| Grupo de iniciadores e IQN (apenas para iSCSI) | Os destinos de armazenamento iSCSI são chamados de LUNs (unidades lógicas) e são apresentados aos hosts como dispositivos de bloco padrão. Os grupos de iniciadores são tabelas de nomes de nós de host iSCSI e controlam quais iniciadores têm acesso a quais LUNs. Os destinos iSCSI se conetam à rede por meio de adaptadores de rede Ethernet (NICs) padrão, placas de mecanismo de descarga TCP (TOE) com iniciadores de software, adaptadores de rede convergidos (CNAs) ou adaptadores de barramento de host dedicados (HBAs) e são identificados por IQNs (iSCSI Qualified Names). Quando você cria um volume iSCSI, o Cloud Manager cria automaticamente um LUN para você. Simplificamos a criação de apenas um LUN por volume, para que não haja gerenciamento envolvido. Depois de criar o volume, link:task_provisioning_storage.html#connecting-a-lun-to-a-host["Use o IQN para se conetar ao LUN a partir de seus hosts"]. 
+|===

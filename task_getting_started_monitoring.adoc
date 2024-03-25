@@ -1,0 +1,185 @@
+---
+sidebar: sidebar 
+permalink: task_getting_started_monitoring.html 
+keywords: monitoring, cloud insights, tenant, acquisition unit, iops, throughput, latency, performance, cloud volumes ontap performance, volume performance 
+summary: Execute algumas etapas para começar a monitorar o desempenho do Cloud Volumes ONTAP. 
+---
+= Monitorando o Cloud Volumes ONTAP na AWS
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Execute algumas etapas para começar a monitorar o desempenho do Cloud Volumes ONTAP.
+
+
+
+== Início rápido
+
+Comece rapidamente seguindo estas etapas ou role para baixo até as seções restantes para obter detalhes completos.
+
+
+
+==== image:number1.png["Número 1"] Verifique o suporte para sua configuração
+
+[role="quick-margin-para"]
+Você precisa de uma nova instalação do Cloud Manager 3.8.4 ou posterior na AWS, Cloud Volumes ONTAP na AWS, e você precisa ser um novo cliente do Cloud Insights.
+
+
+
+==== image:number2.png["Número 2"] Ative a monitorização no seu sistema novo ou existente
+
+[role="quick-margin-list"]
+* Novos ambientes de trabalho: Certifique-se de manter o Monitoramento ativado quando você cria o ambiente de trabalho (ele está habilitado por padrão).
+* Ambientes de trabalho existentes: Selecione um ambiente de trabalho e clique em *Start Monitoring*.
+
+
+
+
+==== image:number3.png["Número 3"] Visualizar dados de desempenho
+
+[role="quick-margin-para"]
+Clique em *Monitoramento* e veja os dados de desempenho dos seus volumes.
+
+
+
+==== image:number4.png["Número 4"] Inscreva-se no Cloud Insights
+
+[role="quick-margin-para"]
+Inscreva-se antes que sua avaliação gratuita de 30 dias termine para continuar vendo dados de desempenho no Cloud Manager e no Cloud Insights. https://docs.netapp.com/us-en/cloudinsights/concept_subscribing_to_cloud_insights.html["Saiba como se inscrever"^].
+
+
+
+== Requisitos
+
+Leia os seguintes requisitos para se certificar de que tem uma configuração suportada.
+
+Versões compatíveis do Cloud Manager:: Você precisa de uma nova instalação do Cloud Manager 3.8.4 ou posterior. Uma nova instalação é necessária porque uma nova infraestrutura é necessária para habilitar o serviço de monitoramento. Essa infraestrutura está disponível a partir de novas instalações do Cloud Manager 3,8.4.
+Versões suportadas do Cloud Volumes ONTAP:: Qualquer versão do Cloud Volumes ONTAP na AWS.
+Requisito Cloud Insights:: Você deve ser um novo cliente da Cloud Insights. O monitoramento não é suportado se você já tiver um locatário do Cloud Insights.
+Endereço de e-mail do Cloud Central:: O endereço de e-mail da sua conta de usuário do Cloud Central deve ser o endereço de e-mail da sua empresa. Domínios de e-mail gratuitos como gmail e hotmail não são suportados ao criar um locatário do Cloud Insights.
+Rede para a unidade de aquisição:: A Unidade de aquisição usa autenticação de 2 vias/mútua para se conetar ao servidor Cloud Insights. O certificado de cliente deve ser passado para o servidor Cloud Insights para ser autenticado. Para fazer isso, o proxy deve ser configurado para encaminhar a solicitação http para o servidor Cloud Insights sem descriptografar os dados.
++
+--
+A Unidade de aquisição usa os dois pontos finais a seguir para se comunicar com o Cloud Insights. Se você tiver um firewall entre o servidor da Unidade de aquisição e o Cloud Insights, precisará desses endpoints ao configurar regras de firewall:
+
+....
+https://aulogin.<Cloud Insights Domain>
+https://<your-tenant-ID>.<Cloud Insights Domain>
+....
+Por exemplo:
+
+....
+https://aulogin.c01.cloudinsights.netapp.com
+https://cg0c586a-ee05-45rb-a5ac-333b5ae7718d7.c01.cloudinsights.netapp.com
+....
+Entre em Contato conosco através do chat no produto se precisar de ajuda para identificar seu domínio Cloud Insights e ID do locatário.
+
+--
+Rede para o conetor:: Semelhante à Unidade de aquisição, o conetor deve ter conetividade de saída ao locatário do Cloud Insights. Mas o ponto final que o conetor entra em Contato é um pouco diferente. Ele entra em Contato com o URL do host do locatário usando o ID do locatário encurtado:
++
+--
+ https://<your-short-tenant-ID>.<Cloud Insights Domain>
+Por exemplo:
+
+ https://abcd12345.c01.cloudinsights.netapp.com
+Novamente, você pode entrar em Contato conosco através do chat no produto se precisar de ajuda para identificar o URL do host do locatário.
+
+--
+
+
+
+
+== Ativar a monitorização num novo sistema
+
+O serviço de monitorização é ativado por predefinição no assistente do ambiente de trabalho. Certifique-se de que mantém a opção ativada.
+
+.Passos
+. Clique em *Create Cloud Volumes ONTAP*.
+. Selecione Amazon Web Services como provedor de nuvem e escolha um único nó ou sistema de HA.
+. Preencha a página Detalhes e credenciais.
+. Na página Serviços, deixe o serviço ativado e clique em *continuar*.
++
+image:screenshot_monitoring.gif["Uma captura de tela do serviço de monitoramento que você pode ativar no assistente de ambientes de trabalho."]
+
+
+
+
+
+== Ativar a monitorização num sistema existente
+
+Ativar a monitorização a qualquer momento a partir do ambiente de trabalho.
+
+.Passos
+. Na parte superior do Cloud Manager, clique em *ambientes de trabalho*.
+. Selecione um ambiente de trabalho.
+. No painel à direita, clique em *Iniciar monitoramento*.
++
+image:screenshot_enable_monitoring.gif["[Uma captura de tela que mostra o ícone Ativar monitoramento que está disponível na guia ambientes de trabalho depois de selecionar um ambiente de trabalho."]
+
+
+
+
+
+== Monitorando seus volumes
+
+Monitore a performance visualizando IOPS, taxa de transferência e latência de cada um dos volumes.
+
+.Passos
+. Na parte superior do Cloud Manager, clique em *Monitoramento*.
+. Filtre o conteúdo do painel para obter as informações de que você precisa.
++
+** Selecione um ambiente de trabalho específico.
+** Selecione um período de tempo diferente.
+** Selecione uma SVM específica.
+** Procure um volume específico.
++
+A imagem a seguir destaca cada uma destas opções:
+
++
+image:screenshot_filter_options.gif["Uma captura de tela da guia Monitoramento que mostra as opções que você pode usar para filtrar o conteúdo do painel."]
+
+
+
+. Clique em um volume na tabela para expandir a linha e exibir uma linha do tempo para IOPS, taxa de transferência e latência.
++
+image:screenshot_vol_performance.gif["Uma captura de tela dos dados de desempenho de um volume."]
+
+. Use os dados para identificar problemas de desempenho para minimizar o impactos nos usuários e aplicativos.
+
+
+
+
+== Obter mais informações do Cloud Insights
+
+A guia Monitoramento do Cloud Manager fornece dados básicos de performance para seus volumes. Você pode ir para a interface da Web do Cloud Insights a partir do seu navegador para executar um monitoramento mais detalhado e configurar alertas para seus sistemas Cloud Volumes ONTAP.
+
+.Passos
+. Na parte superior do Cloud Manager, clique em *Monitoramento*.
+. Clique no link *Cloud Insights*.
++
+image:screenshot_cloud_insights.gif["Uma captura de tela que mostra o link Cloud Insights que está disponível no canto superior direito da guia Monitoramento."]
+
+
+
+.Resultado
+Cloud Insights abrir em uma nova guia do navegador. Se precisar de ajuda, consulte o https://docs.netapp.com/us-en/cloudinsights["Documentação do Cloud Insights"^].
+
+
+
+== Desativação da monitorização
+
+Se você não quiser mais monitorar o Cloud Volumes ONTAP, você pode desativar o serviço a qualquer momento.
+
+
+NOTE: Se você desativar o monitoramento de cada um de seus ambientes de trabalho, precisará excluir a instância do EC2 sozinho. A instância é chamada _AcquisitionUnit_ com um hash gerado (UUID) concatenado a ela. Por exemplo: _AcquisitionUnit-FAN7FqeH_
+
+.Passos
+. Na parte superior do Cloud Manager, clique em *ambientes de trabalho*.
+. Selecione um ambiente de trabalho.
+. No painel à direita, clique no image:screenshot_gallery_options.gif["Uma captura de tela do ícone de opções que aparece no painel Serviços depois de selecionar um ambiente de trabalho"] ícone e selecione *Desativar digitalização*.
+

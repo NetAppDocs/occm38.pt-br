@@ -1,0 +1,31 @@
+---
+sidebar: sidebar 
+permalink: task_deleting_working_env.html 
+keywords: terminate, delete, working environment, remove, cloudformation 
+summary: É melhor excluir sistemas Cloud Volumes ONTAP do Cloud Manager, em vez de da AWS ou do Azure. 
+---
+= Eliminar um ambiente de trabalho do Cloud Volumes ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+É melhor excluir sistemas Cloud Volumes ONTAP do Gerenciador de nuvem, em vez de do console do seu provedor de nuvem. Por exemplo, se você encerrar uma instância do Cloud Volumes ONTAP licenciada da AWS, não poderá usar a chave de licença para outra instância. Você deve excluir o ambiente de trabalho do Cloud Manager para liberar a licença.
+
+.Sobre esta tarefa
+Quando você exclui um ambiente de trabalho, o Cloud Manager encerra instâncias, exclui discos e snapshots.
+
+
+IMPORTANT: As instâncias do Cloud Volumes ONTAP têm proteção de terminação habilitada para ajudar a evitar o encerramento acidental da AWS. No entanto, se você encerrar uma instância do Cloud Volumes ONTAP da AWS, deverá ir para o console do AWS CloudFormation e excluir a pilha da instância. O nome da pilha é o nome do ambiente de trabalho.
+
+.Passos
+. No ambiente de trabalho, clique no ícone de menu e, em seguida, clique em *Delete*.
+. Digite o nome do ambiente de trabalho e clique em *Excluir*.
++
+Pode demorar até 5 minutos para eliminar o ambiente de trabalho.
+
+

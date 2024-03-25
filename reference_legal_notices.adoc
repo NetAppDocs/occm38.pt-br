@@ -1,0 +1,64 @@
+---
+sidebar: sidebar 
+permalink: reference_legal_notices.html 
+keywords: copyrights, notice, trademarks, patents, privacy, open source 
+summary: Avisos legais fornecem acesso a declarações de direitos autorais, marcas registradas, patentes e muito mais. 
+---
+= Avisos legais
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Avisos legais fornecem acesso a declarações de direitos autorais, marcas registradas, patentes e muito mais.
+
+
+
+== Direitos de autor
+
+http://www.netapp.com/us/legal/copyright.aspx[]
+
+
+
+== Marcas comerciais
+
+NetApp, o logotipo DA NetApp e as marcas listadas na página de marcas comerciais da NetApp são marcas comerciais da NetApp, Inc. Outros nomes de produtos e empresas podem ser marcas comerciais de seus respetivos proprietários.
+
+http://www.netapp.com/us/legal/netapptmlist.aspx[]
+
+
+
+== Patentes
+
+Uma lista atual de patentes de propriedade da NetApp pode ser encontrada em:
+
+https://www.netapp.com/us/media/patents-page.pdf[]
+
+
+
+== Política de privacidade
+
+https://www.netapp.com/us/legal/privacypolicy/index.aspx[]
+
+
+
+== Código aberto
+
+Os arquivos de aviso fornecem informações sobre direitos autorais de terceiros e licenças usadas no software NetApp.
+
+* link:media/notice_cloud_manager_3.8.7.pdf["Aviso para o Cloud Manager 3.8.7"^]
+* link:media/notice_cloud_manager_3.8.6.pdf["Aviso para o Cloud Manager 3.8.6"^]
+* link:media/notice_cloud_manager_3.8.5.pdf["Aviso para o Cloud Manager 3.8.5"^]
+* link:media/notice_cloud_manager_3.8.4.pdf["Aviso para o Cloud Manager 3.8.4"^]
+* link:media/notice_cloud_manager_3.8.3.pdf["Aviso para o Cloud Manager 3.8.3"^]
+* link:media/notice_cloud_manager_3.8.2.pdf["Aviso para o Cloud Manager 3.8.2"^]
+* link:media/notice_cloud_manager_3.8.1.pdf["Aviso para o Cloud Manager 3.8.1"^]
+* link:media/notice_cloud_manager_3.8.pdf["Aviso para o Cloud Manager 3,8"^]
+* link:media/notice_cloud_backup_service.pdf["Aviso para o Cloud Backup Service"^]
+* link:media/notice_global_file_cache.pdf["Aviso para Global File Cache"^]
+* link:media/notice_cloud_compliance.pdf["Aviso para conformidade com a nuvem"^]
+

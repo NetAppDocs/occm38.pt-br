@@ -1,0 +1,258 @@
+---
+sidebar: sidebar 
+permalink: download_gfc_resources.html 
+keywords: global file cache, edge 
+summary: Há muitos requisitos que você precisa estar ciente antes de começar a instalar o software Global File Cache Edge em seus escritórios remotos. 
+---
+= Antes de começar a implantar instâncias do Global File Cache Edge
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Há muitos requisitos que você precisa estar ciente antes de começar a instalar o software Global File Cache Edge em seus escritórios remotos.
+
+
+
+== Faça o download dos recursos necessários
+
+Baixe os modelos virtuais Global File Cache que você está planejando usar em suas filiais, o pacote de instalação de software e documentação de referência adicional:
+
+* Modelo virtual do Windows Server 2016:
++
+https://repo.cloudsync.netapp.com/gfc/2K16_GFC_1_0_18_OVF.zip["Windows Server 2016 .OVA incluindo NetApp GFC (VMware vSphere 6,5 ou superior)"^] https://repo.cloudsync.netapp.com/gfc/2k16_GFC_1_0_0_18_VHD.zip["Windows Server 2016 .VHDX incluindo NetApp GFC (Microsoft Hyper-v)"^]
+
+* Modelo virtual do Windows Server 2019:
++
+https://repo.cloudsync.netapp.com/gfc/2K19_GFC_1_0_18_OVF.zip["Windows Server 2019 .OVA incluindo NetApp GFC (VMware vSphere 6,5 ou superior)"^] https://repo.cloudsync.netapp.com/gfc/2k19_GFC_1_0_0_18_VHD.zip["Windows Server 2019 .VHDX incluindo NetApp GFC (Microsoft Hyper-v)"^]
+
+* Software global File Cache Edge:
++
+https://repo.cloudsync.netapp.com/gfc/GFC-1-0-0-21-Release.exe["Software NetApp GFC (.EXE)"^]
+
+* Documentação Global File Cache:
++
+link:https://repo.cloudsync.netapp.com/gfc/NetApp%20GFC%20-%20User%20Guide.pdf["Guia do usuário do cache global de arquivos da NetApp"^]
+
+
+
+
+
+== Projetando e implantando o Global File Cache Edge
+
+Dependendo dos seus requisitos, talvez seja necessário implantar uma ou várias instâncias do Global File Cache Edge com base nas sessões de usuário simultâneas em uma filial. A instância do Edge apresenta o compartilhamento de arquivos virtual aos usuários finais dentro da filial, que foi estendido de forma transparente a partir da instância associada do Global File Cache Core. O Global File Cache Edge deve conter um `D:\` volume NTFS, que contém os arquivos armazenados em cache dentro da filial.
+
+
+NOTE: Para o Global File Cache Edge, é importante entender o link:concept_before_you_begin_to_deploy_gfc.html#sizing-guidelines["diretrizes de dimensionamento"^]. Isso ajudará você a criar o design correto para sua implantação Global File Cache. Você também precisaria determinar o que é certo para o seu ambiente em termos de escala, disponibilidade de recursos e redundância.
+
+
+
+=== Instância do Global File Cache Edge
+
+Ao implantar uma instância do Global File Cache Edge, você precisa provisionar uma única VM, seja implantando o Windows Server 2016 Standard ou Datacenter Edition, ou o Windows Server 2019 Standard ou Datacenter Edition, ou usando o Global File Cache `.OVA` ou `.VHD` modelo, que inclui o sistema operacional Windows Server de sua escolha e o software Global File Cache.
+
+
+
+==== Passos rápidos
+
+. Implante o modelo Virtual Global File Cache ou a VM do Windows Server 2016 ou a edição Standard ou Datacenter do Windows Server 2019.
+. Verifique se a VM está conetada à rede, conetada ao domínio e acessível por meio do RDP.
+. Instale o software Global File Cache Edge mais recente.
+. Identifique a instância Global File Cache Management Server e Core.
+. Configure a instância do Global File Cache Edge.
+
+
+
+
+== Requisitos de borda de cache de arquivos global
+
+O Global File Cache Edge foi projetado para funcionar em todas as plataformas compatíveis com o Windows Server 2016 e 2019, trazendo TI simplificada para escritórios remotos corporativos e além. Criticamente, o Global File Cache pode ser implantado em sua infraestrutura de hardware, virtualização ou ambientes de nuvem híbrida/pública existentes em quase todos os casos, se eles atenderem a alguns requisitos de nível básico.
+
+O Global File Cache Edge requer os seguintes recursos de hardware e software para funcionar de forma otimizada. Para obter mais informações sobre as diretrizes gerais de dimensionamento, link:concept_before_you_begin_to_deploy_gfc.html#sizing-guidelines["Diretrizes de dimensionamento"]consulte .
+
+
+
+=== Dispositivo de servidor endurecido
+
+O pacote de instalação Global File Cache cria um dispositivo de software endurecido em qualquer instância do Microsoft Windows Server. _Não desinstalar_ o pacote Global File Cache. A desinstalação do Global File Cache afetará a funcionalidade da instância do servidor e pode exigir uma reconstrução completa da instância do servidor.
+
+
+
+=== Requisitos físicos de hardware
+
+* Mínimo de 4 núcleos de CPU
+* Mínimo de 16 GB de RAM
+* NIC dedicada única ou redundante de 1 Gbps
+* HDD ou SSD SAS de 10K RPM (preferido)
+* Controlador RAID com funcionalidade de armazenamento em cache write-back ativada
+
+
+
+
+=== Requisitos de implantação virtual
+
+Sabe-se que as plataformas de hipervisor estão sujeitas a degradação do desempenho da perspetiva do subsistema de storage (por exemplo, latência). Para um desempenho ideal usando o Global File Cache, recomenda-se uma instância de servidor físico com SSD.
+
+Para obter a melhor performance em ambientes virtuais, além dos requisitos de host físico, os seguintes requisitos e reservas de recursos devem ser atendidos:
+
+Microsoft Hyper-V 2012 R2 e posterior:
+
+* Processador (CPU): As CPUs devem ser definidas como *Static*: Mínimo: 4 núcleos vCPU.
+* Memória (RAM): Mínimo: 16 GB definido como *estático*.
+* Provisionamento de disco rígido: Os discos rígidos devem ser configurados como *Fixed Disk*.
+
+
+VMware vSphere 6.x e posterior:
+
+* Processador (CPU): A reserva de ciclos de CPU deve ser definida. Mínimo: 4 núcleos vCPU a 10000 MHz.
+* Memória (RAM): Mínimo: Reserva de 16 GB.
+* Provisionamento de disco rígido:
++
+** O provisionamento de disco deve ser definido como *thick provisioned eager zerado*.
+** As partilhas do disco rígido têm de ser definidas para *High*.
+** Devices.hotplug deve ser definido como *False* usando o vSphere Client para impedir que o Microsoft Windows apresente unidades de Cache de Arquivo Global como removíveis.
+
+
+* Rede: A interface de rede deve ser definida como *VMXNET3* (requer ferramentas de VM).
+
+
+O Global File Cache é executado no Windows Server 2016 e 2019, portanto, a plataforma de virtualização precisa suportar o sistema operacional, bem como a integração com utilitários que melhoram o desempenho do sistema operacional convidado da VM e o gerenciamento da VM, como as Ferramentas da VM.
+
+
+
+=== Requisitos de dimensionamento da partição
+
+* C: - Mínimo 250GB (volume do sistema/arranque)
+* D: - Mínimo 1TB (volume de dados separado para Cache de Arquivo Global Intelligent File Cache*)
+
+
+*O tamanho mínimo é 2xx o conjunto de dados ativo. O volume de cache (D:) pode ser estendido e só é restringido pelas limitações do sistema de arquivos Microsoft Windows NTFS.
+
+
+
+=== Requisitos de disco de Cache de arquivos inteligente Global File Cache
+
+A latência do disco no disco de Cache de Arquivo Inteligente (D:) do Global File Cache deve fornecer latência média de disco de e/S inferior a 0,5ms ms e taxa de transferência de 1MiBps Gbps por usuário simultâneo.
+
+Para obter mais informações, consulte link:https://repo.cloudsync.netapp.com/gfc/NetApp%20GFC%20-%20User%20Guide.pdf["Guia do usuário do cache global de arquivos da NetApp"^].
+
+
+
+=== Rede
+
+* Firewall: As portas TCP devem ser permitidas entre a borda do Cache Global de arquivos e as instâncias do Management Server e Core.
++
+Portas TCP: 443 (HTTPS - LMS), 6618 – 6630.
+
+* Os dispositivos de otimização de rede (como Riverbed Steelhead) devem ser configurados para passar por portas específicas do Global File Cache (TCP 6618-6630).
+
+
+
+
+=== Práticas recomendadas para workstation e aplicativos do cliente
+
+O Global File Cache integra-se de forma transparente aos ambientes do cliente, permitindo que os usuários acessem dados centralizados usando suas estações de trabalho cliente, executando aplicativos empresariais. Usando o Global File Cache, os dados são acessados por meio de um mapeamento de unidade direta ou por meio de um namespace DFS. Para obter mais informações sobre o Global File Cache Fabric, Intelligent File Caching e os principais aspetos do software, consulte a link:concept_before_you_begin_to_deploy_gfc.html["Antes de começar a implantar o Global File Cache"^] seção.
+
+Para garantir uma experiência e desempenho ideais, é importante cumprir os requisitos e as práticas recomendadas do Microsoft Windows Client, conforme descrito no Guia do Usuário do Global File Cache. Isso se aplica a todas as versões do Microsoft Windows.
+
+Para obter mais informações, consulte link:https://repo.cloudsync.netapp.com/gfc/NetApp%20GFC%20-%20User%20Guide.pdf["Guia do usuário do cache global de arquivos da NetApp"^].
+
+
+
+=== Melhores práticas de firewall e antivírus
+
+Embora o Global File Cache faça um esforço razoável para validar que os pacotes de aplicativos antivírus mais comuns são compatíveis com o Global File Cache, a NetApp não pode garantir e não é responsável por quaisquer incompatibilidades ou problemas de desempenho causados por esses programas, ou por suas atualizações, Service packs ou modificações associadas.
+
+O Global File Cache não recomenda a instalação nem o aplicativo de soluções de monitoramento ou antivírus em qualquer instância habilitada pelo Global File Cache (Core ou Edge). Se uma solução for instalada, por escolha ou por política, as práticas recomendadas e recomendações a seguir devem ser aplicadas. Para obter pacotes de antivírus comuns, consulte o Apêndice A link:https://repo.cloudsync.netapp.com/gfc/NetApp%20GFC%20-%20User%20Guide.pdf["Guia do usuário do cache global de arquivos da NetApp"^]no .
+
+
+
+=== Definições da firewall
+
+* Firewall da Microsoft:
++
+** Guarde as definições de firewall como predefinição.
+** Recomendação: Deixe as configurações e os serviços do firewall da Microsoft na configuração padrão de OFF e não iniciado para instâncias padrão do Global File Cache Edge.
+** Recomendação: Deixe as configurações e os serviços do firewall da Microsoft na configuração padrão de ATIVADO e iniciado para instâncias do Edge que também executam a função controlador de domínio.
+
+
+* Firewall corporativo:
++
+** A instância do Global File Cache Core escuta nas portas TCP 6618-6630, certifique-se de que as instâncias do Global File Cache Edge possam se conetar a essas portas TCP.
+** As instâncias de cache de arquivos globais exigem comunicações com o servidor de gerenciamento de cache de arquivos global na porta TCP 443 (HTTPS).
+
+
+* As soluções/dispositivos de otimização de rede devem ser configurados para passar por portas específicas do Global File Cache.
+
+
+
+
+=== Práticas recomendadas de antivírus
+
+Esta seção ajuda você a entender os requisitos ao executar um software antivírus em uma instância do Windows Server executando o Global File Cache. O Global File Cache testou os produtos antivírus mais usados, incluindo Cylance, McAfee, Symantec, Sophos, Trend Micro, Kaspersky e Windows Defender, para uso em conjunto com o Global File Cache.
+
+
+NOTE: Adicionar antivírus a um dispositivo Edge pode introduzir um impactos de 10 a 20% no desempenho do usuário.
+
+Para obter mais informações, consulte link:https://repo.cloudsync.netapp.com/gfc/NetApp%20GFC%20-%20User%20Guide.pdf["Guia do usuário do cache global de arquivos da NetApp"^].
+
+
+
+==== Configurar exclusões
+
+O software antivírus ou outros utilitários de indexação ou verificação de terceiros nunca devem verificar a unidade D: Na instância do Edge. Essas verificações da unidade D do servidor Edge resultarão em inúmeras solicitações de abertura de arquivo para todo o namespace do cache. Isso resultará em buscas de arquivos pela WAN para que todos os servidores de arquivos sejam otimizados no data center. O alagamento de conexão WAN e a carga desnecessária na instância do Edge ocorrerão, resultando na degradação do desempenho.
+
+Além da unidade D: ', o seguinte diretório e processos Global File Cache devem geralmente ser excluídos de todos os aplicativos antivírus:
+
+* `C:\Program Files\TalonFAST\`
+* `C:\Program Files\TalonFAST\Bin\LMClientService.exe`
+* `C:\Program Files\TalonFAST\Bin\LMServerService.exe`
+* `C:\Program Files\TalonFAST\Bin\Optimus.exe`
+* `C:\Program Files\TalonFAST\Bin\tafsexport.exe`
+* `C:\Program Files\TalonFAST\Bin\tafsutils.exe`
+* `C:\Program Files\TalonFAST\Bin\tapp.exe`
+* `C:\Program Files\TalonFAST\Bin\tfs.exe`
+* `C:\Program Files\TalonFAST\Bin\TService.exe`
+* `C:\Program Files\TalonFAST\Bin\tum.exe`
+* `C:\Program Files\TalonFAST\FastDebugLogs\`
+* `C:\Windows\System32\drivers\tfast.sys`
+* `\\?\TafsMtPt:\ or \\?\TafsMtPt*`
+* `\Device\TalonCacheFS\`
+* `\\?\GLOBALROOT\Device\TalonCacheFS\`
+* `\\?\GLOBALROOT\Device\TalonCacheFS\*`
+
+
+
+
+== Política de suporte da NetApp
+
+As instâncias globais de Cache de arquivos são projetadas especificamente para Global File Cache como o aplicativo principal executado em uma plataforma Windows Server 2016 e 2019. O Global File Cache requer acesso prioritário aos recursos da plataforma, por exemplo, disco, memória, interfaces de rede, e pode colocar altas demandas sobre esses recursos. As implantações virtuais exigem reservas de memória/CPU e discos de alta performance.
+
+* Para implantações de filiais do Global File Cache, os serviços e aplicativos suportados no servidor que executa o Global File Cache estão limitados a:
++
+** DNS/DHCP
+** Controlador de domínio do ative Directory (o Global File Cache deve estar em um volume separado)
+** Serviços de impressão
+** Microsoft System Center Configuration Manager (SCCM)
+** Agentes do sistema do lado do cliente e aplicativos antivírus aprovados pela Global File Cache
+
+
+* O suporte e a manutenção da NetApp se aplicam somente ao cache global de arquivos.
+* O software de produtividade de linha de negócios, que normalmente consome recursos, por exemplo, servidores de banco de dados, servidores de e-mail e assim por diante, não é suportado.
+* O cliente é responsável por qualquer software não Global File Cache que possa ser instalado no servidor que executa o Global File Cache:
++
+** Se qualquer pacote de software de terceiros causar conflitos de software ou recursos com o Global File Cache ou o desempenho estiver comprometido, a organização de suporte do Global File Cache pode exigir que o cliente desative ou remova o software do servidor que executa o Global File Cache.
+** É responsabilidade do cliente por toda a instalação, integração, suporte e atualização de qualquer software adicionado ao servidor que executa o aplicativo Global File Cache.
+
+
+* Utilitários/agentes de gerenciamento de sistemas, como ferramentas antivírus e agentes de licenciamento, podem ser capazes de coexistir. No entanto, exceto para os serviços e aplicativos suportados listados acima, esses aplicativos não são suportados pelo Global File Cache e as mesmas diretrizes acima ainda devem ser seguidas:
++
+** É responsabilidade do cliente por toda a instalação, integração, suporte e atualização de qualquer software adicionado.
+** Se um cliente instalar qualquer pacote de software de terceiros que cause ou suspeite estar causando conflitos de software ou recursos com o Global File Cache ou o desempenho estiver comprometido, talvez haja um requisito da organização de suporte do Global File Cache para desativar/remover o software.
+
+
+

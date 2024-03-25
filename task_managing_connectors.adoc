@@ -1,0 +1,106 @@
+---
+sidebar: sidebar 
+permalink: task_managing_connectors.html 
+keywords: managing connectors, uninstall connector, switch connectors, switch between connectors, go to local UI, local interface, local connector, local cloud manager 
+summary: Depois de criar um ou mais conetores, você pode gerenciá-los alternando entre conetores, conetando-se à interface de usuário local em execução em um conetor e muito mais. 
+---
+= Gerenciamento de conetores existentes
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Depois de criar um ou mais conetores, você pode gerenciá-los alternando entre conetores, conetando-se à interface de usuário local em execução em um conetor e muito mais.
+
+
+
+== Comutação entre conetores
+
+Se você tiver vários conetores, pode alternar entre eles para ver os ambientes de trabalho associados a um conetor específico.
+
+Por exemplo, digamos que você está trabalhando em um ambiente multicloud. Você pode ter um conetor na AWS e outro no Google Cloud. Você precisa alternar entre esses conetores para gerenciar os sistemas Cloud Volumes ONTAP executados nessas nuvens.
+
+.Passo
+. Clique no menu suspenso *Connector*, selecione outro conetor e clique em *Switch*.
++
+image:screenshot_connector_switch.gif["Uma captura de tela que mostra o ícone do conetor no cabeçalho e na ação Switch."]
+
++
+O Cloud Manager atualiza e mostra os ambientes de trabalho associados ao conector selecionado.
+
+
+
+
+
+== Acessando a IU local
+
+Embora você deva executar quase todas as tarefas a partir da interface de usuário SaaS, uma interface de usuário local ainda está disponível no conetor. Esta interface é necessária para algumas tarefas que precisam ser executadas a partir do próprio conetor:
+
+* link:task_configuring_proxy.html["Configurando um servidor proxy"]
+* Instalando um patch (você normalmente trabalhará com o pessoal do NetApp para instalar um patch)
+* Download de mensagens do AutoSupport (geralmente direcionadas pelo pessoal do NetApp quando você tiver problemas)
+
+
+.Passos
+. https://docs.netapp.com/us-en/occm/task_logging_in.html["Faça login na interface SaaS do Cloud Manager"^] De uma máquina que tenha uma conexão de rede com a instância do conetor.
++
+Se o conetor não tiver um endereço IP público, você precisará de uma conexão VPN ou precisará se conetar a partir de um host de salto que esteja na mesma rede que o conetor.
+
+. Clique no menu suspenso *Connector*, clique no menu de ação de um conetor e, em seguida, clique em *Go to local UI*.
++
+image:screenshot_connector_local_ui.gif["Uma captura de tela que mostra o ícone do conetor no cabeçalho e a ação ir para a IU local."]
+
++
+A interface do Cloud Manager em execução no conetor é carregada em uma nova guia do navegador.
+
+
+
+
+
+== Removendo conetores do Cloud Manager
+
+Se um conetor estiver inativo, você poderá removê-lo da lista de conetores no Cloud Manager. Pode fazê-lo se tiver eliminado a máquina virtual do conetor ou se tiver desinstalado o software do conetor.
+
+Observe o seguinte sobre como remover um conetor:
+
+* Esta ação não exclui a máquina virtual.
+* Esta ação não pode ser revertida - uma vez que você remove um conetor do Cloud Manager, você não pode adicioná-lo de volta ao Cloud Manager.
+
+
+.Passos
+. Clique no menu suspenso conetor no cabeçalho do Cloud Manager.
+. Clique no menu de ação para um conetor inativo e clique em *Remove Connector*.
++
+image:screenshot_connector_remove.gif["Uma captura de tela do widget do conetor onde você pode remover um conetor inativo."]
+
+. Introduza o nome do conetor para confirmar e, em seguida, clique em Remover.
+
+
+.Resultado
+O Cloud Manager remove o conetor de seus Registros.
+
+
+
+== Desinstalar o software do conetor
+
+O conetor inclui um script de desinstalação que você pode usar para desinstalar o software para solucionar problemas ou remover permanentemente o software do host.
+
+.Passo
+. A partir do host Linux, execute o script de desinstalação:
++
+*/opt/application/NetApp/cloudmanager/bin/uninstall.sh [silent]*
+
++
+_silent_ executa o script sem solicitar confirmação.
+
+
+
+.E quanto às atualizações de software?
+****
+O conetor atualiza automaticamente o software para a versão mais recente, desde que seja link:reference_networking_cloud_manager.html["acesso de saída à internet"] necessário obter a atualização de software.
+
+****

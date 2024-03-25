@@ -1,0 +1,186 @@
+---
+sidebar: sidebar 
+permalink: task_managing_cloud_central_accounts.html 
+keywords: account settings, workspaces, Connector, account admin, workspace admin, users, associate, disassociate, add user, add users, user management, administer, user, management, remove user, remove users, remove, delete, account, user account, user accounts, add workspace, setup workspace, workspace, Connector, manage Connector, manage workspace, associate Connector 
+summary: Depois de executar a configuração inicial, talvez seja necessário gerenciar mais tarde usuários, workspaces, conetores e assinaturas. 
+---
+= Gerenciamento de usuários, workspaces, conetores e assinaturas
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+link:task_setting_up_cloud_central_accounts.html["Depois de executar a configuração inicial"], Talvez seja necessário administrar as configurações da conta posteriormente gerenciando usuários, espaços de trabalho, conetores e assinaturas.
+
+link:concept_cloud_central_accounts.html["Saiba mais sobre como as contas do Cloud Central funcionam"].
+
+
+
+== Adicionando usuários
+
+Associe usuários do Cloud Central à conta do Cloud Central para que esses usuários possam criar e gerenciar ambientes de trabalho no Cloud Manager.
+
+.Passos
+. Se o usuário ainda não tiver feito isso, peça ao usuário para ir https://cloud.netapp.com["Centro de nuvem da NetApp"^] e se inscrever.
+. Na parte superior do Cloud Manager, clique no menu suspenso *Account*.
++
+image:screenshot_account_settings_menu.gif["Uma captura de tela que mostra a opção Configurações de conta no banner superior do Cloud Manager."]
+
+. Clique em *Gerenciar conta* ao lado da conta selecionada no momento.
++
+image:screenshot_manage_account_settings.gif["Uma captura de tela que mostra a opção Gerenciar configurações de conta que está disponível na lista suspensa conta."]
+
+. Na guia usuários, clique em *Usuário associado*.
+. Insira o endereço de e-mail do usuário e selecione uma função para o usuário:
++
+** *Admin da conta*: Pode executar qualquer ação no Cloud Manager.
+** *Workspace Admin*: Pode criar e gerenciar recursos em workspaces atribuídos.
+** *Visualizador de conformidade*: Só pode visualizar informações de conformidade e gerar relatórios para espaços de trabalho que eles têm permissão para acessar.
+
+
+. Se você selecionou Workspace Admin ou Compliance Viewer, selecione um ou mais workspaces para associar a esse usuário.
++
+image:screenshot_associate_user.gif["Uma captura de tela que mostra como associar um usuário selecionando uma função e os espaços de trabalho associados."]
+
+. Clique em *Usuário associado*.
+
+
+.Resultado
+O usuário deve receber um e-mail do NetApp Cloud Central intitulado "Associação de Contas". O e-mail inclui as informações necessárias para acessar o Cloud Manager.
+
+
+
+== Removendo usuários
+
+A desassociação de um usuário faz com que ele não possa mais acessar os recursos em uma conta do Cloud Central.
+
+.Passos
+. Na parte superior do Cloud Manager, clique no menu suspenso *Account* e clique em *Manage Account*.
++
+image:screenshot_manage_account_settings.gif["Uma captura de tela que mostra a opção Gerenciar configurações de conta que está disponível na lista suspensa conta."]
+
+. Na guia usuários, clique no menu de ação na linha que corresponde ao usuário.
++
+image:screenshot_associate_user_workspace.gif["Uma captura de tela que mostra o menu de ação disponível ao passar o Mouse sobre o nome de um usuário na tabela usuários."]
+
+. Clique em *Disassocie User* e clique em *Disassocie* para confirmar.
+
+
+.Resultado
+O usuário não pode mais acessar os recursos dessa conta do Cloud Central.
+
+
+
+== Gerenciando os workspaces de um administrador do espaço de trabalho
+
+Você pode associar e desassociar administradores do Workspace a workspaces a qualquer momento. Associar o usuário permite que ele crie e visualize os ambientes de trabalho nesse espaço de trabalho.
+
+.Passos
+. Na parte superior do Cloud Manager, clique no menu suspenso *Account* e clique em *Manage Account*.
++
+image:screenshot_manage_account_settings.gif["Uma captura de tela que mostra a opção Gerenciar configurações de conta que está disponível na lista suspensa conta."]
+
+. Na guia usuários, clique no menu de ação na linha que corresponde ao usuário.
++
+image:screenshot_associate_user_workspace.gif["Uma captura de tela que mostra o menu de ação disponível ao passar o Mouse sobre o nome de um usuário na tabela usuários."]
+
+. Clique em *Gerenciar espaços de trabalho*.
+. Selecione os espaços de trabalho a associar ao utilizador e clique em *aplicar*.
+
+
+.Resultado
+O usuário agora pode acessar esses workspaces a partir do Cloud Manager, desde que o conetor também esteja associado aos workspaces.
+
+
+
+== Gerenciando espaços de trabalho
+
+Gerencie seus workspaces criando, renomeando e excluindo-os. Observe que não é possível excluir um workspace se ele contiver recursos. Deve estar vazio.
+
+.Passos
+. Na parte superior do Cloud Manager, clique no menu suspenso *Account* e clique em *Manage Account*.
+. Clique em *Workspaces*.
+. Escolha uma das seguintes opções:
++
+** Clique em *Adicionar novo espaço de trabalho* para criar um novo espaço de trabalho.
+** Clique em *Renomear* para renomear a área de trabalho.
+** Clique em *Excluir* para excluir a área de trabalho.
+
+
+
+
+
+
+== Gerenciando espaços de trabalho de um conetor
+
+Você precisa associar o conetor aos workspaces para que os administradores do Workspace possam acessar esses workspaces a partir do Cloud Manager.
+
+Se você tiver apenas administradores de conta, associar o conetor com workspaces não será necessário. Administradores de conta têm a capacidade de acessar todos os espaços de trabalho no Cloud Manager por padrão.
+
+link:concept_cloud_central_accounts.html#users-workspaces-and-service-connectors["Saiba mais sobre usuários, workspaces e conetores"].
+
+.Passos
+. Na parte superior do Cloud Manager, clique no menu suspenso *Account* e clique em *Manage Account*.
+. Clique em *Connector*.
+. Clique em *Manage Workspaces* (gerir espaços de trabalho) para o conetor que pretende associar.
+. Selecione os espaços de trabalho a associar ao conetor e clique em *Apply*.
+
+
+
+
+== Gerenciamento de assinaturas
+
+Depois de se inscrever no marketplace de um provedor de nuvem, cada assinatura estará disponível no widget Configurações de conta. Você tem a opção de renomear uma assinatura e desassociar a assinatura de uma ou mais contas.
+
+Por exemplo, digamos que você tem duas contas e cada uma é cobrada através de assinaturas separadas. Você pode desassociar uma assinatura de uma das contas para que os usuários dessa conta não escolham acidentalmente a assinatura errada ao criar um ambiente de trabalho do Cloud volume ONTAP.
+
+link:concept_cloud_central_accounts.html["Saiba mais sobre assinaturas"].
+
+.Passos
+. Na parte superior do Cloud Manager, clique no menu suspenso *Account* e clique em *Manage Account*.
+. Clique em *Subscrições*.
++
+Você só verá as assinaturas associadas à conta que você está visualizando no momento.
+
+. Clique no menu de ação na linha que corresponde à assinatura que você deseja gerenciar.
++
+image:screenshot_subscription_menu.gif["Uma captura de tela do menu de ação para uma assinatura."]
+
+. Escolha para renomear a assinatura ou gerenciar as contas associadas à assinatura.
+
+
+
+
+== Alterar o nome da conta
+
+Altere o nome da sua conta a qualquer momento para alterá-lo para algo significativo para você.
+
+.Passos
+. Na parte superior do Cloud Manager, clique no menu suspenso *Account* e clique em *Manage Account*.
+. Na guia *Visão geral*, clique no ícone de edição ao lado do nome da conta.
+. Digite um novo nome de conta e clique em *Salvar*.
+
+
+
+
+== Ativar ou desativar a plataforma SaaS
+
+Não recomendamos desativar a plataforma SaaS a menos que você precise para cumprir com as políticas de segurança da sua empresa. Desativar a plataforma SaaS limita sua capacidade de usar os serviços de nuvem integrados da NetApp.
+
+Os serviços a seguir não estarão disponíveis no Cloud Manager se você desativar a plataforma SaaS:
+
+* Conformidade com a nuvem
+* Kubernetes
+* Disposição em camadas na nuvem
+* Cache de arquivos global
+* Monitoramento (Cloud Insights)
+
+
+.Passos
+. Na parte superior do Cloud Manager, clique no menu suspenso *Account* e clique em *Manage Account*.
+. Na guia *Visão geral*, alterne a opção para ativar o uso da plataforma SaaS.
+

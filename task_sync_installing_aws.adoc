@@ -1,0 +1,111 @@
+---
+sidebar: sidebar 
+permalink: task_sync_installing_aws.html 
+keywords: data broker, install, aws, networking, permissions, regions, install data broker in aws, install in aws, deploy in aws, deploy data broker in aws, cft, template, iam role, use your own iam role, regions, supported regions, networking requirements, port, ports, 443, port 443, ntp, network time protocol, permissions, iam role, iam permissions, aws data broker 
+summary: Quando você cria um relacionamento de sincronização, escolha a opção AWS Data Broker para implantar o software de corretor de dados em uma nova instância do EC2 em uma VPC. O Cloud Sync orienta você pelo processo de instalação, mas os requisitos e etapas são repetidos nesta página para ajudá-lo a se preparar para a instalação. 
+---
+= Instalar o agente de dados na AWS
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Quando você cria um relacionamento de sincronização, escolha a opção AWS Data Broker para implantar o software de corretor de dados em uma nova instância do EC2 em uma VPC. O Cloud Sync orienta você pelo processo de instalação, mas os requisitos e etapas são repetidos nesta página para ajudá-lo a se preparar para a instalação.
+
+Você também tem a opção de instalar o agente de dados em um host Linux existente na nuvem ou no local. link:task_sync_installing_linux.html["Saiba mais"].
+
+
+
+== Regiões AWS compatíveis
+
+Todas as regiões são suportadas, exceto as regiões China e GovCloud (EUA).
+
+
+
+== Requisitos de rede
+
+* O corretor de dados precisa de uma conexão de saída de Internet para que possa pesquisar o serviço Cloud Sync para tarefas na porta 443.
++
+Quando o Cloud Sync implanta o agente de dados na AWS, ele cria um grupo de segurança que permite a comunicação de saída necessária. Observe que você pode configurar o agente de dados para usar um servidor proxy durante o processo de instalação.
+
++
+Se precisar limitar a conetividade de saída, link:reference_sync_networking.html["a lista de endpoints que o corretor de dados entra em contato"]consulte .
+
+* A NetApp recomenda configurar o agente de origem, destino e dados para usar um serviço de protocolo de tempo de rede (NTP). A diferença de tempo entre os três componentes não deve exceder 5 minutos.
+
+
+
+
+== Permissões necessárias para implantar o agente de dados na AWS
+
+A conta de usuário da AWS que você usa para implantar o agente de dados deve ter as permissões incluídas no https://s3.amazonaws.com/metadata.datafabric.io/docs/aws_iam_policy.json["Esta política fornecida pela NetApp"^].
+
+
+
+== [[iam]]requisitos para usar sua própria função do IAM com o agente de dados da AWS
+
+Quando o Cloud Sync implanta o agente de dados, ele cria uma função do IAM para a instância do agente de dados. Você pode implantar o agente de dados usando sua própria função do IAM, se preferir. Você pode usar essa opção se sua organização tiver políticas de segurança rígidas.
+
+A função do IAM deve atender aos seguintes requisitos:
+
+* O serviço EC2 deve ter permissão para assumir a função IAM como uma entidade confiável.
+* link:media/aws_iam_policy_data_broker.json["As permissões definidas neste arquivo JSON"^] Deve ser anexado à função do IAM para que o corretor de dados possa funcionar corretamente.
+
+
+Siga as etapas abaixo para especificar a função do IAM ao implantar o corretor de dados.
+
+
+
+== Instalar o agente de dados
+
+Você pode instalar um agente de dados na AWS ao criar um relacionamento de sincronização.
+
+.Passos
+. Clique em *criar nova sincronização*.
+. Na página *Definir relação de sincronização*, escolha uma fonte e destino e clique em *continuar*.
++
+Conclua as etapas até chegar à página *Data Broker*.
+
+. Na página *Data Broker*, clique em *Create Data Broker* e selecione *Amazon Web Services*.
++
+Se você já tem um corretor de dados, você precisará clicar no image:screenshot_plus_icon.gif["Uma captura de tela se o ícone de mais"] ícone primeiro.
+
++
+image:screenshot_create_data_broker.gif["Uma captura de tela da página Data Broker que permite escolher entre um agente de dados AWS, Azure, GCP e no local."]
+
+. Digite um nome para o corretor de dados e clique em *continuar*.
+. Insira uma chave de acesso da AWS para que o Cloud Sync possa criar o agente de dados na AWS em seu nome.
++
+As chaves não são salvas ou usadas para quaisquer outros fins.
+
++
+Se você preferir não fornecer chaves de acesso, clique no link na parte inferior da página para usar um modelo do CloudFormation. Ao usar essa opção, você não precisa fornecer credenciais porque está fazendo login diretamente na AWS.
+
++
+[[cft]]o vídeo a seguir mostra como iniciar a instância do data broker usando um modelo do CloudFormation:
+
++
+video::video_cloud_sync.mp4[width=848,height=480]
+. Se você inseriu uma chave de acesso da AWS, selecione um local para a instância, selecione um par de chaves, escolha se deseja habilitar um endereço IP público e, em seguida, selecione uma função do IAM existente ou deixe o campo em branco para que o Cloud Sync crie a função para você.
++
+Se você escolher sua própria função do IAM, <<iam,você precisará fornecer as permissões necessárias>>.
+
++
+image:screenshot_aws_data_broker.gif["Uma captura de tela das informações que você precisa fornecer ao implantar um agente de dados na AWS."]
+
+. Depois que o corretor de dados estiver disponível, clique em *continuar* no Cloud Sync.
++
+A imagem a seguir mostra uma instância implantada com sucesso na AWS:
+
++
+image:screenshot_created_instance.gif["Esta captura de tela mostra uma instância implantada com sucesso. A interface mostra detalhes sobre a instância, incluindo a rede da AWS."]
+
+. Complete as páginas no assistente para criar a nova relação de sincronização.
+
+
+.Resultado
+Você implantou um agente de dados na AWS e criou uma nova relação de sincronização. Você pode usar esse corretor de dados com relações de sincronização adicionais.

@@ -1,0 +1,196 @@
+---
+sidebar: sidebar 
+permalink: faq_cloud_compliance.html 
+keywords: faq, frequently asked questions, questions 
+summary: Esta FAQ pode ajudar se você está apenas procurando uma resposta rápida para uma pergunta. 
+---
+= Perguntas frequentes sobre o Cloud Compliance
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Esta FAQ pode ajudar se você está apenas procurando uma resposta rápida para uma pergunta.
+
+
+
+== O que é o Cloud Compliance?
+
+O Cloud Compliance é uma oferta de nuvem que usa a tecnologia orientada por Inteligência artificial (AI) para ajudar as organizações a entender o contexto dos dados e identificar dados confidenciais em suas configurações do Azure NetApp Files, sistemas Cloud Volumes ONTAP hospedados na AWS ou Azure, buckets do Amazon S3 e bancos de dados.
+
+O Cloud Compliance fornece parâmetros predefinidos (como categorias e tipos de informações confidenciais) para lidar com as novas regulamentações de conformidade de dados para a privacidade e a sensibilidade dos dados, como GDPR, CCPA, HIPAA e muito mais.
+
+
+
+== Por que devo usar o Cloud Compliance?
+
+O Cloud Compliance ajuda você a:
+
+* Cumprir as regulamentações de privacidade e conformidade de dados.
+* Obedecer às políticas de retenção de dados.
+* Localize e reporte facilmente dados específicos em resposta aos titulares do dados, conforme exigido pelo GDPR, CCPA, HIPAA e outras regulamentações sobre a privacidade de dados.
+
+
+
+
+== Quais são os casos de uso comuns para o Cloud Compliance?
+
+* Identificar informações pessoais identificáveis (PII).
+* Identifique um amplo escopo de informações confidenciais conforme exigido pelas regulamentações de privacidade do GDPR e CCPA.
+* Cumprir as novas e futuras regulamentações de privacidade de dados.
+
+
+https://cloud.netapp.com/cloud-compliance["Saiba mais sobre os casos de uso do Cloud Compliance"^].
+
+
+
+== Que tipos de dados podem ser verificados com o Cloud Compliance?
+
+O Cloud Compliance dá suporte à verificação de dados não estruturados em protocolos NFS e CIFS gerenciados pela Cloud Volumes ONTAP e Azure NetApp Files. O Cloud Compliance também pode verificar os dados armazenados nos buckets do Amazon S3.
+
+Além disso, o Cloud Compliance pode verificar bancos de dados localizados em qualquer lugar - eles não precisam ser gerenciados pelo Cloud Manager.
+
+link:concept_cloud_compliance.html#how-scans-work["Saiba como as digitalizações funcionam"].
+
+
+
+== Quais fornecedores de nuvem são compatíveis?
+
+O Cloud Compliance opera como parte do Cloud Manager e, atualmente, é compatível com AWS e Azure. Isso proporciona à sua organização uma visibilidade unificada da privacidade entre diferentes fornecedores de nuvem. O suporte ao Google Cloud Platform (GCP) será adicionado em breve.
+
+
+
+== Como faço para acessar o Cloud Compliance?
+
+O Cloud Compliance é operado e gerenciado por meio do Cloud Manager. Você pode acessar os recursos de conformidade na nuvem a partir da guia *Compliance* no Cloud Manager.
+
+
+
+== Como funciona o Cloud Compliance?
+
+O Cloud Compliance implanta outra camada de inteligência artificial ao lado do sistema e dos sistemas de storage do Cloud Manager. Em seguida, ele verifica os dados em volumes, buckets e bancos de dados e indexa os insights de dados encontrados.
+
+link:concept_cloud_compliance.html["Saiba mais sobre como o Cloud Compliance funciona"].
+
+
+
+== Quanto custa o Cloud Compliance?
+
+O custo para usar o Cloud Compliance depende da quantidade de dados que você está digitalizando. Os primeiros 1 TB de dados verificados pelo Cloud Compliance em um espaço de trabalho do Cloud Manager são gratuitos. Uma assinatura do AWS ou Azure Marketplace é necessária para continuar a digitalizar dados após esse ponto.  https://cloud.netapp.com/cloud-compliance#pricing["preços"^]Consulte para obter detalhes.
+
+
+
+== Com que frequência o Cloud Compliance verifica meus dados?
+
+Os dados são alterados com frequência. Assim, o Cloud Compliance verifica seus dados continuamente sem impacto nos dados. Embora a digitalização inicial dos seus dados possa demorar mais tempo, as digitalizações subsequentes apenas analisam as alterações incrementais, o que reduz os tempos de digitalização do sistema.
+
+link:concept_cloud_compliance.html#how-scans-work["Saiba como as digitalizações funcionam"].
+
+
+
+== O Cloud Compliance oferece relatórios?
+
+Sim. As informações oferecidas pelo Cloud Compliance podem ser relevantes para outras partes interessadas em suas organizações, por isso, permitimos que você gere relatórios para compartilhar os insights.
+
+Os seguintes relatórios estão disponíveis para conformidade com a nuvem:
+
+Relatório de avaliação de risco de privacidade:: Fornece insights de privacidade de seus dados e uma pontuação de risco de privacidade. link:task_generating_compliance_reports.html["Saiba mais"].
+Relatório de solicitação de acesso do titular dos dados:: Permite que você extraia um relatório de todos os arquivos que contêm informações sobre o nome específico ou identificador pessoal de um titular de dados. link:task_responding_to_dsar.html["Saiba mais"].
+Relatório PCI DSS:: Ajuda você a identificar a distribuição de informações de cartão de crédito entre seus arquivos. link:task_generating_compliance_reports.html["Saiba mais"].
+Relatório HIPAA:: Ajuda você a identificar a distribuição de informações de saúde entre seus arquivos. link:task_generating_compliance_reports.html["Saiba mais"].
+Relatórios sobre um tipo de informação específico:: Estão disponíveis relatórios que incluem detalhes sobre os arquivos identificados que contêm dados pessoais e dados pessoais confidenciais. Você também pode ver os arquivos divididos por categoria e tipo de arquivo. link:task_controlling_private_data.html["Saiba mais"].
+
+
+
+
+== Que tipo de instância ou VM é necessário para o Cloud Compliance?
+
+* No Azure, o Cloud Compliance é executado em uma VM Standard_D16s_v3 com um disco de 512 GB.
+* Na AWS, o Cloud Compliance é executado em uma instância do m5,4xlarge com um disco GP2 de 500 GB.
++
+Em regiões onde o m5,4xlarge não está disponível, o Cloud Compliance é executado em uma instância do m4,4xlarge.
+
+
+
+
+NOTE: Alterar ou redimensionar o tipo de instância/VM não é suportado. Você precisa usar o tamanho padrão fornecido.
+
+link:concept_cloud_compliance.html["Saiba mais sobre como o Cloud Compliance funciona"].
+
+
+
+== O desempenho da digitalização varia?
+
+O desempenho da digitalização pode variar com base na largura de banda da rede e no tamanho médio do ficheiro no seu ambiente de nuvem.
+
+
+
+== Quais tipos de arquivo são suportados?
+
+O Cloud Compliance verifica todos os arquivos para obter informações sobre categorias e metadados e exibe todos os tipos de arquivo na seção tipos de arquivo do painel.
+
+Quando o Cloud Compliance deteta informações pessoais identificáveis (PII) ou quando realiza uma pesquisa DSAR, apenas os seguintes formatos de arquivo são suportados: .PDF, .DOCX, .DOC, .PPTX, .XLS, .XLSX, .CSV, .TXT, .RTF e .json.
+
+
+
+== Como habilito o Cloud Compliance?
+
+Primeiro, você precisa implantar uma instância de Cloud Compliance no Cloud Manager. Quando a instância estiver em execução, você poderá ativá-la em ambientes de trabalho e bancos de dados existentes na guia *Compliance* ou selecionando um ambiente de trabalho específico.
+
+link:task_getting_started_compliance.html["Saiba como começar"].
+
+
+NOTE: A ativação do Cloud Compliance resulta em uma verificação inicial imediata. Os resultados de conformidade são exibidos pouco depois.
+
+
+
+== Como posso desativar o Cloud Compliance?
+
+Você pode desativar o Cloud Compliance na página ambientes de trabalho depois de selecionar um ambiente de trabalho individual.
+
+link:task_managing_compliance.html["Saiba mais"].
+
+
+NOTE: Para remover completamente a instância do Cloud Compliance, você pode remover manualmente a instância do Cloud Compliance do portal do seu provedor de nuvem.
+
+
+
+== O que acontece se a disposição de dados em categorias estiver ativada no Cloud Volumes ONTAP?
+
+Você pode querer habilitar o Cloud Compliance em um sistema Cloud Volumes ONTAP que categoriza dados inativos no storage de objetos. Se a disposição de dados em categorias estiver ativada, o Cloud Compliance verifica todos os dados que estão em discos e dados inativos dispostos no storage de objetos.
+
+A verificação de conformidade não aquece os dados frios - permanece fria e dividida em armazenamento de objetos.
+
+
+
+== Posso usar o Cloud Compliance para analisar o storage ONTAP no local?
+
+A digitalização dos dados diretamente de um ambiente de trabalho do ONTAP no local não é compatível. Mas você pode digitalizar seus dados ONTAP locais replicando os dados NFS ou CIFS locais em um ambiente de trabalho Cloud Volumes ONTAP e ativando a conformidade nesses volumes. Estamos planejando dar suporte ao Cloud Compliance com ofertas de nuvem adicionais, como o Cloud Volumes Service. 
+
+link:task_scanning_onprem.html["Saiba mais"].
+
+
+
+== O Cloud Compliance pode enviar notificações para minha organização?
+
+Não, mas você pode baixar relatórios de status que você pode compartilhar internamente em sua organização.
+
+
+
+== Posso personalizar o serviço de acordo com as necessidades da minha organização?
+
+O Cloud Compliance fornece insights prontos para uso para seus dados. Esses insights podem ser extraídos e usados para atender às necessidades da sua organização.
+
+
+
+== Posso limitar as informações de conformidade na nuvem a usuários específicos?
+
+Sim, o Cloud Compliance é totalmente integrado ao Cloud Manager. Os usuários do Cloud Manager só podem ver informações sobre os ambientes de trabalho que estão qualificados para visualizar de acordo com a Privileges do workspace.
+
+Além disso, se você quiser permitir que certos usuários visualizem apenas os resultados da verificação do Cloud Compliance sem ter a capacidade de gerenciar as configurações de Cloud Compliance, você pode atribuir a esses usuários a função _Cloud Compliance Viewer_.
+
+link:concept_cloud_compliance.html#user-access-to-compliance-information["Saiba mais"].

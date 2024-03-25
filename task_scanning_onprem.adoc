@@ -1,0 +1,47 @@
+---
+sidebar: sidebar 
+permalink: task_scanning_onprem.html 
+keywords: cloud compliance, on-prem, scan on prem data, scan on-prem data 
+summary: Você pode digitalizar seus dados do ONTAP no local com o Cloud Compliance replicando os dados no local para um ambiente de trabalho do Cloud Volumes ONTAP e habilitando a conformidade. A digitalização dos dados diretamente de um ambiente de trabalho ONTAP local não é suportada. 
+---
+= Verificação de dados do ONTAP no local com o Cloud Compliance usando o SnapMirror
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Você pode digitalizar seus dados ONTAP locais com o Cloud Compliance replicando os dados NFS ou CIFS on-premises em um ambiente operacional da Cloud Volumes ONTAP e habilitando a conformidade. A digitalização dos dados diretamente de um ambiente de trabalho ONTAP local não é suportada.
+
+Você deve ter link:task_deploy_cloud_compliance.html["Já implantou uma instância do Cloud Compliance no Cloud Manager"^].
+
+.Passos
+. No Cloud Manager, crie uma relação de SnapMirror entre o cluster ONTAP no local e o Cloud Volumes ONTAP.
++
+.. https://docs.netapp.com/us-en/occm/task_discovering_ontap.html["Descubra o cluster no local no Cloud Manager"^].
+.. https://docs.netapp.com/us-en/occm/task_replicating_data.html["Crie uma replicação do SnapMirror entre o cluster do ONTAP no local e o Cloud Volumes ONTAP a partir do Cloud Manager"^].
+
+
+. Para volumes DP criados a partir de volumes de origem SMB, a partir da CLI do ONTAP, configure os volumes de destino SMB para acesso aos dados. (Isso não é necessário para volumes NFS porque o acesso aos dados é habilitado automaticamente pelo Cloud Compliance.)
++
+.. http://docs.netapp.com/ontap-9/topic/com.netapp.doc.pow-cifs-cg/GUID-371B7797-B5BE-4B19-BDE4-BBC938F109BF.html["Crie um compartilhamento SMB no volume de destino"^].
+.. http://docs.netapp.com/ontap-9/topic/com.netapp.doc.pow-cifs-cg/GUID-90FCFDB3-F60C-4685-9BBD-6D648F75701C.html["Aplique as ACLs apropriadas ao compartilhamento SMB no volume de destino"^].
+
+
+. No Cloud Manager, ative o Cloud Compliance no ambiente de trabalho do Cloud Volumes ONTAP que contém os dados do SnapMirror:
++
+.. Clique em *ambientes de trabalho*.
+.. Selecione o ambiente de trabalho que contém os dados do SnapMirror e clique em *Ativar conformidade*.
++
+link:task_getting_started_compliance.html["Clique aqui se precisar de ajuda para ativar o Cloud Compliance em um sistema Cloud Volumes ONTAP"^].
+
+.. Clique no botão *Ativar acesso aos volumes DP* na parte superior da página _Configuração de digitalização_.
+.. Ative cada volume DP que você deseja digitalizar ou use o controle *Ativar conformidade para todos os volumes* para habilitar todos os volumes, incluindo todos os volumes DP.
+
+
+
+
+Consulte link:task_getting_started_compliance.html#scanning-data-protection-volumes["Digitalização de volumes de proteção de dados"^] para obter mais informações sobre a digitalização de volumes DP.

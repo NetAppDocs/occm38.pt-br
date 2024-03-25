@@ -1,0 +1,146 @@
+---
+sidebar: sidebar 
+permalink: task_managing_backups.html 
+keywords: restoring, restore, restore volumes, Backup to Cloud, cloud backup service, backup schedule, change schedule, change backup schedule, modify schedule, modify backup schedule, retention, backup retention, delete, delete backups, deleting, deleting backups, disable, disable backups, turn off backups, disable backup to cloud, turn off backup to cloud 
+summary: Gerencie backups para sistemas Cloud Volumes ONTAP e ONTAP locais alterando o agendamento de backup, restaurando volumes, excluindo backups e muito mais. 
+---
+= Gerenciamento de backups para sistemas Cloud Volumes ONTAP e ONTAP locais
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Gerencie backups para sistemas Cloud Volumes ONTAP e ONTAP locais alterando o agendamento de backup, restaurando volumes, excluindo backups e muito mais.
+
+
+
+== Alteração da retenção de agendamento e backup
+
+A política padrão faz backup de volumes todos os dias e retém as 30 cópias de backup mais recentes de cada volume. Você pode alterar para backups semanais ou mensais e pode alterar o número de cópias de backup a serem mantidas. Você também pode selecionar uma das políticas definidas pelo sistema que fornece backups programados para 3 meses, 1 ano e 7 anos.
+
+
+TIP: A alteração da política de backup afeta apenas novos volumes criados após a alteração da programação. Isso não afeta a programação de nenhum volume existente.
+
+.Passos
+. Selecione o ambiente de trabalho.
+. Clique image:screenshot_gallery_options.gif["Ícone mais"] e selecione *Backup Settings*.
++
+image:screenshot_backup_settings_button.png["Uma captura de tela que mostra o botão Backup Settings (Configurações de backup) que está disponível depois de selecionar um ambiente de trabalho."]
+
+. Na página _Backup Settings_, clique image:screenshot_horizontal_more_button.gif["Ícone mais"] em para o ambiente de trabalho e selecione *Modify Backup Policy*.
++
+image:screenshot_backup_modify_policy.png["Uma captura de tela que mostra o botão Backup Settings (Configurações de backup) que está disponível depois de selecionar um ambiente de trabalho."]
+
+. Na página _Modificar política de backup_, altere a retenção de agendamento e backup e clique em *Salvar*.
++
+image:screenshot_backup_modify_policy_page.png["Uma captura de tela que mostra as configurações de backup na nuvem, onde você pode modificar o agendamento de backup e a configuração de retenção de backup."]
+
+
+
+
+
+== Iniciar e parar backups de volumes
+
+Você pode parar de fazer backup de um volume se não precisar de cópias de backup desse volume e não quiser pagar pelo custo para armazenar os backups. Você também pode adicionar um novo volume à lista de backup se ele não estiver sendo feito o backup no momento.
+
+.Passos
+. Selecione o ambiente de trabalho.
+. Clique image:screenshot_gallery_options.gif["Ícone mais"] e selecione *Backup Settings*.
++
+image:screenshot_backup_settings_button.png["Uma captura de tela que mostra o botão Backup Settings (Configurações de backup) que está disponível depois de selecionar um ambiente de trabalho."]
+
+. Na página _Configurações de backup_, clique image:screenshot_horizontal_more_button.gif["Ícone mais"] em para o ambiente de trabalho e selecione *Gerenciar volumes*.
++
+image:screenshot_backup_manage_volumes.png["Uma captura de tela que mostra o botão Gerenciar volumes na página Configurações de backup."]
+
+. Marque a caixa de seleção para volumes que deseja iniciar o backup e desmarque a caixa de seleção para volumes que deseja interromper o backup.
++
+image:screenshot_backup_manage_volumes_page.png["A página Gerenciar volumes, onde você pode selecionar ou desmarcar volumes."]
+
+
+
+*Observação:* ao impedir que um volume seja feito backup, você continuará sendo cobrado pelo provedor de nuvem pelos custos de armazenamento de objetos pela capacidade que os backups usam, a menos que você <<Eliminar cópias de segurança,exclua os backups>>.
+
+
+
+== Restaurar um volume a partir de uma cópia de segurança
+
+Quando você restaura dados de um backup, o Cloud Manager cria um volume _new_ usando os dados do backup. Você pode restaurar os dados para um volume no mesmo ambiente de trabalho ou para um ambiente de trabalho diferente localizado na mesma conta de nuvem que o ambiente de trabalho de origem. Como o backup não contém nenhum instantâneo, o volume recém-restaurado também não.
+
+
+TIP: Os backups criados a partir de sistemas ONTAP no local podem ser restaurados apenas para sistemas Cloud Volumes ONTAP que usam o mesmo fornecedor de nuvem que reside no backup.
+
+.Passos
+. Selecione o ambiente de trabalho.
+. Clique image:screenshot_gallery_options.gif["Ícone mais"] e selecione *Ver backups*.
++
+image:screenshot_view_backups_selection.png["Uma captura de tela da seleção do botão Exibir backups para um ambiente de trabalho."]
+
+. Selecione a linha para o volume que deseja restaurar e clique em *Exibir lista de backup*.
++
+image:screenshot_backup_to_s3_volume.gif["Uma captura de tela da guia Backup e Restauração mostrando um volume que tem backups."]
+
+. Localize o backup que você deseja restaurar e clique no ícone *Restaurar*.
++
+image:screenshot_backup_to_s3_restore_icon.gif["Uma captura de tela do ícone de restauração para um backup depois de selecionar um volume."]
+
+. Preencha a página _Restore Backup to new volume_:
++
+.. Selecione o ambiente de trabalho para o qual pretende restaurar o volume.
+.. Introduza um nome para o volume.
+.. Clique em *Restaurar*.
++
+image:screenshot_backup_to_s3_restore_options.gif["Uma captura de tela que mostra as opções de restauração: Um ambiente de trabalho para restaurar, o nome do volume e as informações do volume."]
+
+
+
+
+
+.Resultado
+O Cloud Manager cria um novo volume com base no backup selecionado. Você pode link:task_managing_storage.html#managing-existing-volumes["gerencie esse novo volume"^]como necessário.
+
+
+
+== Eliminar cópias de segurança
+
+O Backup to Cloud permite que você exclua _todos_ backups de um volume específico. Você não pode excluir _individuais_ backups.
+
+Você pode fazer isso se não precisar mais dos backups ou se você excluir o volume de origem e quiser remover todos os backups.
+
+
+IMPORTANT: Se você pretende excluir um sistema Cloud Volumes ONTAP ou ONTAP local que tenha backups, exclua os backups *antes* de excluir o sistema. O Backup to Cloud não exclui backups automaticamente quando você exclui um sistema e não há suporte atual na IU para excluir os backups depois que o sistema for excluído.
+
+.Passos
+. Na parte superior do Cloud Manager, clique em *Backup*.
+. Na lista de volumes, localize o volume e clique em *Exibir lista de backup*.
+. Clique image:screenshot_horizontal_more_button.gif["Ícone mais"] e selecione *Excluir todos os backups*.
++
+image:screenshot_delete_all_backups.png["Uma captura de tela da seleção do botão Excluir todos os backups para excluir todos os backups de um volume."]
+
+. Na caixa de diálogo de confirmação, clique em *Excluir*.
+
+
+
+
+== Desativação do backup na nuvem
+
+A desativação do Backup na nuvem para um ambiente de trabalho desativa os backups de cada volume no sistema e também desativa a capacidade de restaurar um volume. Quaisquer backups existentes não serão excluídos.
+
+Observe que você continuará sendo cobrado pelo seu provedor de nuvem pelos custos de storage de objetos pela capacidade que seus backups usam, a menos que você exclua os backups.
+
+.Passos
+. Selecione o ambiente de trabalho.
+. Clique image:screenshot_gallery_options.gif["Ícone mais"] e selecione *Backup Settings*.
++
+image:screenshot_backup_settings_button.png["Uma captura de tela que mostra o botão Backup Settings (Configurações de backup) que está disponível depois de selecionar um ambiente de trabalho."]
+
+. Na página _Backup Settings_, clique image:screenshot_horizontal_more_button.gif["Ícone mais"] em para o ambiente de trabalho e selecione *Deactivate Backup to Cloud*.
++
+image:screenshot_disable_backups.png["Uma captura de tela do botão Desativar backup para um ambiente de trabalho."]
+
+. Na caixa de diálogo de confirmação, clique em *Desativar*.
+

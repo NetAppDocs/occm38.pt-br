@@ -1,0 +1,85 @@
+---
+sidebar: sidebar 
+permalink: concept_saas.html 
+keywords: cloud manager, Connector, user interface, ui, interface, cloud, saas, saas interface 
+summary: Introduzimos uma experiência de software como serviço para o Cloud Manager. Essa nova experiência facilita o uso do Cloud Manager e nos permite fornecer recursos adicionais para gerenciar sua infraestrutura de nuvem híbrida. 
+---
+= Transição do Cloud Manager para SaaS
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Introduzimos uma experiência de software como serviço para o Cloud Manager. Essa nova experiência facilita o uso do Cloud Manager e nos permite fornecer recursos adicionais para gerenciar sua infraestrutura de nuvem híbrida.
+
+
+
+== A experiência anterior do Cloud Manager
+
+O software Cloud Manager anteriormente era composto por uma interface de usuário e uma camada de gerenciamento que enviava solicitações para provedores de nuvem. Para começar, você implantaria o Cloud Manager em sua rede na nuvem ou na rede local e, em seguida, acessaria a interface de usuário executada nessa instância.
+
+Essa experiência mudou.
+
+
+
+== A nova experiência SaaS
+
+A interface do Cloud Manager agora está acessível por meio de uma interface de usuário baseada em SaaS à qual você faz login a partir do NetApp. Você não precisa mais acessar uma interface de usuário a partir de um software executado em sua rede.
+
+Na maioria dos casos, você precisa implantar um _Connector_ em sua nuvem ou rede local. O conetor é um software necessário para gerenciar o Cloud Volumes ONTAP e outros serviços de dados em nuvem. (Na verdade, o conetor é o mesmo que o software existente do Cloud Manager instalado.)
+
+
+
+== Benefícios
+
+Essa abordagem baseada em SaaS oferece vários benefícios:
+
+* Com ele, oferecemos recursos de gerenciamento adicionais para Azure NetApp Files e Cloud Volumes Service sem a necessidade de implantar software no seu ambiente.
+* Você pode alternar facilmente entre suas contas do Cloud Central.
++
+Se um usuário estiver associado a várias contas do Cloud Central, ele poderá mudar para uma conta diferente a qualquer momento no menu Configurações do usuário. Em seguida, eles podem ver os conetores e os ambientes de trabalho associados a essa conta.
+
++
+image:screenshot_switch_account.gif[""]
+
+* Você pode alternar facilmente entre conetores (o que você sabe hoje como o software Cloud Manager) que são instalados em diferentes redes ou diferentes provedores de nuvem.
++
+image:screenshot_switch_service_connector.gif[""]
+
+
+
+
+
+== A interface do utilizador local
+
+Embora você deva executar quase todas as tarefas a partir da interface de usuário SaaS, uma interface de usuário local ainda está disponível no conetor. Esta interface é necessária para algumas tarefas que precisam ser executadas a partir do próprio conetor:
+
+* Configurando um servidor proxy
+* Instalando um patch
+* A transferir mensagens AutoSupport
+
+
+Você pode acessar a interface de usuário local diretamente da interface de usuário SaaS:
+
+image:screenshot_local_ui.gif[""]
+
+
+
+== Alterações de instância, VM e tipo de máquina
+
+Para garantir que os recursos adequados estejam disponíveis para novos e futuros recursos no Cloud Manager, alteramos o mínimo necessário de instância, VM e tipo de máquina da seguinte forma:
+
+* AWS: t3.xlarge
+* Azure: DS3 v2
+* GCP: N1-standard-4
+
+
+Ao atualizar o tipo de máquina, você terá acesso a recursos como uma nova experiência do Kubernetes, Global File Cache, Monitoramento e muito mais.
+
+Esses tamanhos padrão são o mínimo link:reference_cloud_mgr_reqs.html["Com base nos requisitos de CPU e RAM"]suportado .
+
+O Cloud Manager solicitará instruções para alterar o tipo de máquina do conetor.

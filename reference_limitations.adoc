@@ -1,0 +1,56 @@
+---
+sidebar: sidebar 
+permalink: reference_limitations.html 
+keywords: limitations, active directory, ad, iscsi, key managers, ip address, govcloud, cloud manager, Cloud Volumes ONTAP, days, 14 days, running, Connectors should remain running 
+summary: As limitações conhecidas identificam plataformas, dispositivos ou funções que não são suportadas por esta versão do produto ou que não interoperam corretamente com ele. Revise essas limitações com cuidado. 
+---
+= Limitações conhecidas
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+As limitações conhecidas identificam plataformas, dispositivos ou funções que não são suportadas por esta versão do produto ou que não interoperam corretamente com ele. Revise essas limitações com cuidado.
+
+
+
+== Os conetores devem permanecer em funcionamento
+
+Um conetor deve permanecer sempre em funcionamento. É importante para a saúde e operação contínuas dos serviços que você habilitar.
+
+Por exemplo, um conetor é um componente chave na integridade e operação dos sistemas Cloud Volumes ONTAP PAYGO. Se um conetor for desligado, os sistemas Cloud Volumes ONTAP PAYGO desligarão após perder a comunicação com um conetor por mais de 14 dias.
+
+
+
+== A plataforma SaaS está desativada para regiões do governo
+
+Se você implantar um conetor em uma região do AWS GovCloud, uma região do Azure Gov ou uma região do Azure DoD, o acesso ao Cloud Manager estará disponível somente por meio do endereço IP do host de um conetor. O acesso à plataforma SaaS está desativado para toda a conta.
+
+Isso significa que somente usuários privilegiados que podem acessar a VPC/VNet interna do usuário final podem usar a IU ou API do Cloud Manager.
+
+Isso também significa que os seguintes serviços não estão disponíveis no Cloud Manager:
+
+* Conformidade com a nuvem
+* Kubernetes
+* Disposição em camadas na nuvem
+* Cache de arquivos global
+* Monitoramento (Cloud Insights)
+
+
+A plataforma SaaS é necessária para usar esses serviços.
+
+
+
+== Hosts Linux compartilhados não são suportados
+
+O conetor não é suportado em um host que é compartilhado com outros aplicativos. O host deve ser um host dedicado.
+
+
+
+== O Cloud Manager não é compatível com o FlexGroup volumes
+
+Embora o Cloud Volumes ONTAP ofereça suporte ao FlexGroup volumes, o Cloud Manager não oferece. Se você criar um volume do FlexGroup a partir do Gerenciador do sistema ou da CLI, defina o modo de gerenciamento de capacidade do Cloud Manager como Manual. O modo automático pode não funcionar corretamente com volumes FlexGroup.

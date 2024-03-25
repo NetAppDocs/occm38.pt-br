@@ -1,0 +1,31 @@
+---
+sidebar: sidebar 
+permalink: reference_infrastructure_as_code.html 
+keywords: terraform, terraform provider, automation, automating 
+summary: Use os recursos nesta página para obter ajuda para integrar o Cloud Manager e o Cloud Volumes ONTAP à sua infraestrutura como código. 
+---
+= Recursos de automação para infraestrutura como código
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Use os recursos desta página para obter ajuda para integrar o Cloud Manager e o Cloud Volumes ONTAP ao https://www.netapp.com/us/info/what-is-infrastructure-as-code-iac.aspx["infraestrutura como código"^] seu .
+
+As equipes de DevOps usam diversas ferramentas para automatizar a configuração de novos ambientes, o que permite que elas tratem a infraestrutura como código. Uma dessas ferramentas é o Terraform. Desenvolvemos um fornecedor Terraform que as equipes de DevOps podem usar com o Cloud Manager para automatizar e integrar o Cloud Volumes ONTAP à infraestrutura como código.
+
+https://registry.terraform.io/providers/NetApp/netapp-cloudmanager/latest["Veja o provedor NetApp-cloudmmanager"^].
+
+* Ligações relacionadas*
+
+* https://cloud.netapp.com/blog/using-cloud-manager-rest-apis-with-federated-access["Blog da nuvem NetApp: Usando APIs REST do Cloud Manager com acesso federado"^]
+* https://cloud.netapp.com/blog/cloud-automation-with-cloud-volumes-ontap-rest["Blog de nuvem da NetApp: Automação da nuvem com Cloud Volumes ONTAP e REST"^]
+* https://cloud.netapp.com/blog/automated-data-cloning-for-cloud-based-testing["Blog de nuvem da NetApp: Clonagem automatizada de dados para testes baseados na nuvem de aplicações de software"^]
+* https://blog.netapp.com/infrastructure-as-code-accelerated-with-ansible-netapp/["Blog do NetApp: Aceleração da infraestrutura como código (IAC) com NetApp"^]
+* https://netapp.io/configuration-management-and-automation/["NetApp thePub: Gerenciamento de configuração  Automação com Ansible"^]
+* https://netapp.io/2019/03/25/simplicity-at-its-finest-roles-for-ansible-ontap-use/["NetApp thePub: Funções para uso do Ansible ONTAP"^]
+

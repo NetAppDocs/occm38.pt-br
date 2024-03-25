@@ -1,0 +1,81 @@
+---
+sidebar: sidebar 
+permalink: task_launching_aws_mktp.html 
+keywords: install connector, create connector, deploy connector, installation, installing, marketplace, aws, launch, launching, ec2 console, iam role 
+summary: É melhor criar um conetor diretamente do Cloud Manager, mas você pode iniciar um conetor no AWS Marketplace, se preferir não especificar chaves de acesso da AWS. Depois de criar e configurar o conetor, o Cloud Manager o usará automaticamente quando você criar novos ambientes de trabalho. 
+---
+= Criando um conetor no AWS Marketplace
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+É melhor criar um conetor diretamente do Cloud Manager, mas você pode iniciar um conetor no AWS Marketplace, se preferir não especificar chaves de acesso da AWS. Depois de criar e configurar o conetor, o Cloud Manager o usará automaticamente quando você criar novos ambientes de trabalho.
+
+.Passos
+. Crie uma política e função do IAM para a instância do EC2:
++
+.. Faça o download da política do IAM do Cloud Manager a partir do seguinte local:
++
+https://mysupport.netapp.com/site/info/cloud-manager-policies["Gerenciador de nuvem do NetApp: Políticas da AWS, Azure e GCP"^]
+
+.. No console do IAM, crie sua própria política copiando e colando o texto da política do IAM do Cloud Manager.
+.. Crie uma função do IAM com o tipo de função Amazon EC2 e anexe a política criada na etapa anterior à função.
+
+
+. Agora vá para o https://aws.amazon.com/marketplace/pp/B018REK8QG["Página do Cloud Manager no AWS Marketplace"^] para implantar o Cloud Manager a partir de uma AMI.
++
+O usuário do IAM deve ter permissões do AWS Marketplace para se inscrever e cancelar a assinatura.
+
+. Na página Marketplace, clique em *Continue to Subscribe* e clique em *Continue to Configuration*.
++
+image:screenshot_subscribe_cm.gif["Uma captura de tela que mostra os botões continuar para assinar e continuar para Configuração no AWS Marketplace."]
+
+. Altere qualquer uma das opções padrão e clique em *Continue to Launch*.
+. Em *escolha Ação*, selecione *Iniciar através de EC2* e, em seguida, clique em *Iniciar*.
++
+Estas etapas descrevem como iniciar a instância a partir do Console EC2 porque o console permite que você anexe uma função do IAM à instância do Cloud Manager. Isso não é possível usando a ação *Launch from Website*.
+
+. Siga as instruções para configurar e implantar a instância:
++
+** *Escolha tipo de instância*: Dependendo da disponibilidade da região, escolha um dos tipos de instância compatíveis (recomenda-se T3.xlarge).
++
+link:reference_cloud_mgr_reqs.html["Revise os requisitos da instância"].
+
+** *Configurar instância*: Selecione uma VPC e uma sub-rede, escolha a função do IAM que você criou na etapa 1, ative a proteção de terminação (recomendada) e escolha qualquer outra opção de configuração que atenda aos seus requisitos.
++
+image:screenshot_aws_iam_role.gif["Uma captura de tela que mostra campos na página Configurar instância na AWS. A função do IAM que você deve ter criado na etapa 1 é selecionada."]
+
+** *Adicionar armazenamento*: Mantenha as opções de armazenamento padrão.
+** *Add Tags*: Insira tags para a instância, se desejado.
+** *Configurar grupo de segurança*: Especifique os métodos de conexão necessários para a instância do conetor: SSH, HTTP e HTTPS.
+** *Revisão*: Revise suas seleções e clique em *Lançamento*.
++
+A AWS inicia o software com as configurações especificadas. A instância do conetor e o software devem estar sendo executados em aproximadamente cinco minutos.
+
+
+
+. Abra um navegador da Web a partir de um host que tenha uma conexão com a instância do conetor e insira o seguinte URL:
++
+http://_ipaddress_:80[]
+
+. Depois de iniciar sessão, configure o conetor:
++
+.. Especifique a conta do Cloud Central a ser associada ao conetor.
++
+link:concept_cloud_central_accounts.html["Saiba mais sobre as contas do Cloud Central"].
+
+.. Introduza um nome para o sistema.
++
+image:screenshot_set_up_cloud_manager.gif["Uma captura de tela que mostra a tela do conetor de configuração que permite selecionar uma conta do Cloud Central e nomear o sistema."]
+
+
+
+
+
+.Resultado
+O conetor agora está instalado e configurado com sua conta do Cloud Central. O Cloud Manager usará automaticamente esse conetor quando você criar novos ambientes de trabalho. Mas se você tiver mais de um conetor, você precisará link:task_managing_connectors.html["alterne entre eles"].

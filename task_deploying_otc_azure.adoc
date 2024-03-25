@@ -1,0 +1,227 @@
+---
+sidebar: sidebar 
+permalink: task_deploying_otc_azure.html 
+keywords: Cloud Volumes ONTAP, deploying, launching, creating, deploy, launch, create, azure, BYOL, license key, serial number, tags, azure tags, location, license, preconfigured packages, programmatic deployments, disk size, write speed, access control, volume protection, usage profile, register, CIFS share, quota, qtree, HA, HA pair, associate subscription, azure marketplace, marketplace subscription 
+summary: Você pode iniciar um único sistema Cloud Volumes ONTAP no Azure criando um ambiente de trabalho do Cloud Volumes ONTAP no Cloud Manager. 
+---
+= Iniciar o Cloud Volumes ONTAP no Azure
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Você pode iniciar um sistema de nó único ou um par de HA no Azure criando um ambiente de trabalho do Cloud Volumes ONTAP no Cloud Manager.
+
+.Antes de começar
+* Você deve ter um link:task_creating_connectors_aws.html["Conetor associado ao workspace"].
++
+
+NOTE: Você deve ser um administrador de conta para criar um conetor. Quando você cria seu primeiro ambiente de trabalho do Cloud Volumes ONTAP, o Cloud Manager solicita que você crie um conetor se ainda não tiver um.
+
+* link:concept_connectors.html["Você deve estar preparado para deixar o conetor funcionando o tempo todo"].
+* Você deve ter escolhido uma configuração e obtido informações de rede do Azure do administrador. Para obter detalhes, link:task_planning_your_config_azure.html["Planejando sua configuração do Cloud Volumes ONTAP"]consulte .
+* Para implantar um sistema BYOL, você precisa do número de série de 20 dígitos (chave de licença) para cada nó.
+
+
+.Sobre esta tarefa
+Quando o Cloud Manager cria um sistema Cloud Volumes ONTAP no Azure, ele cria vários objetos Azure, como um grupo de recursos, interfaces de rede e contas de storage. Você pode revisar um resumo dos recursos no final do assistente.
+
+[WARNING]
+.Potencial para perda de dados
+====
+A implantação do Cloud Volumes ONTAP em um grupo de recursos compartilhados existente não é recomendada devido ao risco de perda de dados. Embora a reversão esteja atualmente desativada por padrão ao usar a API para implantar em um grupo de recursos existente, excluir o Cloud Volumes ONTAP potencialmente excluirá outros recursos desse grupo compartilhado.
+
+A prática recomendada é usar um novo grupo de recursos dedicado para o Cloud Volumes ONTAP. Essa é a opção padrão e recomendada somente ao implantar o Cloud Volumes ONTAP no Azure a partir do Gerenciador de nuvem.
+
+====
+.Passos
+. Na página ambientes de trabalho, clique em *Adicionar ambiente de trabalho* e siga as instruções.
+. *Escolha um local*: Selecione *Microsoft Azure* e *nó único Cloud Volumes ONTAP* ou *alta disponibilidade Cloud Volumes ONTAP*.
+. *Detalhes e credenciais*: Opcionalmente, altere as credenciais e a assinatura do Azure, especifique um nome de cluster e um nome de grupo de recursos, adicione tags se necessário e especifique credenciais.
++
+A tabela a seguir descreve os campos para os quais você pode precisar de orientação:
+
++
+[cols="25,75"]
+|===
+| Campo | Descrição 
+
+
+| Nome do ambiente de trabalho | O Cloud Manager usa o nome do ambiente de trabalho para nomear o sistema Cloud Volumes ONTAP e a máquina virtual do Azure. Ele também usa o nome como prefixo para o grupo de segurança predefinido, se você selecionar essa opção. 
+
+
+| Nome Grupo recursos | Mantenha o nome padrão para o novo grupo de recursos ou desmarque *usar padrão* e insira seu próprio nome para o novo grupo de recursos. A prática recomendada é usar um novo grupo de recursos dedicado para o Cloud Volumes ONTAP. Embora seja possível implantar o Cloud Volumes ONTAP em um grupo de recursos compartilhado existente usando a API, isso não é recomendado devido ao risco de perda de dados. Consulte o aviso acima para obter mais detalhes. 
+
+
+| Tags | As tags são metadados para seus recursos do Azure. Quando você insere tags neste campo, o Cloud Manager as adiciona ao grupo de recursos associado ao sistema Cloud Volumes ONTAP. Você pode adicionar até quatro tags da interface do usuário ao criar um ambiente de trabalho e, em seguida, você pode adicionar mais após a criação. Observe que a API não limita a quatro tags ao criar um ambiente de trabalho. Para obter informações sobre tags, https://azure.microsoft.com/documentation/articles/resource-group-using-tags/["Documentação do Microsoft Azure: Usando tags para organizar seus recursos do Azure"^] consulte . 
+
+
+| Nome de utilizador e palavra-passe | Essas são as credenciais da conta de administrador do cluster do Cloud Volumes ONTAP. Você pode usar essas credenciais para se conetar ao Cloud Volumes ONTAP por meio do OnCommand System Manager ou da CLI. 
+
+
+| [[vídeo]]Editar credenciais | Você pode escolher diferentes credenciais do Azure e uma assinatura diferente do Azure para usar com este sistema Cloud Volumes ONTAP. Você precisa associar uma assinatura do Azure Marketplace à assinatura do Azure selecionada para implantar um sistema Cloud Volumes ONTAP pay-as-you-go. link:task_adding_azure_accounts.html["Saiba como adicionar credenciais"]. 
+|===
++
+O vídeo a seguir mostra como associar uma assinatura do Marketplace a uma assinatura do Azure:
+
++
+video::video_subscribing_azure.mp4[width=848,height=480]
+. *Serviços*: Mantenha os serviços ativados ou desative os serviços individuais que você não deseja usar com o Cloud Volumes ONTAP.
++
+** link:concept_cloud_compliance.html["Saiba mais sobre o Cloud Compliance"].
+** link:concept_backup_to_cloud.html["Saiba mais sobre o Backup to Cloud"].
+
+
+. *Localização e conetividade*: Selecione um local e um grupo de segurança e marque a caixa de seleção para confirmar a conetividade de rede entre o Cloud Manager e o local de destino.
+. *Conta do site de suporte e licença*: Especifique se você deseja usar o pagamento conforme o uso ou o BYOL e especifique uma conta do site de suporte da NetApp.
++
+Para entender como as licenças funcionam, link:concept_licensing.html["Licenciamento"]consulte .
+
++
+Uma conta do site de suporte da NetApp é opcional para pagamento conforme o uso, mas necessária para sistemas BYOL. link:task_adding_nss_accounts.html["Saiba como adicionar contas do site de suporte da NetApp"].
+
+. *Pacotes pré-configurados*: Selecione um dos pacotes para implantar rapidamente um sistema Cloud Volumes ONTAP ou clique em *criar minha própria configuração*.
++
+Se você escolher um dos pacotes, você só precisa especificar um volume e, em seguida, revisar e aprovar a configuração.
+
+. *Licenciamento*: Altere a versão do Cloud Volumes ONTAP conforme necessário, selecione uma licença e selecione um tipo de máquina virtual.
++
+image:screenshot_cvo_licensing_azure.gif["Uma captura de tela da página Licenciamento. Ele mostra a versão do Cloud Volumes ONTAP, a licença (explorar, padrão ou Premium) e o tipo de VM."]
+
++
+Se suas necessidades mudarem depois de iniciar o sistema, você poderá modificar a licença ou o tipo de máquina virtual mais tarde.
+
++
+
+NOTE: Se uma versão mais recente do Release Candidate, General Availability ou patch estiver disponível para a versão selecionada, o Cloud Manager atualizará o sistema para essa versão ao criar o ambiente de trabalho. Por exemplo, a atualização ocorre se você selecionar Cloud Volumes ONTAP 9,6 RC1 e 9,6 GA estiver disponível. A atualização não ocorre de uma versão para outra, por exemplo, de 9,6 a 9,7.
+
+. *Assine no Azure Marketplace*: Siga as etapas se o Cloud Manager não puder habilitar implantações programáticas do Cloud Volumes ONTAP.
+. *Recursos de armazenamento subjacentes*: Escolha configurações para o agregado inicial: Um tipo de disco, um tamanho para cada disco e se a disposição de dados em camadas para armazenamento Blob deve ser ativada.
++
+Observe o seguinte:
+
++
+** O tipo de disco é para o volume inicial. Você pode escolher um tipo de disco diferente para volumes subsequentes.
+** O tamanho do disco é para todos os discos no agregado inicial e para quaisquer agregados adicionais criados pelo Cloud Manager quando você usa a opção de provisionamento simples. Você pode criar agregados que usam um tamanho de disco diferente usando a opção Alocação avançada.
++
+Para obter ajuda sobre como escolher um tipo e tamanho de disco, link:task_planning_your_config_azure.html#sizing-your-system-in-azure["Dimensionamento do seu sistema no Azure"]consulte .
+
+** Você pode escolher uma política específica de disposição em categorias de volume ao criar ou editar um volume.
+** Se você desativar a disposição de dados em categorias, poderá ativá-la em agregados subsequentes.
++
+link:concept_data_tiering.html["Saiba mais sobre categorização de dados"].
+
+
+
+. *Velocidade de gravação e WORM* (somente sistemas de nó único): Escolha a velocidade de gravação *normal* ou *alta* e ative o armazenamento WORM (write once, read many), se desejado.
++
+A escolha de uma velocidade de gravação é compatível apenas com sistemas de nó único.
+
++
+link:task_planning_your_config_azure.html#choosing-a-write-speed["Saiba mais sobre a velocidade de escrita"].
+
++
+O WORM não pode ser ativado se a disposição de dados em camadas estiver ativada.
+
++
+link:concept_worm.html["Saiba mais sobre o armazenamento WORM"].
+
+. *Comunicação segura com armazenamento e WORM* (somente HA): Escolha se deseja habilitar uma conexão HTTPS a contas de storage do Azure e ative o armazenamento WORM (write once, read many), se desejado.
++
+A conexão HTTPS é de um par de HA do Cloud Volumes ONTAP 9,7 para contas de storage do Azure. Observe que ativar essa opção pode afetar o desempenho de gravação. Não é possível alterar a configuração depois de criar o ambiente de trabalho.
+
++
+link:concept_worm.html["Saiba mais sobre o armazenamento WORM"].
+
+. *Criar volume*: Insira os detalhes do novo volume ou clique em *Ignorar*.
++
+Alguns dos campos desta página são auto-explicativos. A tabela a seguir descreve os campos para os quais você pode precisar de orientação:
+
++
+[cols="25,75"]
+|===
+| Campo | Descrição 
+
+
+| Tamanho | O tamanho máximo que você pode inserir depende, em grande parte, se você ativar o provisionamento de thin, o que permite criar um volume maior do que o armazenamento físico atualmente disponível para ele. 
+
+
+| Controle de acesso (somente para NFS) | Uma política de exportação define os clientes na sub-rede que podem acessar o volume. Por padrão, o Cloud Manager insere um valor que fornece acesso a todas as instâncias na sub-rede. 
+
+
+| Permissões e utilizadores/grupos (apenas para CIFS) | Esses campos permitem controlar o nível de acesso a um compartilhamento para usuários e grupos (também chamados de listas de controle de acesso ou ACLs). Você pode especificar usuários ou grupos do Windows locais ou de domínio, ou usuários ou grupos UNIX. Se você especificar um nome de usuário do domínio do Windows, você deve incluir o domínio do usuário usando o nome de domínio do formato. 
+
+
+| Política de instantâneos | Uma política de cópia Snapshot especifica a frequência e o número de cópias snapshot do NetApp criadas automaticamente. Uma cópia Snapshot do NetApp é uma imagem pontual do sistema de arquivos que não afeta a performance e exige o mínimo de storage. Você pode escolher a política padrão ou nenhuma. Você pode escolher nenhum para dados transitórios: Por exemplo, tempdb para Microsoft SQL Server. 
+
+
+| Opções avançadas (somente para NFS) | Selecione uma versão NFS para o volume: NFSv3 ou NFSv4. 
+
+
+| Grupo de iniciadores e IQN (apenas para iSCSI) | Os destinos de armazenamento iSCSI são chamados de LUNs (unidades lógicas) e são apresentados aos hosts como dispositivos de bloco padrão. Os grupos de iniciadores são tabelas de nomes de nós de host iSCSI e controlam quais iniciadores têm acesso a quais LUNs. Os destinos iSCSI se conetam à rede por meio de adaptadores de rede Ethernet (NICs) padrão, placas de mecanismo de descarga TCP (TOE) com iniciadores de software, adaptadores de rede convergidos (CNAs) ou adaptadores de barramento de host dedicados (HBAs) e são identificados por IQNs (iSCSI Qualified Names). Quando você cria um volume iSCSI, o Cloud Manager cria automaticamente um LUN para você. Simplificamos a criação de apenas um LUN por volume, para que não haja gerenciamento envolvido. Depois de criar o volume, link:task_provisioning_storage.html#connecting-a-lun-to-a-host["Use o IQN para se conetar ao LUN a partir de seus hosts"]. 
+|===
++
+A imagem seguinte mostra a página volume preenchida para o protocolo CIFS:
+
++
+image:screenshot_cot_vol.gif["Captura de tela: Mostra a página volume preenchida para uma instância do Cloud Volumes ONTAP."]
+
+. *Configuração CIFS*: Se você escolher o protocolo CIFS, configure um servidor CIFS.
++
+[cols="25,75"]
+|===
+| Campo | Descrição 
+
+
+| Endereço IP primário e secundário do DNS | Os endereços IP dos servidores DNS que fornecem resolução de nomes para o servidor CIFS. Os servidores DNS listados devem conter os Registros de localização de serviço (SRV) necessários para localizar os servidores LDAP do ative Directory e os controladores de domínio para o domínio em que o servidor CIFS irá ingressar. 
+
+
+| Ative Directory Domain para aderir | O FQDN do domínio do ative Directory (AD) ao qual você deseja que o servidor CIFS se associe. 
+
+
+| Credenciais autorizadas para ingressar no domínio | O nome e a senha de uma conta do Windows com Privileges suficiente para adicionar computadores à unidade organizacional especificada (ou) dentro do domínio do AD. 
+
+
+| Nome NetBIOS do servidor CIFS | Um nome de servidor CIFS exclusivo no domínio AD. 
+
+
+| Unidade organizacional | A unidade organizacional dentro do domínio AD a associar ao servidor CIFS. A predefinição é computadores. Para configurar os Serviços de domínio do Azure AD como o servidor AD para o Cloud Volumes ONTAP, você deve inserir *computadores AADDC* ou *usuários AADDC* neste campo. https://docs.microsoft.com/en-us/azure/active-directory-domain-services/create-ou["Documentação do Azure: Crie uma unidade organizacional (ou) em um domínio gerenciado dos Serviços de domínio do Azure AD"^] 
+
+
+| Domínio DNS | O domínio DNS da máquina virtual de storage (SVM) do Cloud Volumes ONTAP. Na maioria dos casos, o domínio é o mesmo que o domínio AD. 
+
+
+| NTP Server | Selecione *Use ative Directory Domain* para configurar um servidor NTP usando o DNS do ative Directory. Se você precisa configurar um servidor NTP usando um endereço diferente, então você deve usar a API. Consulte link:api.html["Guia do desenvolvedor de API do Cloud Manager"^]para obter detalhes. 
+|===
+. *Perfil de uso, tipo de disco e Política de disposição em categorias*: Escolha se você deseja habilitar os recursos de eficiência de storage e alterar a política de disposição em categorias de volume, se necessário.
++
+Para obter mais informações, link:task_planning_your_config_azure.html#choosing-a-volume-usage-profile["Compreender os perfis de utilização de volume"]consulte e link:concept_data_tiering.html["Visão geral de categorização de dados"].
+
+. *Rever & aprovar*: Revise e confirme suas seleções.
++
+.. Reveja os detalhes sobre a configuração.
+.. Clique em *mais informações* para analisar detalhes sobre o suporte e os recursos do Azure que o Cloud Manager adquirirá.
+.. Selecione as caixas de verificação *I understand...*.
+.. Clique em *Go*.
+
+
+
+
+.Resultado
+O Cloud Manager implanta o sistema Cloud Volumes ONTAP. Você pode acompanhar o progresso na linha do tempo.
+
+Se você tiver algum problema na implantação do sistema Cloud Volumes ONTAP, revise a mensagem de falha. Você também pode selecionar o ambiente de trabalho e clicar em *Re-create environment*.
+
+Para obter ajuda adicional, vá https://mysupport.netapp.com/GPS/ECMLS2588181.html["Suporte à NetApp Cloud Volumes ONTAP"^] para .
+
+.Depois de terminar
+* Se você provisionou um compartilhamento CIFS, dê aos usuários ou grupos permissões para os arquivos e pastas e verifique se esses usuários podem acessar o compartilhamento e criar um arquivo.
+* Se você quiser aplicar cotas a volumes, use o System Manager ou a CLI.
++
+As cotas permitem restringir ou rastrear o espaço em disco e o número de arquivos usados por um usuário, grupo ou qtree.
+
+

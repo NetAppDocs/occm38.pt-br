@@ -1,0 +1,54 @@
+---
+sidebar: sidebar 
+permalink: concept_flash_cache.html 
+keywords: cloud volumes ontap, aws, ec2, flash cache, read-intensive, read, random, databases, email, file services, c5d.4xlarge, c5d.9xlarge, r5d.2xlarge, compression, performance, azure, nvme, standard, l8s, vm type, virtual machine, m5d.8xlarge, m5d.12xlarge, c5d.18xlarge 
+summary: Algumas configurações do Cloud Volumes ONTAP na AWS e no Azure incluem o storage NVMe local, que o Cloud Volumes ONTAP usa como Flash Cache para melhorar a performance. 
+---
+= Flash Cache
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Algumas configurações do Cloud Volumes ONTAP na AWS e no Azure incluem o storage NVMe local, que o Cloud Volumes ONTAP usa como _Flash Cache_ para melhorar a performance.
+
+
+
+== O que é Flash Cache?
+
+O Flash Cache acelera o acesso aos dados por meio do armazenamento em cache inteligente em tempo real dos dados do usuário lidos recentemente e dos metadados do NetApp. Ele é eficaz para cargas de trabalho com uso intenso de leitura aleatória, incluindo bancos de dados, e-mail e serviços de arquivos.
+
+
+
+== Instâncias compatíveis na AWS
+
+Selecione um dos seguintes tipos de instância do EC2 com um sistema Cloud Volumes ONTAP Premium ou BYOL novo ou existente:
+
+* c5d.4xlarge
+* c5d.9xlarge
+* c5d.18xlarge
+* m5d.8xlarge
+* m5d.12xlarge
+* r5d.2xlarge
+
+
+
+
+== Tipo de VM compatível no Azure
+
+Selecione o tipo de VM Standard_L8s_v2 com um único sistema Cloud Volumes ONTAP BYOL no Azure.
+
+
+
+== Limitações
+
+* A compactação deve ser desativada em todos os volumes para aproveitar as melhorias de desempenho do Flash Cache.
++
+Não escolha eficiência de storage ao criar um volume no Cloud Manager ou criar um volume e, em seguida http://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-vsmg/GUID-8508A4CB-DB43-4D0D-97EB-859F58B29054.html["Desative a compressão de dados usando a CLI"^], .
+
+* O reaquecimento do cache após uma reinicialização não é suportado com o Cloud Volumes ONTAP.
+

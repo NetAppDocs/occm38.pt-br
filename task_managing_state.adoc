@@ -1,0 +1,75 @@
+---
+sidebar: sidebar 
+permalink: task_managing_state.html 
+keywords: schedule, schedules, scheduling, shutdowns, shut down, restart, stop, stopping, turn off, weekday, weekend 
+summary: Você pode interromper e iniciar o Cloud Volumes ONTAP do Cloud Manager para gerenciar seus custos de computação em nuvem. 
+---
+= Gerenciando o estado do Cloud Volumes ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Você pode interromper e iniciar o Cloud Volumes ONTAP do Cloud Manager para gerenciar seus custos de computação em nuvem.
+
+
+
+== Agendamento de paradas automáticas do Cloud Volumes ONTAP
+
+Você pode querer desligar o Cloud Volumes ONTAP durante intervalos de tempo específicos para reduzir seus custos de computação. Em vez de fazer isso manualmente, você pode configurar o Cloud Manager para desligar automaticamente e reiniciar os sistemas em momentos específicos.
+
+.Sobre esta tarefa
+Quando você agendar um desligamento automático do seu sistema Cloud Volumes ONTAP, o Cloud Manager adia o desligamento se uma transferência de dados ativa estiver em andamento. O Cloud Manager desliga o sistema após a transferência ser concluída.
+
+Essa tarefa agenda paradas automáticas de ambos os nós em um par de HA.
+
+.Passos
+. No ambiente de trabalho, clique no ícone do relógio:
++
+image:screenshot_shutdown_icon.gif["Captura de tela: Mostra o ícone que carrega a página de desligamento automático."]
+
+. Especifique o agendamento de encerramento:
++
+.. Escolha se deseja desligar o sistema todos os dias, todos os dias da semana, todos os fins de semana ou qualquer combinação das três opções.
+.. Especifique quando pretende desligar o sistema e durante quanto tempo pretende que este seja desligado.
++
+*Exemplo*
+
++
+A imagem a seguir mostra uma programação que instrui o Cloud Manager a desligar o sistema todos os sábados às 12:00 da manhã por 48 horas. O Cloud Manager reinicia o sistema todas as segundas-feiras às 12:00 da manhã
+
++
+image:screenshot_shutdown.gif["Captura de tela: Mostra uma programação de desligamento que desliga o Cloud Volumes ONTAP todos os fins de semana às 12:00 da manhã por 48 horas."]
+
+
+
+. Clique em *Salvar*.
+
+
+.Resultado
+O Cloud Manager salva a programação. O ícone do relógio muda para indicar que está definido um agendamento: image:screenshot_shutdown_icon_scheduled.gif["Captura de tela: Mostra o ícone de desligamento automático após uma programação ser definida."]
+
+
+
+== Parar o Cloud Volumes ONTAP
+
+Parar o Cloud Volumes ONTAP evita que você acumule custos de computação e cria snapshots dos discos raiz e de inicialização, o que pode ser útil para a solução de problemas.
+
+.Sobre esta tarefa
+Quando você interrompe um par de HA, o Cloud Manager desliga ambos os nós.
+
+.Passos
+. No ambiente de trabalho, clique no ícone *Desligar*.
++
+image:screenshot_otc_turn_off.gif["Captura de tela: Mostra o ícone para desligar um sistema Cloud Volumes ONTAP."]
+
+. Mantenha a opção de criar instantâneos ativada porque os instantâneos podem ativar a recuperação do sistema.
+. Clique em *Desligar*.
++
+Pode demorar alguns minutos para parar o sistema. Pode reiniciar os sistemas posteriormente a partir da página ambiente de trabalho.
+
+

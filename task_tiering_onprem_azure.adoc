@@ -1,0 +1,188 @@
+---
+sidebar: sidebar 
+permalink: task_tiering_onprem_azure.html 
+keywords: data tiering, fabricpool, cloud tiering, tiering cold data, tiering inactive data, tiering aff, tiering fas, tiering ontap, tiering volumes, tier data, tier cold data, tier fas, tier aff, tier ontap, azure, blob, azure blob 
+summary: Libere espaço em seus clusters ONTAP no local ao dispor em camadas os dados no storage Blob do Azure. A disposição em camadas de dados é baseada no serviço de disposição em camadas na nuvem do NetApp. 
+---
+= Disposição em camadas de dados de clusters ONTAP on-premises para o storage Azure Blob
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Libere espaço em seus clusters ONTAP no local ao dispor em camadas os dados no storage Blob do Azure. A disposição em camadas de dados é baseada no serviço de disposição em camadas na nuvem do NetApp.
+
+
+
+== Início rápido
+
+Comece rapidamente seguindo estas etapas ou role para baixo até as seções restantes para obter detalhes completos.
+
+
+
+==== image:number1.png["número 1"] Prepare-se para categorizar dados no storage Azure Blob
+
+[role="quick-margin-para"]
+Você precisa do seguinte:
+
+[role="quick-margin-list"]
+* Um sistema AFF ou FAS com agregados all-SSD que esteja executando o ONTAP 9.4 ou posterior e que tenha uma conexão HTTPS com o storage Blob do Azure.
+* Um conetor instalado em um Azure VNet.
+* Rede para um conetor que habilita uma conexão HTTPS de saída para o cluster do ONTAP no data center, para o storage do Blob do Azure e para o serviço de disposição em camadas na nuvem.
+
+
+
+
+==== image:number2.png["number2"] Configurar a disposição em camadas
+
+[role="quick-margin-para"]
+No Cloud Manager, selecione um ambiente de trabalho local, clique em *Configuração de disposição em camadas* e siga as instruções para categorizar dados no armazenamento de Blob do Azure.
+
+
+
+==== image:number3.png["número 3"] Configure o licenciamento
+
+[role="quick-margin-para"]
+Após o término da avaliação gratuita, pague pelo Cloud Tiering por meio de uma assinatura com pagamento conforme o uso, de uma licença de disposição em camadas do ONTAP ou de uma combinação de ambos:
+
+[role="quick-margin-list"]
+* Para se inscrever no Azure Marketplace, clique em *Categorização > Licenciamento*, clique em *Subscribe* e siga as instruções.
+* Para adicionar uma licença de disposição em camadas, mailto:ng-cloud-Tiering em NetApp.com?subject:Licensing [entre em Contato conosco se precisar comprar uma] e, em seguidalink:task_licensing_cloud_tiering.html["Adicione-o ao cluster a partir do Cloud Tiering"], .
+
+
+
+
+== Requisitos
+
+Verifique o suporte para o cluster ONTAP, configure a rede e prepare o armazenamento de objetos.
+
+A imagem a seguir mostra cada componente e as conexões que você precisa preparar entre eles:
+
+image:diagram_cloud_tiering_azure.png["Uma imagem de arquitetura que mostra o serviço disposição em camadas na nuvem com uma conexão ao conetor de serviço no seu provedor de nuvem, o conetor de serviço com uma conexão ao cluster ONTAP e uma conexão entre o cluster ONTAP e o storage de objetos no seu provedor de nuvem. Os dados ativos residem no cluster do ONTAP, enquanto os dados inativos residem no storage de objetos."]
+
+
+NOTE: A comunicação entre o conetor e o armazenamento Blob destina-se apenas à configuração de armazenamento de objetos.
+
+
+
+=== Preparando os clusters do ONTAP
+
+Os clusters do ONTAP devem atender aos requisitos a seguir ao categorizar dados no storage de Blob do Azure.
+
+Plataformas ONTAP compatíveis:: O Cloud Tiering dá suporte a sistemas AFF e agregados all-SSD em sistemas FAS.
+Versão ONTAP suportada:: ONTAP 9 .4 ou posterior
+Requisitos de rede de cluster::
++
+--
+* O cluster do ONTAP inicia uma conexão HTTPS pela porta 443 para o armazenamento de Blobs do Azure.
++
+O ONTAP lê e grava dados no storage de objetos. O armazenamento de objetos nunca inicia, ele apenas responde.
+
++
+Embora o ExpressRoute forneça melhor desempenho e menores custos de transferência de dados, isso não é necessário entre o cluster ONTAP e o armazenamento de Blobs do Azure. Como o desempenho é significativamente melhor ao usar o ExpressRoute, isso é a melhor prática recomendada.
+
+* Uma conexão de entrada é necessária a partir do NetApp Service Connector, que reside em um Azure VNet.
++
+Não é necessária uma conexão entre o cluster e o serviço Cloud Tiering.
+
+* É necessário um LIF entre clusters em cada nó do ONTAP que hospeda volumes dispostos em camadas. O LIF deve estar associado ao _IPspace_ que o ONTAP deve usar para se conetar ao armazenamento de objetos.
++
+Os IPspaces permitem a segregação de tráfego de rede, permitindo a separação do tráfego de clientes para privacidade e segurança. http://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-nmg/GUID-69120CF0-F188-434F-913E-33ACB8751A5D.html["Saiba mais sobre IPspaces"^].
+
++
+Quando você configura a disposição de dados em categorias, o Cloud Tiering solicita que você use o espaço IPspace. Você deve escolher o espaço IPspace ao qual cada LIF está associado. Esse pode ser o espaço IPspace "padrão" ou um espaço IPspace personalizado que você criou.
+
+
+
+--
+Volumes e agregados compatíveis:: O número total de volumes em que o Cloud Tiering pode ser menor que o número de volumes no sistema ONTAP. Isso porque os volumes não podem ser dispostos em camadas de alguns agregados. Por exemplo, você não pode categorizar dados de volumes do SnapLock ou de configurações do MetroCluster. Consulte a documentação do ONTAP para obter link:http://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-psmg/GUID-8E421CC9-1DE1-492F-A84C-9EB1B0177807.html["Funcionalidade ou recursos não suportados pelo FabricPool"^]informações sobre .
+
+
+
+NOTE: O Cloud Tiering é compatível com volumes FlexGroup, a partir do ONTAP 9.5. A configuração funciona da mesma forma que qualquer outro volume.
+
+
+
+=== Criação ou comutação de conetores
+
+Um conector é necessário para categorizar dados na nuvem. Ao categorizar dados no armazenamento de Blob do Azure, um conector deve estar disponível em um Azure VNet. Você precisará criar um novo conetor ou certificar-se de que o conetor atualmente selecionado reside no Azure.
+
+* link:concept_connectors.html["Saiba mais sobre conetores"]
+* link:task_creating_connectors_azure.html["Criando um conetor no Azure"]
+* link:task_managing_connectors.html["Comutação entre conetores"]
+
+
+
+
+=== Preparar a rede para o conetor
+
+Certifique-se de que o conetor tem as ligações de rede necessárias.
+
+.Passos
+. Certifique-se de que a VNet onde o conetor está instalado permite as seguintes ligações:
++
+** Uma conexão de saída à Internet para o serviço Cloud Tiering pela porta 443 (HTTPS)
+** Uma conexão HTTPS pela porta 443 para o storage Azure Blob
+** Uma conexão HTTPS pela porta 443 aos clusters do ONTAP
+
+
+. Se necessário, ative um ponto de extremidade do serviço VNet para o armazenamento Azure.
++
+Recomenda-se um ponto de extremidade do serviço VNet para o armazenamento Azure se tiver uma ligação ExpressRoute ou VPN do seu cluster ONTAP para o VNet e pretender que a comunicação entre o conetor e o armazenamento Blob permaneça na sua rede privada virtual.
+
+
+
+
+
+== Disposição em camadas dos dados inativos do primeiro cluster para o storage Azure Blob
+
+Depois de preparar seu ambiente Azure, comece a categorizar os dados inativos do primeiro cluster.
+
+.O que você vai precisar
+link:task_discovering_ontap.html["Um ambiente de trabalho no local"].
+
+.Passos
+. Selecione um cluster no local.
+. Clique em *Configuração em categorias*.
++
+image:screenshot_setup_tiering_onprem.gif["Uma captura de tela que mostra a opção disposição em camadas de configuração que aparece no lado direito da tela depois de selecionar um ambiente de trabalho ONTAP local."]
+
++
+Agora você está no painel de disposição em camadas.
+
+. Clique em *Configurar disposição em camadas* ao lado do cluster.
+. Conclua as etapas na página *Configuração de categorias*:
++
+.. *Grupo de recursos*: Selecione um grupo de recursos onde um contentor existente é gerenciado ou onde você gostaria de criar um novo contentor para dados em camadas.
+.. *Contentor Azure*: Adicione um novo contentor Blob a uma conta de armazenamento ou selecione um contentor existente e clique em *continuar*.
++
+A conta de armazenamento e os contentores que aparecem nesta etapa pertencem ao grupo de recursos selecionado na etapa anterior.
+
+.. *Nível de acesso*: Selecione o nível de acesso que deseja usar para os dados em camadas e clique em *continuar*.
+.. *Rede de cluster*: Selecione o espaço IPspace que o ONTAP deve usar para se conetar ao armazenamento de objetos e clique em *continuar*.
++
+A seleção do espaço de IPspace correto garante que a disposição em camadas na nuvem possa configurar uma conexão do ONTAP ao armazenamento de objetos do seu provedor de nuvem.
+
+
+
+. Clique em *continuar* para selecionar os volumes que deseja categorizar.
+. Na página *volumes de nível*, configure a disposição em categorias para cada volume. Clique no image:screenshot_edit_icon.gif["Uma captura de tela do ícone de edição que aparece no final de cada linha na tabela para separar volumes"] ícone, selecione uma política de disposição em camadas, ajuste opcionalmente os dias de resfriamento e clique em *aplicar*.
++
+link:concept_cloud_tiering.html#volume-tiering-policies["Saiba mais sobre as políticas de disposição em camadas de volume"].
+
++
+image:https://docs.netapp.com/us-en/cloud-tiering/media/screenshot_volumes_select.gif["Uma captura de tela que mostra os volumes selecionados na página Selecionar volumes de origem."]
+
+
+
+.Resultado
+Você configurou com sucesso a disposição de dados em categorias de volumes no cluster para o storage de objetos Azure Blob.
+
+.O que se segue?
+link:task_licensing_cloud_tiering.html["Certifique-se de se inscrever no serviço Cloud Tiering"].
+
+Você também pode adicionar clusters adicionais ou analisar informações sobre os dados ativos e inativos no cluster. Para obter detalhes, link:task_managing_tiering.html["Gerenciamento de categorização de dados nos clusters"]consulte .

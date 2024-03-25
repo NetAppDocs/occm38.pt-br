@@ -1,0 +1,184 @@
+---
+sidebar: sidebar 
+permalink: concept_cloud_tiering.html 
+keywords: cloud tiering, overview, conceptual, value, features, cost, charging, service connector 
+summary: O Cloud Tiering é um serviço gerenciado pelo NetApp que pode reduzir seus custos de storage no local ao dispor automaticamente em camadas os dados inativos no storage de objetos na nuvem. Isso permite que você estenda seu data center para a nuvem pública sem alterar a camada de aplicação. 
+---
+= Saiba mais sobre o Cloud Tiering
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+O serviço de disposição em camadas na nuvem do NetApp estende o data center para a nuvem ao dispor automaticamente em camadas os dados inativos de clusters ONTAP on-premises para o storage de objetos. Isso libera espaço valioso no cluster para mais workloads, sem fazer alterações na camada de aplicação. A disposição em camadas na nuvem pode reduzir custos no data center e permitir a mudança de um modelo CAPEX para um modelo OPEX.
+
+O serviço disposição em camadas na nuvem aproveita os recursos do _FabricPool_. O FabricPool é uma tecnologia NetApp Data Fabric que permite a disposição automatizada em camadas de dados em storage de objetos de baixo custo. Os dados ativos permanecem em SSDs de alta performance, enquanto os dados inativos são dispostos em camadas em storage de objetos de baixo custo, preservando a eficiência de dados do ONTAP.
+
+
+
+== Caraterísticas
+
+O Cloud Tiering oferece automação, monitoramento, relatórios e uma interface de gerenciamento comum:
+
+* Com a automação, é mais fácil configurar e gerenciar a disposição de dados em camadas de clusters ONTAP no local para a nuvem
+* Um único painel remove a necessidade de gerenciar o FabricPool de forma independente em vários clusters
+* Os relatórios mostram a quantidade de dados ativos e inativos em cada cluster
+* O status de integridade em categorias ajuda você a identificar e corrigir problemas conforme eles ocorrem
+* Se você tiver sistemas Cloud Volumes ONTAP, encontrá-los-á no painel do cluster para ter uma visão completa da disposição de dados em sua infraestrutura de nuvem híbrida
++
+
+TIP: Os sistemas Cloud Volumes ONTAP são somente leitura no Cloud Tiering. link:task_tiering.html["Você configura a disposição em camadas do Cloud Volumes ONTAP a partir do ambiente de trabalho do Cloud Manager"].
+
+
+
+Para obter mais detalhes sobre o valor que o Cloud Tiering fornece, https://cloud.netapp.com/cloud-tiering["Confira a página disposição em camadas na nuvem no NetApp"^].
+
+
+NOTE: Embora o Cloud Tiering possa reduzir significativamente o espaço físico do storage, ele não é uma solução de backup.
+
+
+
+== Fornecedores de storage de objetos compatíveis
+
+É possível categorizar dados inativos de um cluster do ONTAP para Amazon S3, storage Microsoft Azure Blob, Google Cloud Storage ou StorageGRID (nuvem privada).
+
+
+
+== Preços e licenças
+
+Pague pelo categorização de nuvem com uma subscrição com pagamento conforme o uso, uma licença de disposição em camadas do ONTAP chamada _FabricPool_ ou uma combinação de ambos. Uma avaliação gratuita de 30 dias está disponível para o seu primeiro cluster se você não tiver uma licença.
+
+Não há cobrança ao categorizar dados no StorageGRID. Nem uma licença BYOL ou Registro PAYGO são necessários.
+
+https://cloud.netapp.com/cloud-tiering["Ver detalhes de preços"^].
+
+
+
+=== teste gratuito de 30 dias
+
+Se você não tiver uma licença do FabricPool, uma avaliação gratuita de 30 dias do Cloud Tiering será iniciada quando você configurar a disposição em camadas no primeiro cluster. Depois que a avaliação gratuita de 30 dias terminar, você precisará pagar pelo Cloud Tiering por meio de uma assinatura com pagamento conforme o uso, uma licença FabricPool ou uma combinação de ambos.
+
+Se a avaliação gratuita terminar e você não tiver assinado ou adicionado uma licença, o ONTAP não categorizará mais os dados inativos no storage de objetos, mas os dados existentes ainda estarão disponíveis para acesso.
+
+
+
+=== Subscrição com pagamento conforme o uso
+
+O Cloud Tiering oferece licenciamento baseado no consumo em um modelo de pagamento conforme o uso. Depois de se inscrever no marketplace do seu provedor de nuvem, você paga por GB pelos dados dispostos - não há pagamento inicial. Você é cobrado pelo seu provedor de nuvem por meio da sua fatura mensal.
+
+Você deve se inscrever mesmo se você tiver uma avaliação gratuita ou se você trouxer sua própria licença (BYOL):
+
+* A assinatura garante que não haja interrupção do serviço após o término da avaliação gratuita.
++
+Quando o teste terminar, você será cobrado de hora em hora de acordo com a quantidade de dados categorizados.
+
+* Se você categorizar mais dados do que o permitido pela sua licença FabricPool, a categorização de dados continuará em sua assinatura de pagamento conforme o uso.
++
+Por exemplo, se você tiver uma licença de 10 TB, toda a capacidade além dos 10 TB será cobrada por meio da assinatura paga conforme o uso.
+
+
+
+Você não será cobrado da sua assinatura paga conforme o uso durante a avaliação gratuita ou se você não tiver excedido sua licença FabricPool.
+
+link:task_licensing_cloud_tiering.html["Saiba como configurar uma assinatura paga conforme o uso"].
+
+
+
+=== Traga sua própria licença
+
+Traga sua própria licença comprando uma licença ONTAP FabricPool da NetApp. Você pode comprar licenças perpétuas ou baseadas em termos de prazo.
+
+Depois de adquirir uma licença do FabricPool, será necessário adicioná-la ao cluster, link:task_licensing_cloud_tiering.html#adding-a-tiering-license-to-ontap["O que você pode fazer diretamente do Cloud Tiering"].
+
+Depois de ativar a licença por meio do Cloud Tiering, se você adquirir capacidade adicional posteriormente, a licença no cluster será atualizada automaticamente com a nova capacidade. Não é necessário aplicar um novo ficheiro de licença NetApp (NLF) ao cluster.
+
+Como mencionado acima, recomendamos que você configure uma assinatura de pagamento conforme o uso, mesmo que seu cluster tenha uma licença BYOL.
+
+Licença[Contacte-nos para comprar uma licença] NetApp.
+
+
+
+== Como o Cloud Tiering funciona
+
+O Cloud Tiering é um serviço gerenciado pelo NetApp que usa a tecnologia FabricPool para categorizar automaticamente dados inativos (frios) dos seus clusters ONTAP no local para storage de objetos na nuvem pública ou privada. As ligações ao ONTAP ocorrem a partir de um conetor.
+
+A imagem a seguir mostra a relação entre cada componente:
+
+image:diagram_cloud_tiering.png["Uma imagem de arquitetura que mostra o serviço disposição em camadas na nuvem com uma conexão ao conetor de serviço no seu provedor de nuvem, o conetor de serviço com uma conexão ao cluster ONTAP e uma conexão entre o cluster ONTAP e o storage de objetos no seu provedor de nuvem. Os dados ativos residem no cluster do ONTAP, enquanto os dados inativos residem no storage de objetos."]
+
+Em um alto nível, o Cloud Tiering funciona assim:
+
+. Descubra seu cluster no local usando o Cloud Manager.
+. Você configura a disposição em categorias fornecendo detalhes sobre seu storage de objetos, incluindo o bucket/contêiner e uma classe de storage ou camada de acesso.
+. O Cloud Manager configura o ONTAP para usar o fornecedor de storage de objetos e descobre a quantidade de dados ativos e inativos no cluster.
+. Você escolhe os volumes a categorizar e a política de disposição em camadas a serem aplicados a esses volumes.
+. O ONTAP começa a categorizar dados inativos no armazenamento de objetos, assim que os dados atingirem os limites para serem considerados inativos (<<Políticas de disposição em camadas de volume>>consulte ).
+
+
+
+
+=== Storage de objetos
+
+Cada cluster do ONTAP alinha dados inativos em um único armazenamento de objetos. Ao configurar a disposição de dados em categorias, você pode adicionar um novo bucket/contêiner ou selecionar um bucket/contêiner existente, juntamente com uma classe de storage ou uma categoria de acesso.
+
+* link:reference_aws_support.html["Saiba mais sobre as classes de armazenamento S3 suportadas"]
+* link:reference_azure_support.html["Saiba mais sobre os níveis de acesso Blob do Azure compatíveis"]
+* link:reference_google_support.html["Saiba mais sobre as classes de armazenamento compatíveis do Google Cloud"]
+
+
+
+
+=== Políticas de disposição em camadas de volume
+
+Quando você seleciona os volumes que deseja categorizar, você escolhe uma política de disposição em camadas _volume_ para aplicar a cada volume. Uma política de disposição em categorias determina quando ou se os blocos de dados de usuário de um volume são movidos para a nuvem.
+
+Nenhuma política de disposição em camadas:: Mantém os dados em um volume na categoria de performance, impedindo que eles sejam movidos para a nuvem.
+Snapshots inativos (somente Snapshot):: O ONTAP dispõe de blocos de Snapshot frio no volume que não são compartilhados com o sistema de arquivos ativo para o storage de objetos. Se lidos, os blocos de dados inativos na camada de nuvem ficam ativos e são movidos para a categoria de performance.
++
+--
+Os dados são dispostos somente depois que um agregado atingiu a capacidade de 50% e quando os dados alcançaram o período de resfriamento. O número padrão de dias de resfriamento é 2, mas você pode ajustar o número de dias.
+
+
+NOTE: As gravações da categoria de nuvem para a categoria de performance serão desativadas se a capacidade da categoria de performance for superior a 70%. Se isso ocorrer, os blocos são acessados diretamente da camada de nuvem.
+
+--
+Dados inativos do utilizador (Auto):: O ONTAP coloca todos os blocos inativos no volume (não incluindo metadados) no storage de objetos. Os dados inativos incluem não apenas cópias Snapshot, mas também dados de usuários inativos do sistema de arquivos ativo.
++
+--
+Se forem lidos por leituras aleatórias, os blocos de dados inativos na camada de nuvem ficam ativos e são movidos para a camada de performance. Se forem lidos por leituras sequenciais, como as associadas a verificações de índice e antivírus, os blocos de dados inativos na camada de nuvem permanecem inativos e não são gravados na camada de performance.
+
+Os dados são dispostos somente depois que um agregado atingiu a capacidade de 50% e quando os dados alcançaram o período de resfriamento. O período de resfriamento é o tempo em que os dados do usuário em um volume devem permanecer inativos para que os dados sejam considerados "frios" e movidos para o armazenamento de objetos. O número padrão de dias de resfriamento é 31, mas você pode ajustar o número de dias.
+
+
+NOTE: As gravações da categoria de nuvem para a categoria de performance serão desativadas se a capacidade da categoria de performance for superior a 70%. Se isso ocorrer, os blocos são acessados diretamente da camada de nuvem.
+
+--
+Todos os dados do utilizador (todos):: Todos os dados (não incluindo metadados) são imediatamente marcados como frios e dispostos em camadas no storage de objetos o mais rápido possível. Não há necessidade de esperar 48 horas para que novos blocos em um volume fiquem frios. Observe que os blocos localizados no volume antes da política tudo ser definida exigem 48 horas para ficarem frios.
++
+--
+Se lidos, os blocos de dados inativos na categoria de nuvem não são gravados de volta na categoria de performance. Esta política está disponível a partir do ONTAP 9.6.
+
+Leve o seguinte em consideração antes de escolher essa política de disposição em categorias:
+
+* A disposição de dados em categorias reduz imediatamente as eficiências de storage (somente inline).
+* Você deve usar esta política somente se tiver certeza de que os dados inativos no volume não serão alterados.
+* O armazenamento de objetos não é transacional e resultará em fragmentação significativa se sujeito a alterações.
+* Considere o impacto das transferências SnapMirror antes de atribuir a política de todas as categorias aos volumes de origem em relacionamentos de proteção de dados.
++
+Como os dados são dispostos imediatamente, o SnapMirror lê os dados da camada de nuvem e não da camada de performance. Isso resultará em operações mais lentas do SnapMirror - possivelmente retardando outras operações do SnapMirror mais tarde na fila - mesmo que estejam usando políticas de disposição em camadas diferentes.
+
+
+
+--
+Todos os dados do usuário DP (Backup):: Todos os dados em um volume de proteção de dados (não incluindo metadados) são movidos imediatamente para a categoria de nuvem. Se lidos, os blocos de dados inativos na categoria de nuvem permanecem inativos e não são gravados de volta na categoria de performance (começando com ONTAP 9.4).
++
+--
+
+NOTE: Esta política está disponível para o ONTAP 9.5 ou anterior. Ela foi substituída pela política de disposição em camadas *All* a partir do ONTAP 9.6.
+
+--
+

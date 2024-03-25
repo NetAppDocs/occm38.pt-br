@@ -1,0 +1,37 @@
+---
+sidebar: sidebar 
+permalink: task_finding_system_id.html 
+keywords: system id, id, cloud manager system id 
+summary: Para ajudá-lo a começar, seu representante do NetApp pode pedir a ID do sistema que identifica o sistema do Cloud Manager. O ID é normalmente utilizado para fins de licenciamento e resolução de problemas. 
+---
+= Encontrando a ID do sistema do Cloud Manager
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Para ajudá-lo a começar, seu representante da NetApp pode pedir a ID do sistema do Cloud Manager. O ID é normalmente utilizado para fins de licenciamento e resolução de problemas.
+
+.O que você vai precisar
+Você precisa criar um conetor antes de alterar as configurações do Cloud Manager. link:concept_connectors.html#how-to-create-a-connector["Saiba como"].
+
+.Passos
+. No canto superior direito do console do Cloud Manager, clique no ícone Configurações.
++
+image:screenshot_settings_icon.gif["Uma captura de tela que mostra o ícone Configurações no canto superior direito do console do Cloud Manager."]
+
+. Clique em *Painel de suporte*.
++
+A ID do sistema aparece no canto superior direito.
+
++
+*Exemplo*
+
++
+image:screenshot_system_id.gif["Uma captura de tela que mostra a ID do sistema do Cloud Manager que aparece no Painel de suporte."]
+
+

@@ -1,0 +1,67 @@
+---
+sidebar: sidebar 
+permalink: index.html 
+summary: O Cloud Manager permite que especialistas DE TI e arquitetos de nuvem gerenciem centralmente sua infraestrutura multicloud híbrida usando as soluções de nuvem da NetApp. 
+---
+= Documentação do Cloud Manager e do Cloud Volumes ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+O Cloud Manager permite que especialistas DE TI e arquitetos de nuvem gerenciem centralmente sua infraestrutura multicloud híbrida usando as soluções de nuvem da NetApp.
+
+
+
+== BlueXP
+
+O NetApp BlueXP  estende e aprimora as funcionalidades fornecidas pelo Cloud Manager.
+
+https://docs.netapp.com/us-en/bluexp-family/["Vá para a documentação do BlueXP "^]
+
+
+
+== Descubra as novidades
+
+* link:reference_key_changes.html["Mudanças importantes no Cloud Manager"]
+* link:reference_new_occm.html["Novidades no Cloud Manager"]
+* https://docs.netapp.com/us-en/cloud-volumes-ontap/reference_new_97.html["O que há de novo no Cloud Volumes ONTAP"^]
+
+
+
+
+== Comece agora
+
+* link:concept_overview.html["Cloud Manager"]
+* link:concept_cloud_central_accounts.html["Definições de conta"]
+* link:task_getting_started_aws.html["Cloud Volumes ONTAP para AWS"]
+* link:task_getting_started_azure.html["Cloud Volumes ONTAP para Azure"]
+* link:task_getting_started_gcp.html["Cloud Volumes ONTAP para Google Cloud"]
+* link:task_manage_anf.html["Azure NetApp Files"]
+* link:task_manage_cvs_aws.html["Cloud Volumes Service para AWS"]
+* link:task_manage_cvs_gcp.html["Cloud Volumes Service para Google Cloud"]
+* link:task_getting_started_compliance.html["Conformidade com a nuvem"]
+* link:task_gfc_getting_started.html["Cache de arquivos global"]
+* link:concept_backup_to_cloud.html["Backup na nuvem"]
+* link:task_getting_started_monitoring.html["Cloud Insights"]
+
+
+
+
+== Automatize com APIs
+
+* link:api.html["Guia do desenvolvedor de API"^]
+* link:reference_infrastructure_as_code.html["Amostras de automação"]
+
+
+
+
+== Conete-se com colegas, obtenha ajuda e encontre mais informações
+
+* https://community.netapp.com/t5/Cloud-Data-Services/ct-p/CDS["Comunidade NetApp: Serviços de dados em nuvem"^]
+* https://mysupport.netapp.com/GPS/ECMLS2588181.html["Suporte à NetApp Cloud Volumes ONTAP"^]
+* link:reference_additional_info.html["Onde obter ajuda e encontrar mais informações"]
+

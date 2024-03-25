@@ -1,0 +1,74 @@
+---
+sidebar: sidebar 
+permalink: reference_user_roles.html 
+keywords: user, users, roles, role, task, permission, permissions, tasks, admin, Account Admin, Workspace Admin, Cloud Compliance Viewer 
+summary: As funções Admin da conta, Admin do espaço de trabalho e Visualizador de conformidade na nuvem fornecem permissões específicas aos usuários. 
+---
+= Funções
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+As funções Admin da conta, Admin do espaço de trabalho e Visualizador de conformidade na nuvem fornecem permissões específicas aos usuários.
+
+[cols="31,23,23,23"]
+|===
+| Tarefa | Administrador da conta | Admin da área de trabalho | Visualizador de conformidade na nuvem 
+
+
+| Gerenciar ambientes de trabalho | Sim | Sim | Não 
+
+
+| Ativar serviços em ambientes de trabalho | Sim | Sim | Não 
+
+
+| Exibir status de replicação de dados | Sim | Sim | Não 
+
+
+| Veja a linha do tempo | Sim | Sim | Não 
+
+
+| Alterne entre espaços de trabalho | Sim | Sim | Sim 
+
+
+| Ver os resultados da verificação de conformidade | Sim | Sim | Sim 
+
+
+| Eliminar ambientes de trabalho | Sim | Não | Não 
+
+
+| Conecte clusters do Kubernetes a ambientes de trabalho | Sim | Não | Não 
+
+
+| Receba o relatório Cloud Volumes ONTAP | Sim | Não | Não 
+
+
+| Crie conetores | Sim | Não | Não 
+
+
+| Gerenciar contas do Cloud Central | Sim | Não | Não 
+
+
+| Gerenciar credenciais | Sim | Não | Não 
+
+
+| Modifique as configurações do Cloud Manager | Sim | Não | Não 
+
+
+| Visualize e gerencie o Painel de suporte | Sim | Não | Não 
+
+
+| Remova os ambientes de trabalho do Cloud Manager | Sim | Não | Não 
+
+
+| Instale um certificado HTTPS | Sim | Não | Não 
+|===
+.Links relacionados
+* link:task_setting_up_cloud_central_accounts.html["Configurando espaços de trabalho e usuários na conta do Cloud Central"^]
+* link:task_managing_cloud_central_accounts.html["Gerenciamento de espaços de trabalho e usuários na conta do Cloud Central"^]
+

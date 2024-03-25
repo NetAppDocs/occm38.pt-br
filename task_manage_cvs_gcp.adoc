@@ -1,0 +1,271 @@
+---
+sidebar: sidebar 
+permalink: task_manage_cvs_gcp.html 
+keywords: cloud volumes service for gcp, google cloud, cloud volumes, create cloud volumes, delete cloud volumes, discover region, service level, allowed clients, create snapshots 
+summary: Com o Cloud Manager, você cria volumes de nuvem com base na subscrição do Cloud Volumes Service para o Google Cloud. Você também pode editar certos atributos de um volume, obter os comandos de montagem relevantes, criar cópias snapshot e excluir volumes de nuvem. 
+---
+= Crie e gerencie volumes para Cloud Volumes Service para Google Cloud
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Com o Cloud Manager, você cria volumes de nuvem com base na link:https://console.cloud.google.com/marketplace/product/endpoints/cloudvolumesgcp-api.netapp.com?q=cloud%20volumes%20service["Cloud Volumes Service para Google Cloud"^] sua subscrição. Você também pode editar certos atributos de um volume, obter os comandos de montagem relevantes, criar cópias snapshot e excluir volumes de nuvem.
+
+
+
+== Criar o Cloud volumes
+
+É possível criar volumes NFS ou SMB em uma conta do Cloud Volumes Service for Google Cloud nova ou existente. Atualmente, o Cloud volumes suporta NFSv3 e NFSv4,1 para clientes Linux e UNIX e SMB 3.x para clientes Windows.
+
+.Antes de começar
+* Se você quiser usar o SMB na GCP, você deve ter configurado o DNS e o ative Directory.
+* Ao Planejar criar um volume SMB, você deve ter um servidor do Windows ative Directory disponível para o qual você pode se conetar. Você inserirá essas informações ao criar o volume. Além disso, certifique-se de que o usuário Admin é capaz de criar uma conta de máquina no caminho da unidade organizacional (ou) especificado.
+
+
+.Passos
+. Selecione o ambiente de trabalho e clique em *Adicionar novo volume*.
+. Na página Detalhes e localização, introduza os detalhes sobre o volume:
++
+.. Introduza um nome para o volume.
+.. Especifique um tamanho dentro do intervalo de 1 TIB (1024 GiB) a 100 TIB.
++
+link:https://cloud.google.com/solutions/partners/netapp-cloud-volumes/selecting-the-appropriate-service-level-and-allocated-capacity-for-netapp-cloud-volumes-service#allocated_capacity["Saiba mais sobre a capacidade alocada"^].
+
+.. Especifique um nível de serviço: Standard, Premium ou Extreme.
++
+link:https://cloud.google.com/solutions/partners/netapp-cloud-volumes/selecting-the-appropriate-service-level-and-allocated-capacity-for-netapp-cloud-volumes-service#service_levels["Saiba mais sobre os níveis de serviço"^].
+
+.. Selecione a região Google Cloud.
+.. Selecione a rede VPC a partir da qual o volume será acessível. Observe que a VPC não pode ser alterada ou editada após a criação do volume.
+.. Clique em *continuar*.
++
+image:screenshot_cvs_gcp_vol_details_page.png["Uma captura de tela da página de detalhes do volume onde você fornece o nome, o tamanho e o nível de serviço"]
+
+
+
+. Na página Protocolo, selecione NFS ou SMB e, em seguida, defina os detalhes. As entradas necessárias para NFS e SMB são mostradas em seções separadas abaixo.
+. Para NFS:
++
+.. No campo caminho do volume , especifique o nome da exportação de volume que você verá quando montar o volume.
+.. Selecione NFSv3, NFSv4,1 ou ambos, dependendo dos seus requisitos.
+.. Opcionalmente, você pode criar uma política de exportação para identificar os clientes que podem acessar o volume. Especifique:
++
+*** Clientes permitidos usando um endereço IP ou CIDR (Classless Inter-Domain Routing).
+*** Direitos de acesso como somente leitura e gravação ou leitura.
+*** Protocolo de acesso (ou protocolos se o volume permitir o acesso NFSv3 e NFSv4,1) utilizado para os utilizadores.
+*** Clique em Adicionar regra de política de exportação* se quiser definir regras de política de exportação adicionais.
++
+A imagem seguinte mostra a página volume preenchida para o protocolo NFS:
+
++
+image:screenshot_cvs_gcp_nfs_details.png["Uma captura de tela que mostra a página de volume preenchida para um volume NFS Cloud Volumes Service."]
+
+
+
+
+
+. Para SMB:
++
+.. No campo caminho do volume , especifique o nome da exportação de volume que você verá quando montar o volume e clique em *continuar*.
+.. Se o ative Directory tiver sido configurado, você verá a configuração. Se for o primeiro volume a ser configurado e não tiver sido configurado o ative Directory, pode ativar a encriptação de sessão SMB na página Configuração de conetividade SMB:
++
+[cols="25,75"]
+|===
+| Campo | Descrição 
+
+
+| Endereço IP primário do DNS | Os endereços IP dos servidores DNS que fornecem resolução de nomes para o servidor SMB. Use uma vírgula para separar os endereços IP ao fazer referência a vários servidores, por exemplo, 172.31.25.223, 172.31.2.74. 
+
+
+| Ative Directory Domain para aderir | O FQDN do domínio do ative Directory (AD) ao qual você deseja que o servidor SMB se associe. 
+
+
+| Nome NetBIOS do servidor SMB | Um nome NetBIOS para o servidor SMB que será criado. 
+
+
+| Credenciais autorizadas para ingressar no domínio | O nome e a senha de uma conta do Windows com Privileges suficiente para adicionar computadores à unidade organizacional especificada (ou) dentro do domínio do AD. 
+
+
+| Unidade organizacional | A unidade organizacional dentro do domínio AD a associar ao servidor SMB. A predefinição é computadores para ligações ao seu próprio servidor Windows ative Directory. 
+|===
++
+A imagem seguinte mostra a página volume preenchida para o protocolo SMB:
+
++
+image:screenshot_cvs_smb_details.png["Uma captura de tela que mostra a página de volume preenchida para um volume SMB Cloud Volumes Service."]
+
+
+
+. Clique em *continuar*.
+. Se quiser criar o volume com base em um instantâneo de um volume existente, selecione o instantâneo na lista suspensa Nome do instantâneo. Caso contrário, basta clicar em *continuar*.
+. Na página Política de Snapshot, é possível habilitar o Cloud Volumes Service a criar cópias snapshot de seus volumes com base em uma programação. Pode fazê-lo agora movendo o seletor para a direita ou pode editar o volume mais tarde para definir a política de instantâneos.
++
+Consulte link:task_manage_cloud_volumes_gcp_snapshots.html#create_or_modify_a_snapshot_policy["Criando uma política de snapshot"^] para obter mais informações sobre a funcionalidade de instantâneos.
+
+. Clique em *Adicionar volume*.
+
+
+O novo volume é adicionado ao ambiente de trabalho.
+
+Continue com link:task_manage_cvs_gcp.html#mount-the-cloud-volume["Montagem do volume de nuvem"].
+
+
+
+== Montar o Cloud volumes
+
+Acesse as instruções de montagem do Cloud Manager para que você possa montar o volume em um host.
+
+*Nota:* por favor, use o protocolo/dialeto destacado suportado pelo seu cliente.
+
+.Passos
+. Abra o ambiente de trabalho.
+. Passe o Mouse sobre o volume e clique em *Monte o volume*.
++
+Os volumes NFS e SMB exibem instruções de montagem para esse protocolo.
+
+. Passe o Mouse sobre os comandos e copie-os para a área de transferência para facilitar este processo. Basta adicionar o diretório de destino/ponto de montagem no final do comando.
++
+*Exemplo de NFS:*
+
++
+image:screenshot_cvs_aws_nfs_mount.png["Instruções de montagem para volumes NFS"]
+
++
+O tamanho máximo de e/S definido `rsize` pelas opções e `wsize` é 1048576, no entanto, 65536 é o padrão recomendado para a maioria dos casos de uso.
+
++
+Observe que os clientes Linux serão padrão para NFSv4,1, a menos que a versão seja especificada com a `vers=<nfs_version>` opção.
+
++
+*Exemplo SMB:*
+
++
+image:screenshot_cvs_aws_smb_mount.png["Instruções de montagem para volumes SMB"]
+
+. Mapeie a unidade de rede seguindo as instruções de montagem da instância.
++
+Depois de concluir as etapas nas instruções de montagem, você montou com sucesso o volume da nuvem na instância do GCP.
+
+
+
+
+
+== Gerenciar volumes existentes
+
+Você pode gerenciar volumes existentes conforme suas necessidades de storage mudam. Você pode exibir, editar, restaurar e excluir volumes.
+
+.Passos
+. Abra o ambiente de trabalho.
+. Passe o Mouse sobre o volume.
++
+image:screenshot_cvs_gcp_volume_hover_menu.png["Uma captura de tela do menu de volume que permite executar tarefas de volume"]
+
+. Gerencie seus volumes:
++
+[cols="30,70"]
+|===
+| Tarefa | Ação 
+
+
+| Exibir informações sobre um volume | Clique em *Info*. 
+
+
+| Editar um volume (incluindo política de instantâneos)  a| 
+.. Clique em *Editar*.
+.. Modifique as propriedades do volume e clique em *Update*.
+
+
+
+
+| Obtenha o comando de montagem NFS ou SMB  a| 
+.. Clique em *montar o volume*.
+.. Clique em *Copy* para copiar o(s) comando(s).
+
+
+
+
+| Criar uma cópia Snapshot sob demanda  a| 
+.. Clique em *criar uma cópia Snapshot*.
+.. Altere o nome, se necessário, e clique em *criar*.
+
+
+
+
+| Substitua o volume pelo conteúdo de uma cópia Snapshot  a| 
+.. Clique em *Reverter volume para instantâneo*.
+.. Selecione uma cópia Snapshot e clique em *Restore*.
+
+
+
+
+| Excluir uma cópia Snapshot  a| 
+.. Clique em *Excluir uma cópia Snapshot*.
+.. Selecione o instantâneo e clique em *Delete*.
+.. Clique em *Delete* novamente quando solicitado a confirmar.
+
+
+
+
+| Eliminar um volume  a| 
+.. Desmonte o volume de todos os clientes:
++
+*** Em clientes Linux, use o `umount` comando.
+*** Em clientes Windows, clique em *Disconnect network drive*.
+
+
+.. Selecione um volume e, em seguida, clique em *Delete*.
+.. Clique em *Delete* novamente para confirmar.
+
+
+|===
+
+
+
+
+== Remova o Cloud Volumes Service do Cloud Manager
+
+Você pode remover uma assinatura do Cloud Volumes Service para Google Cloud e todos os volumes existentes do Cloud Manager. Os volumes não são excluídos. Eles acabaram de ser removidos da interface do Cloud Manager.
+
+.Passos
+. Abra o ambiente de trabalho.
+. Clique no image:screenshot_gallery_options.gif[""] botão na parte superior da página e clique em *Remover Cloud Volumes Service*.
+. Na caixa de diálogo de confirmação, clique em *Remover*.
+
+
+
+
+== Gerenciar a configuração do ative Directory
+
+Se você alterar seus servidores DNS ou domínio do ative Directory, precisará modificar o servidor SMB no Cloud volumes Services para que ele possa continuar fornecendo storage aos clientes.
+
+.Passos
+. Abra o ambiente de trabalho.
+. Clique no image:screenshot_gallery_options.gif[""] botão na parte superior da página e clique em *Gerenciar ative Directory*. Se nenhum ative Directory estiver configurado, você poderá adicionar um agora. Se uma estiver configurada, pode modificar ou eliminar as definições utilizando o image:screenshot_gallery_options.gif[""] botão.
+. Especifique as configurações para o servidor SMB:
++
+[cols="25,75"]
+|===
+| Campo | Descrição 
+
+
+| Endereço IP primário do DNS | Os endereços IP dos servidores DNS que fornecem resolução de nomes para o servidor SMB. Use uma vírgula para separar os endereços IP ao fazer referência a vários servidores, por exemplo, 172.31.25.223, 172.31.2.74. 
+
+
+| Ative Directory Domain para aderir | O FQDN do domínio do ative Directory (AD) ao qual você deseja que o servidor SMB se associe. 
+
+
+| Nome NetBIOS do servidor SMB | Um nome NetBIOS para o servidor SMB que será criado. 
+
+
+| Credenciais autorizadas para ingressar no domínio | O nome e a senha de uma conta do Windows com Privileges suficiente para adicionar computadores à unidade organizacional especificada (ou) dentro do domínio do AD. 
+
+
+| Unidade organizacional | A unidade organizacional dentro do domínio AD a associar ao servidor SMB. A predefinição é computadores para ligações ao seu próprio servidor Windows ative Directory. 
+|===
+. Clique em *Salvar* para salvar suas configurações.
+

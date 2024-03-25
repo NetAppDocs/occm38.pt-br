@@ -1,0 +1,128 @@
+---
+sidebar: sidebar 
+permalink: task_launching_azure_mktp.html 
+keywords: install, installation, installing, marketplace, azure, deploy, virtual machine, permissions, deploy connector in azure, install connector in azure 
+summary: É melhor criar um conetor diretamente do Cloud Manager, mas você pode iniciar um conetor do Azure Marketplace, se preferir. Depois de criar e configurar o conetor, o Cloud Manager o usará automaticamente quando você criar novos ambientes de trabalho. 
+---
+= Criando um conetor a partir do Azure Marketplace
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+É melhor criar um conetor diretamente do Cloud Manager, mas você pode iniciar um conetor do Azure Marketplace, se preferir. Depois de criar e configurar o conetor, o Cloud Manager o usará automaticamente quando você criar novos ambientes de trabalho.
+
+
+
+== Criando um conetor no Azure
+
+Implante o conetor no Azure usando a imagem no Azure Marketplace e faça login no conetor para especificar sua conta do Cloud Central.
+
+.Passos
+. https://azuremarketplace.microsoft.com/en-us/marketplace/apps/netapp.netapp-oncommand-cloud-manager["Vá para a página do Azure Marketplace para o Cloud Manager"^].
+. Clique em *Obtenha-o agora* e, em seguida, clique em *continuar*.
+. No portal do Azure, clique em *criar* e siga as etapas para configurar a máquina virtual.
++
+Observe o seguinte ao configurar a VM:
+
++
+** O Cloud Manager pode ter um desempenho ideal com discos HDD ou SSD.
+** Escolha um tamanho de VM que atenda aos requisitos de CPU e RAM. Recomendamos DS3 v2.
++
+link:reference_cloud_mgr_reqs.html["Revise os requisitos da VM"].
+
+** Para o grupo de segurança de rede, o conetor requer conexões de entrada usando SSH, HTTP e HTTPS.
++
+link:reference_networking_cloud_manager.html#rules-for-the-connector-in-azure["Saiba mais sobre as regras do grupo de segurança para o conetor"].
+
+** Em *Gerenciamento*, ative *identidade gerenciada atribuída ao sistema* para o conetor selecionando *On*.
++
+Essa configuração é importante porque uma identidade gerenciada permite que a máquina virtual Connector se identifique no Azure ative Directory sem fornecer credenciais. https://docs.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview["Saiba mais sobre identidades gerenciadas para recursos do Azure"^].
+
+
+
+. Na página *Revisão e criação*, revise suas seleções e clique em *criar* para iniciar a implantação.
++
+O Azure implanta a máquina virtual com as configurações especificadas. A máquina virtual e o software do conetor devem estar funcionando em aproximadamente cinco minutos.
+
+. Abra um navegador da Web a partir de um host que tenha uma conexão com a máquina virtual do conetor e insira o seguinte URL:
++
+http://_ipaddress_:80[]
+
+. Depois de iniciar sessão, configure o conetor:
++
+.. Especifique a conta do Cloud Central a ser associada ao conetor.
++
+link:concept_cloud_central_accounts.html["Saiba mais sobre as contas do Cloud Central"].
+
+.. Introduza um nome para o sistema.
++
+image:screenshot_set_up_cloud_manager.gif["Uma captura de tela que mostra a tela Configurar o Cloud Manager que permite selecionar uma conta do Cloud Central e nomear o sistema."]
+
+
+
+
+
+.Resultado
+O conetor está agora instalado e configurado. Você deve conceder permissões do Azure antes que os usuários possam implantar o Cloud Volumes ONTAP no Azure.
+
+
+
+== Concessão de permissões do Azure
+
+Quando você implantou o conetor no Azure, você deve ter habilitado um https://docs.microsoft.com/en-us/azure/active-directory/managed-identities-azure-resources/overview["identidade gerenciada atribuída ao sistema"^]. agora você deve conceder as permissões necessárias do Azure criando uma função personalizada e atribuindo a função à máquina virtual do conetor para uma ou mais assinaturas.
+
+.Passos
+. Crie uma função personalizada usando a política do Cloud Manager:
++
+.. Faça download do https://mysupport.netapp.com/site/info/cloud-manager-policies["Política do Azure do Cloud Manager"^].
+.. Modifique o arquivo JSON adicionando IDs de assinatura do Azure ao escopo atribuível.
++
+Você deve adicionar o ID para cada assinatura do Azure a partir da qual os usuários criarão sistemas Cloud Volumes ONTAP.
+
++
+*Exemplo*
+
++
+"AssignableScopes": [ "/Subscrições/d333af45-0d07-4154-943d-c25fbzzzzzzz", "/Subscrições/54b91999-b3e6-4599-908e-416e0zzzzzzz", "/Subscrições/398e471c-3b42-4ae7-9b59-ce5bbzzzzzzz"
+
+.. Use o arquivo JSON para criar uma função personalizada no Azure.
++
+O exemplo a seguir mostra como criar uma função personalizada usando a CLI do Azure 2,0:
+
++
+`az role definition create --role-definition C:\Policy_for_cloud_Manager_Azure_3.8.7.json`
+
++
+Agora você deve ter uma função personalizada chamada Operador do Cloud Manager que você pode atribuir à máquina virtual do conetor.
+
+
+
+. Atribua a função à máquina virtual Connector para uma ou mais subscrições:
++
+.. Abra o serviço *assinaturas* e selecione a assinatura na qual deseja implantar sistemas Cloud Volumes ONTAP.
+.. Clique em *Access Control (IAM)*.
+.. Clique em *Adicionar* > *Adicionar atribuição de função* e, em seguida, adicione as permissões:
++
+*** Selecione a função *Operador do Cloud Manager*.
++
+
+NOTE: Operador do Cloud Manager é o nome padrão fornecido no https://mysupport.netapp.com/site/info/cloud-manager-policies["Política do Cloud Manager"]. Se você escolher um nome diferente para a função, selecione esse nome em vez disso.
+
+*** Atribua acesso a uma *Máquina Virtual*.
+*** Selecione a assinatura na qual a máquina virtual do conetor foi criada.
+*** Selecione a máquina virtual do conetor.
+*** Clique em *Salvar*.
+
+
+.. Se você quiser implantar o Cloud Volumes ONTAP a partir de assinaturas adicionais, mude para essa assinatura e repita essas etapas.
+
+
+
+
+.Resultado
+O conetor agora tem as permissões necessárias para gerenciar recursos e processos em seu ambiente de nuvem pública. O Cloud Manager usará automaticamente esse conetor quando você criar novos ambientes de trabalho. Mas se você tiver mais de um conetor, você precisará link:task_managing_connectors.html["alterne entre eles"].

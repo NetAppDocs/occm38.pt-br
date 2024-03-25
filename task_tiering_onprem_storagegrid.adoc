@@ -1,0 +1,194 @@
+---
+sidebar: sidebar 
+permalink: task_tiering_onprem_storagegrid.html 
+keywords: data tiering, fabricpool, cloud tiering, tiering cold data, tiering inactive data, tiering aff, tiering fas, tiering ontap, tiering volumes, tier data, tier cold data, tier fas, tier aff, tier ontap, storagegrid, tier to storagegrid, fabricpool storagegrid 
+summary: Liberar espaço nos clusters do ONTAP no local ao dispor dados em camadas no StorageGRID. A disposição em camadas de dados é baseada no serviço de disposição em camadas na nuvem do NetApp. 
+---
+= Disposição de dados em camadas de clusters ONTAP on-premises para o StorageGRID
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Liberar espaço nos clusters do ONTAP no local ao dispor dados em camadas no StorageGRID. A disposição em camadas de dados é baseada no serviço de disposição em camadas na nuvem do NetApp.
+
+
+
+== Início rápido
+
+Comece rapidamente seguindo estas etapas ou role para baixo até as seções restantes para obter detalhes completos.
+
+
+
+==== image:number1.png["número 1"] Prepare-se para categorizar dados no StorageGRID
+
+[role="quick-margin-para"]
+Você precisa do seguinte:
+
+[role="quick-margin-list"]
+* Um sistema AFF ou FAS com agregados all-SSD que está executando o ONTAP 9.4 ou posterior e uma conexão em uma porta especificada pelo usuário para o StorageGRID.
+* StorageGRID 10,3 ou posterior com chaves de acesso AWS que têm permissões S3.
+* Um conetor instalado nas suas instalações.
+* Rede para o conetor que habilita uma conexão HTTPS de saída ao cluster ONTAP, ao StorageGRID e ao serviço de disposição em camadas na nuvem.
+
+
+
+
+==== image:number2.png["número 2"] Configurar a disposição em camadas
+
+[role="quick-margin-para"]
+Selecione um ambiente de trabalho local, clique em *Configuração de disposição em camadas* e siga as instruções para colocar dados em camadas no StorageGRID.
+
+
+
+== Requisitos
+
+Verifique o suporte para o cluster ONTAP, configure a rede e prepare o armazenamento de objetos.
+
+A imagem a seguir mostra cada componente e as conexões que você precisa preparar entre eles:
+
+image:diagram_cloud_tiering_storagegrid.png["Uma imagem de arquitetura que mostra o serviço disposição em camadas na nuvem com uma conexão com o conetor de serviço no local, o conetor de serviço com uma conexão com o cluster do ONTAP e uma conexão entre o cluster do ONTAP e o storage de objetos. Os dados ativos residem no cluster do ONTAP, enquanto os dados inativos residem no storage de objetos."]
+
+
+NOTE: A comunicação entre o conetor e o StorageGRID destina-se apenas à configuração de armazenamento de objetos.
+
+
+
+=== Preparando os clusters do ONTAP
+
+Os clusters do ONTAP precisam atender aos requisitos a seguir ao categorizar dados no StorageGRID.
+
+Plataformas ONTAP compatíveis:: O Cloud Tiering dá suporte a sistemas AFF e agregados all-SSD em sistemas FAS.
+Versão ONTAP suportada:: ONTAP 9 .4 ou posterior
+Licenciamento:: Não é necessária uma licença do FabricPool no cluster do ONTAP ao categorizar dados no StorageGRID.
+Requisitos de rede de cluster::
++
+--
+* O cluster do ONTAP inicia uma conexão HTTPS por uma porta especificada pelo usuário para o StorageGRID (a porta é configurável durante a configuração de disposição em camadas).
++
+O ONTAP lê e grava dados no storage de objetos. O armazenamento de objetos nunca inicia, ele apenas responde.
+
+* Uma conexão de entrada é necessária a partir do conetor, que deve residir em suas instalações.
++
+Não é necessária uma conexão entre o cluster e o serviço Cloud Tiering.
+
+* É necessário um LIF entre clusters em cada nó do ONTAP que hospeda volumes dispostos em camadas. O LIF deve estar associado ao _IPspace_ que o ONTAP deve usar para se conetar ao armazenamento de objetos.
++
+Os IPspaces permitem a segregação de tráfego de rede, permitindo a separação do tráfego de clientes para privacidade e segurança. http://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-nmg/GUID-69120CF0-F188-434F-913E-33ACB8751A5D.html["Saiba mais sobre IPspaces"^].
+
++
+Quando você configura a disposição de dados em categorias, o Cloud Tiering solicita que você use o espaço IPspace. Você deve escolher o espaço IPspace ao qual cada LIF está associado. Esse pode ser o espaço IPspace "padrão" ou um espaço IPspace personalizado que você criou.
+
+
+
+--
+Volumes e agregados compatíveis:: O número total de volumes em que o Cloud Tiering pode ser menor que o número de volumes no sistema ONTAP. Isso porque os volumes não podem ser dispostos em camadas de alguns agregados. Por exemplo, você não pode categorizar dados de volumes do SnapLock ou de configurações do MetroCluster. Consulte a documentação do ONTAP para obter link:http://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-psmg/GUID-8E421CC9-1DE1-492F-A84C-9EB1B0177807.html["Funcionalidade ou recursos não suportados pelo FabricPool"^]informações sobre .
+
+
+
+NOTE: O Cloud Tiering é compatível com volumes FlexGroup, a partir do ONTAP 9.5. A configuração funciona da mesma forma que qualquer outro volume.
+
+
+
+=== Preparando o StorageGRID
+
+O StorageGRID deve atender aos seguintes requisitos.
+
+Versões suportadas do StorageGRID:: StorageGRID 10,3 e posterior são suportados.
+S3 credenciais:: Ao configurar a disposição em camadas no StorageGRID, você precisa fornecer ao Cloud Tiering uma chave de acesso ao S3 e uma chave secreta. O Cloud Tiering usa as chaves para acessar seus buckets.
++
+--
+Essas chaves de acesso devem estar associadas a um usuário que tenha as seguintes permissões:
+
+[source, json]
+----
+"s3:ListAllMyBuckets",
+"s3:ListBucket",
+"s3:GetObject",
+"s3:PutObject",
+"s3:DeleteObject",
+"s3:CreateBucket"
+----
+--
+Controle de versão de objetos:: Você não deve habilitar o controle de versão de objetos do StorageGRID no bucket do armazenamento de objetos.
+
+
+
+
+=== Criação ou comutação de conetores
+
+Um conector é necessário para categorizar dados na nuvem. Ao colocar os dados em categorias no StorageGRID, um conector precisa estar disponível no local. Você precisará instalar um novo conetor ou certificar-se de que o conetor selecionado atualmente reside no local.
+
+* link:concept_connectors.html["Saiba mais sobre conetores"]
+* link:reference_cloud_mgr_reqs.html["Requisitos do host do conetor"]
+* link:task_installing_linux.html["Instalar o conetor em um host Linux existente"]
+* link:task_managing_connectors.html["Comutação entre conetores"]
+
+
+
+
+=== Preparar a rede para o conetor
+
+Certifique-se de que o conetor tem as ligações de rede necessárias.
+
+.Passos
+. Certifique-se de que a rede onde o conetor está instalado permite as seguintes ligações:
++
+** Uma conexão de saída à Internet para o serviço Cloud Tiering pela porta 443 (HTTPS)
+** Uma conexão HTTPS pela porta 443 para o StorageGRID
+** Uma conexão HTTPS pela porta 443 aos clusters do ONTAP
+
+
+
+
+
+
+== Disposição em camadas dos dados inativos do primeiro cluster no StorageGRID
+
+Depois de preparar seu ambiente, comece a categorizar os dados inativos do primeiro cluster.
+
+.O que você vai precisar
+* link:task_discovering_ontap.html["Um ambiente de trabalho no local"].
+* Uma chave de acesso da AWS que tem as permissões S3 necessárias.
+
+
+.Passos
+. Selecione um cluster no local.
+. Clique em *Configuração em categorias*.
++
+image:screenshot_setup_tiering_onprem.gif["Uma captura de tela que mostra a opção disposição em camadas de configuração que aparece no lado direito da tela depois de selecionar um ambiente de trabalho ONTAP local."]
+
++
+Agora você está no painel de disposição em camadas.
+
+. Clique em *Configurar disposição em camadas* ao lado do cluster.
+. Conclua as etapas na página *Configuração de categorias*:
++
+.. *Escolha seu provedor*: Selecione StorageGRID.
+.. *Servidor*: Insira o FQDN do servidor StorageGRID, insira a porta que o ONTAP deve usar para comunicação HTTPS com o StorageGRID e insira a chave de acesso e a chave secreta para uma conta AWS que tenha as permissões S3 necessárias.
+.. *Bucket*: Adicione um novo bucket ou selecione um bucket existente para os dados em camadas.
+.. *Rede de cluster*: Selecione o espaço IPspace que o ONTAP deve usar para se conetar ao armazenamento de objetos e clique em *continuar*.
++
+A seleção do espaço de IPspace correto garante que a disposição em camadas na nuvem possa configurar uma conexão do ONTAP ao armazenamento de objetos do seu provedor de nuvem.
+
+
+
+. Clique em *continuar* para selecionar os volumes que deseja categorizar.
+. Na página *volumes de nível*, configure a disposição em categorias para cada volume. Clique no image:screenshot_edit_icon.gif["Uma captura de tela do ícone de edição que aparece no final de cada linha na tabela para separar volumes"] ícone, selecione uma política de disposição em camadas, ajuste opcionalmente os dias de resfriamento e clique em *aplicar*.
++
+link:concept_cloud_tiering.html#volume-tiering-policies["Saiba mais sobre as políticas de disposição em camadas de volume"].
+
++
+image:https://docs.netapp.com/us-en/cloud-tiering/media/screenshot_volumes_select.gif["Uma captura de tela que mostra os volumes selecionados na página Selecionar volumes de origem."]
+
+
+
+.Resultado
+Você configurou com sucesso a disposição de dados em categorias de volumes no cluster para o StorageGRID.
+
+.O que se segue?
+Você pode adicionar clusters adicionais ou analisar informações sobre os dados ativos e inativos no cluster. Para obter detalhes, link:task_managing_tiering.html["Gerenciamento de categorização de dados nos clusters"]consulte .

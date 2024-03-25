@@ -1,0 +1,44 @@
+---
+sidebar: sidebar 
+permalink: reference_cloud_mgr_reqs.html 
+keywords: configurations, ec2, vm, ports, ram, operating system, os, host, requirement, requirements, hypervisor, disk, space, mysql, centos, rhel, red hat, cpu, disk space, 3306 
+summary: O software do conetor deve ser executado em um host que atenda a requisitos específicos do sistema operacional, requisitos de RAM, requisitos de porta, etc. 
+---
+= Requisitos do host do conetor
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+O software do conetor deve ser executado em um host que atenda a requisitos específicos do sistema operacional, requisitos de RAM, requisitos de porta, etc.
+
+Um host dedicado é necessário:: O conetor não é suportado em um host que é compartilhado com outros aplicativos. O host deve ser um host dedicado.
+CPU:: 4 núcleos ou 4 vCPUs
+RAM:: 14 GB
+Tipo de instância do AWS EC2:: Um tipo de instância que atende aos requisitos de CPU e RAM acima. Recomendamos o T3.xlarge e use esse tipo de instância quando você implantar o conetor diretamente do Cloud Manager.
+Tamanho da VM do Azure:: Um tipo de instância que atende aos requisitos de CPU e RAM acima. Recomendamos o DS3 v2 e usar esse tamanho de VM quando você implantar o conetor diretamente do Cloud Manager.
+Tipo de máquina GCP:: Um tipo de instância que atende aos requisitos de CPU e RAM acima. Recomendamos o padrão n1-4 e usar esse tipo de máquina quando você implantar o conetor diretamente do Cloud Manager.
+Sistemas operacionais suportados::
++
+--
+* CentOS 7,6
+* CentOS 7,7
+* Red Hat Enterprise Linux 7,6
+* Red Hat Enterprise Linux 7,7
++
+O sistema Red Hat Enterprise Linux deve ser registrado no Red Hat Subscription Management. Se não estiver registado, o sistema não poderá aceder aos repositórios para atualizar o software de 3rd partes necessário durante a instalação do conetor.
+
++
+O conetor é suportado em versões em inglês destes sistemas operativos.
+
+
+
+--
+Hipervisor:: Um hypervisor bare metal ou hospedado certificado para executar o CentOS ou o Red Hat Enterprise Linux https://access.redhat.com/certified-hypervisors["Solução Red Hat: Quais hipervisores são certificados para executar o Red Hat Enterprise Linux?"^]
+Espaço em disco em /opt:: 100 GB de espaço devem estar disponíveis
+Acesso de saída à Internet:: O acesso de saída à Internet é necessário para instalar o conetor e para que o conetor gerencie recursos e processos em seu ambiente de nuvem pública. Para obter uma lista de endpoints, link:reference_networking_cloud_manager.html["Requisitos de rede para o conetor"]consulte .
+

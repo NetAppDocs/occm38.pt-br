@@ -1,0 +1,67 @@
+---
+sidebar: sidebar 
+permalink: task_responding_to_dsar.html 
+keywords: dsar, data subject access request, search, search for name, report, gdpr, data privacy laws, data subject, compliance 
+summary: 'Responder a uma solicitação de acesso ao titular dos dados (DSAR), pesquisando o nome completo ou identificador conhecido de um indivíduo (como um endereço de e-mail) e, em seguida, baixando um relatório. O relatório foi projetado para auxiliar na exigência de sua organização em cumprir com o GDPR ou leis de privacidade de dados semelhantes.' 
+---
+= Resposta a uma solicitação de acesso do titular dos dados
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Responder a uma solicitação de acesso ao titular dos dados (DSAR), pesquisando o nome completo ou identificador conhecido de um indivíduo (como um endereço de e-mail) e, em seguida, baixando um relatório. O relatório foi projetado para auxiliar na exigência de sua organização em cumprir com o GDPR ou leis de privacidade de dados semelhantes.
+
+
+NOTE: A NetApp não pode garantir 100% de precisão dos dados pessoais e dados pessoais confidenciais que o Cloud Compliance identifica. Deve sempre validar as informações através da revisão dos dados.
+
+
+
+== O que é uma solicitação de acesso ao titular dos dados?
+
+As regulamentações de privacidade, como o GDPR europeu, concedem aos titulares dos dados (como clientes ou funcionários) o direito de acessar seus dados pessoais. Quando um titular de dados solicita essas informações, isso é conhecido como DSAR (solicitação de acesso do titular dos dados). As organizações devem responder a essas solicitações "sem demora indevida" e, o mais tardar, no prazo de um mês após o recebimento.
+
+
+
+== Como o Cloud Compliance pode ajudá-lo a responder a um DSAR?
+
+Quando você realiza uma pesquisa de titular de dados, o Cloud Compliance localiza todos os arquivos que possuem o nome ou identificador dessa pessoa. O Cloud Compliance verifica os dados pré-indexados mais recentes para o nome ou identificador. Não inicia uma nova digitalização.
+
+Depois que a pesquisa estiver concluída, você poderá baixar a lista de arquivos para um relatório de solicitação de acesso do titular dos dados. O relatório agrega insights dos dados e os coloca em termos legais que você pode enviar de volta para a pessoa.
+
+
+
+== Procurar por titulares de dados e transferir relatórios
+
+Procure o nome completo ou identificador conhecido do titular dos dados e, em seguida, transfira um relatório de lista de ficheiros ou relatório DSAR. Pode pesquisar por link:task_controlling_private_data.html#types-of-personal-data["qualquer tipo de informação pessoal"^].
+
+Apenas o inglês é suportado ao procurar os nomes dos titulares dos dados. O suporte para mais idiomas será adicionado mais tarde.
+
+
+NOTE: A pesquisa de titulares de dados não é suportada em bases de dados neste momento.
+
+.Passos
+. Na parte superior do Cloud Manager, clique em *Cloud Compliance*.
+. Clique em *Assunto de dados*.
+. Procure o nome completo ou identificador conhecido do titular dos dados.
++
+Aqui está um exemplo que mostra uma pesquisa para o nome _john doe_:
+
++
+image:screenshot_dsar_search.gif["Uma captura de tela que mostra uma pesquisa para o nome \"John Doe\" para um DSAR."]
+
+. Escolha uma das opções disponíveis:
++
+** *Download de Relatório DSAR*: Uma resposta formal à solicitação de acesso que você pode enviar ao titular dos dados. Este relatório contém informações geradas automaticamente com base nos dados que o Cloud Compliance foi encontrado no titular dos dados e foi projetado para ser usado como modelo. Você deve preencher o formulário e revisá-lo internamente antes de enviá-lo para o titular dos dados.
+** *Investigar resultados*: Uma página que permite investigar os dados pesquisando, classificando, expandindo detalhes para um arquivo específico e baixando a lista de arquivos.
++
+
+NOTE: Se houver mais de 10.000 resultados, apenas os 10.000 primeiros aparecem na lista de arquivos.
+
+
+
+

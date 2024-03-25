@@ -1,0 +1,31 @@
+---
+sidebar: sidebar 
+permalink: task_signing_up.html 
+keywords: netapp cloud central, sign up, sign up to cloud central, create account 
+summary: Inscreva-se no NetApp Cloud Central para que você possa acessar os serviços de nuvem da NetApp. 
+---
+= Inscreva-se no NetApp Cloud Central
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Inscreva-se no NetApp Cloud Central para que você possa acessar os serviços de nuvem da NetApp.
+
+.Passos
+. Abra um navegador da Web e vá para https://cloud.netapp.com/["Centro de nuvem da NetApp"^].
+. Clique em *Inscrever-se*.
+. Preencha o formulário e clique em *Inscrever-se*.
++
+image:screenshot_cloud_central_signup.gif["Uma captura de tela do formulário de inscrição no Cloud Central, onde você insere seu endereço de e-mail, senha, empresa, nome e número de telefone."]
+
+. Aguarde um e-mail do NetApp Cloud Central.
+. Clique no link no e-mail para verificar seu endereço de e-mail.
+
+
+.Resultado
+Agora você tem um login de usuário ativo do Cloud Central.

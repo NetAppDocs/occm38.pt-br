@@ -1,0 +1,53 @@
+---
+sidebar: sidebar 
+permalink: task_adding_nss_accounts.html 
+keywords: adding, creating, netapp support site account, nss 
+summary: É necessário adicionar sua conta do site de suporte da NetApp ao Cloud Manager para implantar um sistema BYOL. Também é necessário Registrar sistemas pay-as-you-go e atualizar o software ONTAP. 
+---
+= Adicionar contas do site de suporte da NetApp ao Cloud Manager
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+É necessário adicionar sua conta do site de suporte da NetApp ao Cloud Manager para implantar um sistema BYOL. Também é necessário Registrar sistemas pay-as-you-go e atualizar o software ONTAP.
+
+Assista ao vídeo a seguir para saber como adicionar contas do site de suporte da NetApp ao Cloud Manager. Ou role para baixo para ler os passos.
+
+video::V2fLTyztqYQ[youtube,width=848,height=480]
+.O que você vai precisar
+Você precisa criar um conetor antes de alterar as configurações do Cloud Manager. link:concept_connectors.html#how-to-create-a-connector["Saiba como"].
+
+.Passos
+. Se você ainda não tiver uma conta do site de suporte da NetApp, http://now.netapp.com/newuser/["registre-se para um"^].
+. No canto superior direito do console do Cloud Manager, clique no ícone Configurações e selecione *credenciais*.
++
+image:screenshot_settings_icon.gif["Uma captura de tela que mostra o ícone Configurações no canto superior direito do console do Cloud Manager."]
+
+. Clique em *Adicionar credenciais* e selecione *Site de suporte da NetApp*.
+. Especifique um nome para a conta e, em seguida, introduza o nome de utilizador e a palavra-passe.
++
+** A conta deve ser uma conta de cliente (não uma conta de convidado ou temporária).
+** Se você planeja implantar sistemas BYOL:
++
+*** A conta deve estar autorizada a acessar os números de série dos sistemas BYOL.
+*** Se você comprou uma assinatura BYOL segura, então uma conta NSS segura será necessária.
+
+
+
+
+. Clique em *criar conta.*
+
+
+.O que se segue?
+Os usuários agora podem selecionar a conta ao criar novos sistemas Cloud Volumes ONTAP e ao Registrar sistemas existentes.
+
+* link:task_deploying_otc_aws.html["Iniciando o Cloud Volumes ONTAP na AWS"]
+* link:task_deploying_otc_azure.html["Iniciar o Cloud Volumes ONTAP no Azure"]
+* link:task_registering.html["Registar sistemas de pagamento conforme o uso"]
+* link:concept_licensing.html["Saiba como o Cloud Manager gerencia arquivos de licença"]
+

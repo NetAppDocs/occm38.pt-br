@@ -1,0 +1,62 @@
+---
+sidebar: sidebar 
+permalink: concept_accounts_gcp.html 
+keywords: cloud provider accounts, gcp, gcp accounts, google cloud platform, google accounts, google cloud platform accounts, permissions, tiering, data tiering, account for data tiering, account for tiering, project, projects, add project, select new project, gcp project, google project, google cloud project 
+summary: Você usa uma conta do Google Cloud para implantar o Cloud Manager em um projeto. Em seguida, você pode implantar o Cloud Volumes ONTAP no mesmo projeto ou em um projeto diferente. As contas do Google Cloud adicionadas ao Cloud Manager são usadas para habilitar a categorização de dados. 
+---
+= Projetos, permissões e contas do Google Cloud
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Uma conta de serviço fornece ao Cloud Manager permissões para implantar e gerenciar sistemas Cloud Volumes ONTAP no mesmo projeto que o Cloud Manager ou em projetos diferentes.
+
+
+
+== Projeto e permissões para o Cloud Manager
+
+Antes de implantar o Cloud Volumes ONTAP no Google Cloud, você deve primeiro implantar um conetor em um projeto do Google Cloud. O conetor não pode ser executado em suas instalações ou em um provedor de nuvem diferente.
+
+Dois conjuntos de permissões devem estar em vigor antes de implantar um conetor diretamente do Cloud Manager:
+
+. Você precisa implantar um conetor usando uma conta do Google que tenha permissões para iniciar a instância de VM do Connector do Cloud Manager.
+. Ao implantar o conetor, você será solicitado a selecionar um https://cloud.google.com/iam/docs/service-accounts["conta de serviço"^] para a instância de VM. O Cloud Manager obtém permissões da conta de serviço para criar e gerenciar sistemas Cloud Volumes ONTAP em seu nome. As permissões são fornecidas anexando uma função personalizada à conta de serviço.
+
+
+Nós configuramos dois arquivos YAML que incluem as permissões necessárias para o usuário e a conta de serviço. link:task_creating_connectors_gcp.html["Saiba como usar os arquivos YAML para configurar permissões"].
+
+A imagem a seguir mostra os requisitos de permissão descritos nos números 1 e 2 acima:
+
+image:diagram_permissions_gcp.png["explicação"]
+
+
+
+== Projeto para Cloud Volumes ONTAP
+
+O Cloud Volumes ONTAP pode residir no mesmo projeto que o conetor, ou em um projeto diferente. Para implantar o Cloud Volumes ONTAP em um projeto diferente, você precisa primeiro adicionar a conta de serviço do Connector e a função a esse projeto.
+
+* link:task_creating_connectors_gcp.html#setting-up-gcp-permissions-to-create-a-connector["Saiba como configurar a conta de serviço (consulte o passo 2)"].
+* link:task_deploying_gcp.html["Saiba como implantar o Cloud Volumes ONTAP no GCP e selecione um projeto"].
+
+
+
+
+== Conte com a categorização de dados
+
+
+TIP: O Cloud Manager requer uma conta do GCP para o Cloud Volumes ONTAP 9,6, mas não para 9,7 e posterior. Para usar a disposição de dados em categorias com o Cloud Volumes ONTAP 9,7, siga a etapa 4 em link:task_getting_started_gcp.html["Introdução ao Cloud Volumes ONTAP no Google Cloud Platform"].
+
+É necessário adicionar uma conta do Google Cloud ao Cloud Manager para habilitar a disposição de dados em categorias em um sistema Cloud Volumes ONTAP 9,6. A categorização de dados categoriza automaticamente os dados inativos no storage de objetos de baixo custo, permitindo que você recupere espaço no storage primário e diminua o storage secundário.
+
+Ao adicionar a conta, você precisa fornecer ao Cloud Manager uma chave de acesso ao storage para uma conta de serviço que tenha permissões de administrador do storage. O Cloud Manager usa as chaves de acesso para configurar e gerenciar um bucket do Cloud Storage para categorização de dados.
+
+Depois de adicionar uma conta do Google Cloud, é possível habilitar a disposição em categorias de dados em volumes individuais ao criá-los, modificá-los ou replicá-los.
+
+* link:task_adding_gcp_accounts.html["Saiba como configurar e adicionar contas do GCP ao Cloud Manager"].
+* link:task_tiering.html["Saiba como categorizar dados inativos em armazenamento de objetos de baixo custo"].
+

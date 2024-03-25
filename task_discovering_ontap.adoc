@@ -1,0 +1,60 @@
+---
+sidebar: sidebar 
+permalink: task_discovering_ontap.html 
+keywords: ontap, cluster, discover, manage, discovering, fas, aff, discover onprem, discover aff cluster, discover cluster, add cluster 
+summary: O Cloud Manager pode descobrir os clusters do ONTAP em seu ambiente local, em uma configuração de storage privado do NetApp e na nuvem da IBM. Ao descobrir um cluster do ONTAP, você provisiona storage, replica dados e categoriza dados inativos de um cluster no local para a nuvem. 
+---
+= Descobrindo clusters do ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+O Cloud Manager pode descobrir os clusters do ONTAP em seu ambiente local, em uma configuração de storage privado do NetApp e na nuvem da IBM. Ao descobrir um cluster do ONTAP, você provisiona storage, replica dados, faz backup e categoriza dados inativos de um cluster no local para a nuvem.
+
+.O que você vai precisar
+* Um conetor instalado em um fornecedor de nuvem ou no local.
++
+Se você quiser categorizar dados inativos na nuvem, leia os requisitos do conector com base em onde planeja categorizar dados inativos.
+
++
+** link:concept_connectors.html["Saiba mais sobre conetores"]
+** link:task_managing_connectors.html["Comutação entre conetores"]
+** link:concept_cloud_tiering.html["Saiba mais sobre o Cloud Tiering"]
+
+
+* O endereço IP de gerenciamento de cluster e a senha da conta de usuário admin para adicionar o cluster ao Cloud Manager.
++
+O Cloud Manager descobre clusters do ONTAP usando HTTPS. Se você usar políticas de firewall personalizadas, elas devem atender aos seguintes requisitos:
+
++
+** O host do conetor deve permitir o acesso HTTPS de saída através da porta 443.
++
+Se o conetor estiver na nuvem, toda a comunicação de saída é permitida pelo grupo de segurança predefinido.
+
+** O cluster ONTAP deve permitir acesso HTTPS de entrada através da porta 443.
++
+A política de firewall "mgmt" padrão permite o acesso HTTPS de entrada de todos os endereços IP. Se você modificou essa política padrão, ou se criou sua própria política de firewall, associe o protocolo HTTPS a essa política e habilite o acesso do host do conetor.
+
+
+
+
+
+.Passos
+. Na página ambientes de trabalho, clique em *Adicionar ambiente de trabalho* e selecione *ONTAP on-premises*.
+. Se você for solicitado, crie um conetor.
++
+Consulte os links acima para obter mais detalhes.
+
+. Na página *Detalhes do cluster do ONTAP*, insira o endereço IP de gerenciamento de cluster, a senha da conta de usuário do administrador e a localização do cluster.
++
+image:screenshot_discover_ontap.gif["Uma captura de tela que mostra um exemplo da página Detalhes do cluster do ONTAP: O endereço IP de gerenciamento de cluster, nome de usuário e senha e no local selecionado como o local do cluster."]
+
+. Na página Detalhes, insira um nome e uma descrição para o ambiente de trabalho e clique em *Go*.
+
+
+.Resultado
+O Cloud Manager descobre o cluster. Agora, você pode criar volumes, replicar dados de e para o cluster, configurar a disposição de dados em categorias na nuvem, fazer backup de volumes na nuvem e iniciar o System Manager para executar tarefas avançadas.

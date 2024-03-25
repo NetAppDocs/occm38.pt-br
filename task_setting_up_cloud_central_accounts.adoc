@@ -1,0 +1,125 @@
+---
+sidebar: sidebar 
+permalink: task_setting_up_cloud_central_accounts.html 
+keywords: account settings, workspaces, Connector, account admin, workspace admin, users, associate, disassociate, add user, add users, user management, administer, user, management, account, user account, user accounts, create workspace, add workspace, setup workspace, workspace, Connector, manage Connector, manage workspace, associate Connector 
+summary: Ao fazer login no Cloud Manager pela primeira vez, você será solicitado a criar uma conta do NetApp Cloud Central. Essa conta oferece alocação a vários clientes e permite organizar usuários e recursos em espaços de trabalho isolados. 
+---
+= Configurando espaços de trabalho e usuários na conta do Cloud Central
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Quando você faz login no Cloud Manager pela primeira vez, será solicitado que você crie uma conta _NetApp Cloud Central_. Essa conta fornece alocação a vários clientes e permite organizar usuários e recursos em _workspaces_ isolados.
+
+link:concept_cloud_central_accounts.html["Saiba mais sobre como as contas do Cloud Central funcionam"].
+
+Configure sua conta do Cloud Central para que os usuários possam acessar o Cloud Manager e acessar os ambientes de trabalho em um workspace. Basta adicionar um único usuário ou adicionar vários usuários e workspaces.
+
+
+
+== Adicionar espaços de trabalho
+
+No Cloud Manager, os espaços de trabalho permitem isolar um conjunto de ambientes de trabalho de outros ambientes de trabalho e de outros usuários. Por exemplo, você pode criar dois espaços de trabalho e associar usuários separados a cada área de trabalho.
+
+.Passos
+. Na parte superior do Cloud Manager, clique no menu suspenso *Account*.
++
+image:screenshot_account_settings_menu.gif["Uma captura de tela que mostra a opção Configurações de conta no banner superior do Cloud Manager."]
+
+. Clique em *Gerenciar conta* ao lado da conta selecionada no momento.
++
+image:screenshot_manage_account_settings.gif["Uma captura de tela que mostra a opção Gerenciar configurações de conta que está disponível na lista suspensa conta."]
+
+. Clique em *Workspaces*.
+. Clique em *Adicionar novo espaço de trabalho*.
+. Insira um nome para o workspace e clique em *Add*.
+
+
+.Depois de terminar
+Se um administrador do espaço de trabalho precisar de acesso a essa área de trabalho, você precisará associar o usuário. Você também precisará associar conetores ao espaço de trabalho para que os administradores do Workspace possam usar esses conetores.
+
+
+
+== Adicionando usuários
+
+Associe usuários do Cloud Central à conta do Cloud Central para que esses usuários possam criar e gerenciar ambientes de trabalho no Cloud Manager.
+
+.Passos
+. Se o usuário ainda não tiver feito isso, peça ao usuário para ir https://cloud.netapp.com["Centro de nuvem da NetApp"^] e se inscrever.
+. Na parte superior do Cloud Manager, clique no menu suspenso *Account* e clique em *Manage Account*.
++
+image:screenshot_manage_account_settings.gif["Uma captura de tela que mostra a opção Gerenciar configurações de conta que está disponível na lista suspensa conta."]
+
+. Na guia usuários, clique em *Usuário associado*.
+. Insira o endereço de e-mail do usuário e selecione uma função para o usuário:
++
+** *Admin da conta*: Pode executar qualquer ação no Cloud Manager.
+** *Workspace Admin*: Pode criar e gerenciar recursos em workspaces atribuídos.
+** *Visualizador de conformidade*: Só pode visualizar informações de conformidade e gerar relatórios para espaços de trabalho que eles têm permissão para acessar.
+
+
+. Se você selecionou Workspace Admin ou Compliance Viewer, selecione um ou mais workspaces para associar a esse usuário.
++
+image:screenshot_associate_user.gif["Uma captura de tela que mostra como associar um usuário selecionando uma função e os espaços de trabalho associados."]
+
+. Clique em *Usuário associado*.
+
+
+.Resultado
+O usuário deve receber um e-mail do NetApp Cloud Central intitulado "Associação de Contas". O e-mail inclui as informações necessárias para acessar o Cloud Manager.
+
+
+
+== Associar administradores de workspace a workspaces
+
+Você pode associar administradores do Workspace a espaços de trabalho adicionais a qualquer momento. Associar o usuário permite que ele crie e visualize os ambientes de trabalho nesse espaço de trabalho.
+
+.Passos
+. Na parte superior do Cloud Manager, clique no menu suspenso *Account* e clique em *Manage Account*.
++
+image:screenshot_manage_account_settings.gif["Uma captura de tela que mostra a opção Gerenciar configurações de conta que está disponível na lista suspensa conta."]
+
+. Na guia usuários, clique no menu de ação na linha que corresponde ao usuário.
++
+image:screenshot_associate_user_workspace.gif["Uma captura de tela que mostra o menu de ação disponível ao passar o Mouse sobre o nome de um usuário na tabela usuários."]
+
+. Clique em *Gerenciar espaços de trabalho*.
+. Selecione um ou mais espaços de trabalho e clique em *Apply*.
+
+
+.Resultado
+O usuário agora pode acessar esses workspaces a partir do Cloud Manager, desde que o conetor também esteja associado aos workspaces.
+
+
+
+== Associar conetores a espaços de trabalho
+
+Você precisa associar um conetor aos workspaces para que os administradores do workspace possam usar esses conetores para criar sistemas Cloud Volumes ONTAP.
+
+Se você tiver apenas administradores de conta, associar o conetor com workspaces não será necessário. Administradores de conta têm a capacidade de acessar todos os espaços de trabalho no Cloud Manager por padrão.
+
+link:concept_cloud_central_accounts.html#users-workspaces-and-service-connectors["Saiba mais sobre usuários, workspaces e conetores"].
+
+.Passos
+. Na parte superior do Cloud Manager, clique no menu suspenso *Account* e clique em *Manage Account*.
++
+image:screenshot_manage_account_settings.gif["Uma captura de tela que mostra a opção Gerenciar configurações de conta que está disponível na lista suspensa conta."]
+
+. Clique em *Connector*.
+. Clique em *Manage Workspaces* (gerir espaços de trabalho) para o conetor que pretende associar.
+. Selecione um ou mais espaços de trabalho e clique em *Apply*.
+
+
+.Resultado
+Administradores de workspace agora podem usar esses conetores para criar sistemas Cloud Volumes ONTAP.
+
+
+
+== O que se segue?
+
+Agora que você configurou sua conta, você pode gerenciá-la a qualquer momento removendo usuários, gerenciando espaços de trabalho, conetores e assinaturas. link:task_managing_cloud_central_accounts.html["Saiba mais"].

@@ -1,0 +1,606 @@
+---
+sidebar: sidebar 
+permalink: reference_networking_cloud_manager.html 
+keywords: networking, network, requirements, connection, connections, vpc, security group, security groups, subnets, proxy server, vpn, outbound, inbound, connections, jump host, URL, URLs, endpoints, endpoint, ports 
+summary: Configure sua rede para que o conetor possa gerenciar recursos e processos em seu ambiente de nuvem pública. O passo mais importante é garantir o acesso de saída à Internet a vários endpoints. 
+---
+= Requisitos de rede para o conetor
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Configure sua rede para que o conetor possa gerenciar recursos e processos em seu ambiente de nuvem pública. O passo mais importante é garantir o acesso de saída à Internet a vários endpoints.
+
+
+TIP: Se a rede utilizar um servidor proxy para toda a comunicação com a Internet, pode especificar o servidor proxy a partir da página Definições. link:task_configuring_proxy.html["Configurando o conetor para usar um servidor proxy"]Consulte a .
+
+
+
+== Conexão com redes de destino
+
+Um conetor requer uma conexão de rede com o tipo de ambiente de trabalho que você está criando e os serviços que você está planejando habilitar.
+
+Por exemplo, se você instalar um conetor em sua rede corporativa, deverá configurar uma conexão VPN com a VPC ou a VNet no qual você inicia o Cloud Volumes ONTAP.
+
+
+
+== Acesso de saída à Internet
+
+O conetor requer acesso de saída à Internet para gerenciar recursos e processos em seu ambiente de nuvem pública. O acesso de saída à Internet também é necessário se você quiser instalar manualmente o conetor em um host Linux ou acessar a IU local em execução no conetor.
+
+As seções a seguir identificam os endpoints específicos.
+
+
+
+=== Endpoints para gerenciar recursos na AWS
+
+Um conetor entra em Contato com os seguintes endpoints ao gerenciar recursos na AWS:
+
+[cols="43,57"]
+|===
+| Endpoints | Finalidade 
+
+
+ a| 
+Serviços da AWS (amazonaws.com):
+
+* CloudFormation
+* Nuvem de computação elástica (EC2)
+* Key Management Service (KMS)
+* Serviço de token de segurança (STS)
+* Serviço de armazenamento simples (S3)
+
+
+O endpoint exato depende da região em que você implementa o Cloud Volumes ONTAP. https://docs.aws.amazon.com/general/latest/gr/rande.html["Consulte a documentação da AWS para obter detalhes."^]
+| Permite que o conetor implante e gerencie o Cloud Volumes ONTAP na AWS. 
+
+
+| https://api.services.cloud.NetApp.com:443 | Solicitações de API para o NetApp Cloud Central. 
+
+
+| https://cloud.support.NetApp.com.s3.us-west-1.amazonaws.com | Fornece acesso a imagens de software, manifestos e modelos. 
+
+
+| https://repo.cloud.support.NetApp.com | Usado para baixar dependências do Cloud Manager. 
+
+
+| \http://repo.mysql.com/ | Usado para baixar MySQL. 
+
+
+| \https://cognito-idp.us-east-1.amazonaws.com \https://cognito-identity.us-east-1.amazonaws.com \https://sts.amazonaws.com https://cloud-support-NetApp-com-accelerated.s3.amazonaws.com | Permite que o conetor acesse e baixe manifestos, modelos e imagens de atualização do Cloud Volumes ONTAP. 
+
+
+| \https://cloudmanagerinfraprod.azurecr.io | Acesso a imagens de software de componentes de contentor para uma infraestrutura que esteja executando o Docker e fornece uma solução para integrações de serviços com o Cloud Manager. 
+
+
+| \https://kinesis.us-east-1.amazonaws.com | Permite que o NetApp transmita dados de Registros de auditoria. 
+
+
+| https://cloudmanager.cloud.NetApp.com | Comunicação com o serviço Cloud Manager, que inclui contas do Cloud Central. 
+
+
+| https://NetApp-cloud-account.auth0.com | Comunicação com o NetApp Cloud Central para autenticação centralizada de usuários. 
+
+
+| \https://w86yt021u5.execute-api.us-east-1.amazonaws.com/production/whitelist | Usado para adicionar seu ID de conta da AWS à lista de usuários permitidos para Backup em S3. 
+
+
+| https://support.NetApp.com/aods/asupmessage https://support.NetApp.com/asupprod/post/1,0/postAsup | Comunicação com NetApp AutoSupport. 
+
+
+| https://support.NetApp.com/svcgw - https://support.NetApp.com/ServiceGW/Entitlement - https://eval.lic.NetApp.com.s3.us-west-1.amazonaws.com - https://cloud-support-NetApp-com.s3.us-west-1.amazonaws.com | Comunicação com o NetApp para licenciamento de sistema e Registro de suporte. 
+
+
+| https://client.infra.support.NetApp.com.s3.us-west-1.amazonaws.com - https://cloud-support-NetApp-com-accelerated.s3.us-west-1.amazonaws.com - https://trigger.asup.NetApp.com.s3.us-west-1.amazonaws.com | Permite que o NetApp colete informações necessárias para solucionar problemas de suporte. 
+
+
+| https://ipa-signer.cloudmanager.NetApp.com | Permite que o Cloud Manager gere licenças (por exemplo, uma licença FlexCache para Cloud Volumes ONTAP) 
+
+
+| \https://packages.cloud.google.com/yum https://github.com/NetApp/Trident/Releases/download/ | Necessário para conectar sistemas Cloud Volumes ONTAP a um cluster Kubernetes. Os endpoints permitem a instalação do NetApp Trident. 
+
+
+ a| 
+Vários locais de terceiros, por exemplo:
+
+* \https://repo1.maven.org/maven2
+* \https://oss.sonatype.org/content/repositories
+* \https://repo.typesafe.com
+
+
+Locais de terceiros estão sujeitos a alterações.
+| Durante as atualizações, o Cloud Manager baixa os pacotes mais recentes para dependências de terceiros. 
+|===
+
+
+=== Endpoints para gerenciar recursos no Azure
+
+Um conetor entra em Contato com os seguintes endpoints ao gerenciar recursos no Azure:
+
+[cols="43,57"]
+|===
+| Endpoints | Finalidade 
+
+
+| \https://management.azure.com \https://login.microsoftonline.com | Permite que o Cloud Manager implante e gerencie o Cloud Volumes ONTAP na maioria das regiões do Azure. 
+
+
+| \https://management.microsoftazure.de \https://login.microsoftonline.de | Permite que o Cloud Manager implante e gerencie o Cloud Volumes ONTAP nas regiões Azure Alemanha. 
+
+
+| \https://management.usgovcloudapi.net \https://login.microsoftonline.com | Permite que o Cloud Manager implante e gerencie o Cloud Volumes ONTAP nas regiões Azure US Gov. 
+
+
+| https://api.services.cloud.NetApp.com:443 | Solicitações de API para o NetApp Cloud Central. 
+
+
+| https://cloud.support.NetApp.com.s3.us-west-1.amazonaws.com | Fornece acesso a imagens de software, manifestos e modelos. 
+
+
+| https://repo.cloud.support.NetApp.com | Usado para baixar dependências do Cloud Manager. 
+
+
+| \http://repo.mysql.com/ | Usado para baixar MySQL. 
+
+
+| \https://cognito-idp.us-east-1.amazonaws.com \https://cognito-identity.us-east-1.amazonaws.com \https://sts.amazonaws.com https://cloud-support-NetApp-com-accelerated.s3.amazonaws.com | Permite que o conetor acesse e baixe manifestos, modelos e imagens de atualização do Cloud Volumes ONTAP. 
+
+
+| \https://cloudmanagerinfraprod.azurecr.io | Acesso a imagens de software de componentes de contentor para uma infraestrutura que esteja executando o Docker e fornece uma solução para integrações de serviços com o Cloud Manager. 
+
+
+| \https://kinesis.us-east-1.amazonaws.com | Permite que o NetApp transmita dados de Registros de auditoria. 
+
+
+| https://cloudmanager.cloud.NetApp.com | Comunicação com o serviço Cloud Manager, que inclui contas do Cloud Central. 
+
+
+| https://NetApp-cloud-account.auth0.com | Comunicação com o NetApp Cloud Central para autenticação centralizada de usuários. 
+
+
+| https://mysupport.NetApp.com | Comunicação com NetApp AutoSupport. 
+
+
+| https://support.NetApp.com/svcgw - https://support.NetApp.com/ServiceGW/Entitlement - https://eval.lic.NetApp.com.s3.us-west-1.amazonaws.com - https://cloud-support-NetApp-com.s3.us-west-1.amazonaws.com | Comunicação com o NetApp para licenciamento de sistema e Registro de suporte. 
+
+
+| https://client.infra.support.NetApp.com.s3.us-west-1.amazonaws.com - https://cloud-support-NetApp-com-accelerated.s3.us-west-1.amazonaws.com - https://trigger.asup.NetApp.com.s3.us-west-1.amazonaws.com | Permite que o NetApp colete informações necessárias para solucionar problemas de suporte. 
+
+
+| https://ipa-signer.cloudmanager.NetApp.com | Permite que o Cloud Manager gere licenças (por exemplo, uma licença FlexCache para Cloud Volumes ONTAP) 
+
+
+| \https://packages.cloud.google.com/yum https://github.com/NetApp/Trident/Releases/download/ | Necessário para conectar sistemas Cloud Volumes ONTAP a um cluster Kubernetes. Os endpoints permitem a instalação do NetApp Trident. 
+
+
+| *.blob.core.windows.net | Necessário para pares de HA ao usar um proxy. 
+
+
+ a| 
+Vários locais de terceiros, por exemplo:
+
+* \https://repo1.maven.org/maven2
+* \https://oss.sonatype.org/content/repositories
+* \https://repo.typesafe.com
+
+
+Locais de terceiros estão sujeitos a alterações.
+| Durante as atualizações, o Cloud Manager baixa os pacotes mais recentes para dependências de terceiros. 
+|===
+
+
+=== Endpoints para gerenciar recursos no GCP
+
+Um conetor entra em Contato com os seguintes endpoints ao gerenciar recursos no GCP:
+
+[cols="43,57"]
+|===
+| Endpoints | Finalidade 
+
+
+| \https://www.googleapis.com | Permite que o conetor entre em Contato com as APIs do Google para implantar e gerenciar o Cloud Volumes ONTAP no GCP. 
+
+
+| https://api.services.cloud.NetApp.com:443 | Solicitações de API para o NetApp Cloud Central. 
+
+
+| https://cloud.support.NetApp.com.s3.us-west-1.amazonaws.com | Fornece acesso a imagens de software, manifestos e modelos. 
+
+
+| https://repo.cloud.support.NetApp.com | Usado para baixar dependências do Cloud Manager. 
+
+
+| \http://repo.mysql.com/ | Usado para baixar MySQL. 
+
+
+| \https://cognito-idp.us-east-1.amazonaws.com \https://cognito-identity.us-east-1.amazonaws.com \https://sts.amazonaws.com https://cloud-support-NetApp-com-accelerated.s3.amazonaws.com | Permite que o conetor acesse e baixe manifestos, modelos e imagens de atualização do Cloud Volumes ONTAP. 
+
+
+| \https://cloudmanagerinfraprod.azurecr.io | Acesso a imagens de software de componentes de contentor para uma infraestrutura que esteja executando o Docker e fornece uma solução para integrações de serviços com o Cloud Manager. 
+
+
+| \https://kinesis.us-east-1.amazonaws.com | Permite que o NetApp transmita dados de Registros de auditoria. 
+
+
+| https://cloudmanager.cloud.NetApp.com | Comunicação com o serviço Cloud Manager, que inclui contas do Cloud Central. 
+
+
+| https://NetApp-cloud-account.auth0.com | Comunicação com o NetApp Cloud Central para autenticação centralizada de usuários. 
+
+
+| https://mysupport.NetApp.com | Comunicação com NetApp AutoSupport. 
+
+
+| https://support.NetApp.com/svcgw - https://support.NetApp.com/ServiceGW/Entitlement - https://eval.lic.NetApp.com.s3.us-west-1.amazonaws.com - https://cloud-support-NetApp-com.s3.us-west-1.amazonaws.com | Comunicação com o NetApp para licenciamento de sistema e Registro de suporte. 
+
+
+| https://client.infra.support.NetApp.com.s3.us-west-1.amazonaws.com - https://cloud-support-NetApp-com-accelerated.s3.us-west-1.amazonaws.com - https://trigger.asup.NetApp.com.s3.us-west-1.amazonaws.com | Permite que o NetApp colete informações necessárias para solucionar problemas de suporte. 
+
+
+| https://ipa-signer.cloudmanager.NetApp.com | Permite que o Cloud Manager gere licenças (por exemplo, uma licença FlexCache para Cloud Volumes ONTAP) 
+
+
+| \https://packages.cloud.google.com/yum https://github.com/NetApp/Trident/Releases/download/ | Necessário para conectar sistemas Cloud Volumes ONTAP a um cluster Kubernetes. Os endpoints permitem a instalação do NetApp Trident. 
+
+
+ a| 
+Vários locais de terceiros, por exemplo:
+
+* \https://repo1.maven.org/maven2
+* \https://oss.sonatype.org/content/repositories
+* \https://repo.typesafe.com
+
+
+Locais de terceiros estão sujeitos a alterações.
+| Durante as atualizações, o Cloud Manager baixa os pacotes mais recentes para dependências de terceiros. 
+|===
+
+
+=== Endpoints para instalar o conetor em um host Linux
+
+Você tem a opção de instalar manualmente o software Connector em seu próprio host Linux. Se o fizer, o instalador do conetor deve acessar os seguintes URLs durante o processo de instalação:
+
+* \http://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm
+* \https://dl.fedoraproject.org/pub/epel/epel-release-latest-7.noarch.rpm
+* \https://s3.amazonaws.com/aws-cli/awscli-bundle.zip
+
+
+O host pode tentar atualizar os pacotes do sistema operacional durante a instalação. O host pode entrar em Contato com diferentes sites de espelhamento para esses pacotes do sistema operacional.
+
+
+
+=== Endpoints acessados a partir do navegador da Web ao usar a IU local
+
+Embora você deva executar quase todas as tarefas a partir da interface de usuário SaaS, uma interface de usuário local ainda está disponível no conetor. A máquina que executa o navegador da Web deve ter conexões com os seguintes endpoints:
+
+[cols="43,57"]
+|===
+| Endpoints | Finalidade 
+
+
+| O host do conetor  a| 
+Você deve inserir o endereço IP do host de um navegador da Web para carregar o console do Cloud Manager.
+
+Dependendo da sua conetividade com o seu provedor de nuvem, você pode usar o IP privado ou um IP público atribuído ao host:
+
+* Um IP privado funciona se você tiver uma VPN e acesso direto à sua rede virtual
+* Um IP público funciona em qualquer cenário de rede
+
+
+Em qualquer caso, você deve proteger o acesso à rede, garantindo que as regras do grupo de segurança permitam o acesso somente de IPs ou sub-redes autorizados.
+
+
+
+| \https://auth0.com \https://cdn.auth0.com://NetApp-cloud-account.auth0.com https://services.cloud.NetApp.com | Seu navegador da Web se coneta a esses endpoints para autenticação de usuário centralizada por meio do NetApp Cloud Central. 
+
+
+| \https://widget.intercom.io | Para um bate-papo no produto que permite conversar com especialistas em nuvem da NetApp. 
+|===
+
+
+== Portas e grupos de segurança
+
+Não há tráfego de entrada para o conetor, a menos que você o inicie. HTTP e HTTPS fornecem acesso ao link:concept_connectors.html#the-local-user-interface["IU local"], que você usará em circunstâncias raras. O SSH só é necessário se você precisar se conetar ao host para solução de problemas.
+
+
+
+=== Regras para o conetor na AWS
+
+O grupo de segurança do conetor requer regras de entrada e saída.
+
+
+
+==== Regras de entrada
+
+A origem das regras de entrada no grupo de segurança predefinido é 0,0.0,0/0.
+
+[cols="10,10,80"]
+|===
+| Protocolo | Porta | Finalidade 
+
+
+| SSH | 22 | Fornece acesso SSH ao host do conetor 
+
+
+| HTTP | 80 | Fornece acesso HTTP a partir de navegadores da Web cliente para a interface de usuário local e conexões a partir do Cloud Compliance 
+
+
+| HTTPS | 443 | Fornece acesso HTTPS a partir de navegadores da Web cliente para a interface de usuário local 
+
+
+| TCP | 3128 | Fornece à instância de conformidade com a nuvem acesso à Internet, se sua rede AWS não usar um NAT ou proxy 
+|===
+
+
+==== Regras de saída
+
+O grupo de segurança predefinido para o conetor abre todo o tráfego de saída. Se isso for aceitável, siga as regras básicas de saída. Se você precisar de regras mais rígidas, use as regras de saída avançadas.
+
+
+
+===== Regras básicas de saída
+
+O grupo de segurança predefinido para o conetor inclui as seguintes regras de saída.
+
+[cols="20,20,60"]
+|===
+| Protocolo | Porta | Finalidade 
+
+
+| Todo o TCP | Tudo | Todo o tráfego de saída 
+
+
+| Todos os UDP | Tudo | Todo o tráfego de saída 
+|===
+
+
+===== Regras de saída avançadas
+
+Se você precisar de regras rígidas para o tráfego de saída, você pode usar as seguintes informações para abrir apenas as portas necessárias para a comunicação de saída pelo conetor.
+
+
+NOTE: O endereço IP de origem é o host do conetor.
+
+[cols="5*"]
+|===
+| Serviço | Protocolo | Porta | Destino | Finalidade 
+
+
+.9+| Ative Directory | TCP | 88 | Floresta do ative Directory | Autenticação Kerberos V. 
+
+
+| TCP | 139 | Floresta do ative Directory | Sessão de serviço NetBIOS 
+
+
+| TCP | 389 | Floresta do ative Directory | LDAP 
+
+
+| TCP | 445 | Floresta do ative Directory | Microsoft SMB/CIFS sobre TCP com enquadramento NetBIOS 
+
+
+| TCP | 464 | Floresta do ative Directory | Kerberos V alterar e definir senha (SET_CHANGE) 
+
+
+| TCP | 749 | Floresta do ative Directory | Palavra-passe de alteração e definição Kerberos V do ative Directory (RPCSEC_GSS) 
+
+
+| UDP | 137 | Floresta do ative Directory | Serviço de nomes NetBIOS 
+
+
+| UDP | 138 | Floresta do ative Directory | Serviço de datagrama NetBIOS 
+
+
+| UDP | 464 | Floresta do ative Directory | Administração de chaves Kerberos 
+
+
+| Chamadas de API e AutoSupport | HTTPS | 443 | LIF de gerenciamento de cluster de ONTAP e Internet de saída | Chamadas de API para AWS e ONTAP e envio de mensagens AutoSupport para o NetApp 
+
+
+.2+| Chamadas de API | TCP | 3000 | LIF de gerenciamento de clusters ONTAP | Chamadas de API para ONTAP 
+
+
+| TCP | 8088 | Cópia de segurança para S3 | Chamadas de API para Backup para S3 
+
+
+| DNS | UDP | 53 | DNS | Usado para resolução de DNS pelo Cloud Manager 
+
+
+| Conformidade com a nuvem | HTTP | 80 | Instância de Cloud Compliance | Cloud Compliance para Cloud Volumes ONTAP 
+|===
+
+
+=== Regras para o conetor no Azure
+
+O grupo de segurança do conetor requer regras de entrada e saída.
+
+
+
+==== Regras de entrada
+
+A origem das regras de entrada no grupo de segurança predefinido é 0,0.0,0/0.
+
+[cols="3*"]
+|===
+| Porta | Protocolo | Finalidade 
+
+
+| 22 | SSH | Fornece acesso SSH ao host do conetor 
+
+
+| 80 | HTTP | Fornece acesso HTTP a partir de navegadores da Web cliente para a interface de usuário local 
+
+
+| 443 | HTTPS | Fornece acesso HTTPS a partir de navegadores da Web cliente para a interface de usuário local 
+|===
+
+
+==== Regras de saída
+
+O grupo de segurança predefinido para o conetor abre todo o tráfego de saída. Se isso for aceitável, siga as regras básicas de saída. Se você precisar de regras mais rígidas, use as regras de saída avançadas.
+
+
+
+===== Regras básicas de saída
+
+O grupo de segurança predefinido para o conetor inclui as seguintes regras de saída.
+
+[cols="3*"]
+|===
+| Porta | Protocolo | Finalidade 
+
+
+| Tudo | Todo o TCP | Todo o tráfego de saída 
+
+
+| Tudo | Todos os UDP | Todo o tráfego de saída 
+|===
+
+
+===== Regras de saída avançadas
+
+Se você precisar de regras rígidas para o tráfego de saída, você pode usar as seguintes informações para abrir apenas as portas necessárias para a comunicação de saída pelo conetor.
+
+
+NOTE: O endereço IP de origem é o host do conetor.
+
+[cols="5*"]
+|===
+| Serviço | Porta | Protocolo | Destino | Finalidade 
+
+
+.9+| Ative Directory | 88 | TCP | Floresta do ative Directory | Autenticação Kerberos V. 
+
+
+| 139 | TCP | Floresta do ative Directory | Sessão de serviço NetBIOS 
+
+
+| 389 | TCP | Floresta do ative Directory | LDAP 
+
+
+| 445 | TCP | Floresta do ative Directory | Microsoft SMB/CIFS sobre TCP com enquadramento NetBIOS 
+
+
+| 464 | TCP | Floresta do ative Directory | Kerberos V alterar e definir senha (SET_CHANGE) 
+
+
+| 749 | TCP | Floresta do ative Directory | Palavra-passe de alteração e definição Kerberos V do ative Directory (RPCSEC_GSS) 
+
+
+| 137 | UDP | Floresta do ative Directory | Serviço de nomes NetBIOS 
+
+
+| 138 | UDP | Floresta do ative Directory | Serviço de datagrama NetBIOS 
+
+
+| 464 | UDP | Floresta do ative Directory | Administração de chaves Kerberos 
+
+
+| Chamadas de API e AutoSupport | 443 | HTTPS | LIF de gerenciamento de cluster de ONTAP e Internet de saída | Chamadas de API para AWS e ONTAP e envio de mensagens AutoSupport para o NetApp 
+
+
+| Chamadas de API | 3000 | TCP | LIF de gerenciamento de clusters ONTAP | Chamadas de API para ONTAP 
+
+
+| DNS | 53 | UDP | DNS | Usado para resolução de DNS pelo Cloud Manager 
+|===
+
+
+=== Regras para o conetor na GCP
+
+As regras de firewall para o conetor exigem regras de entrada e saída.
+
+
+
+==== Regras de entrada
+
+A origem das regras de entrada nas regras de firewall predefinidas é 0,0.0,0/0.
+
+[cols="10,10,80"]
+|===
+| Protocolo | Porta | Finalidade 
+
+
+| SSH | 22 | Fornece acesso SSH ao host do conetor 
+
+
+| HTTP | 80 | Fornece acesso HTTP a partir de navegadores da Web cliente para a interface de usuário local 
+
+
+| HTTPS | 443 | Fornece acesso HTTPS a partir de navegadores da Web cliente para a interface de usuário local 
+|===
+
+
+==== Regras de saída
+
+As regras de firewall predefinidas para o conetor abrem todo o tráfego de saída. Se isso for aceitável, siga as regras básicas de saída. Se você precisar de regras mais rígidas, use as regras de saída avançadas.
+
+
+
+===== Regras básicas de saída
+
+As regras de firewall predefinidas para o conetor incluem as seguintes regras de saída.
+
+[cols="20,20,60"]
+|===
+| Protocolo | Porta | Finalidade 
+
+
+| Todo o TCP | Tudo | Todo o tráfego de saída 
+
+
+| Todos os UDP | Tudo | Todo o tráfego de saída 
+|===
+
+
+===== Regras de saída avançadas
+
+Se você precisar de regras rígidas para o tráfego de saída, você pode usar as seguintes informações para abrir apenas as portas necessárias para a comunicação de saída pelo conetor.
+
+
+NOTE: O endereço IP de origem é o host do conetor.
+
+[cols="5*"]
+|===
+| Serviço | Protocolo | Porta | Destino | Finalidade 
+
+
+.9+| Ative Directory | TCP | 88 | Floresta do ative Directory | Autenticação Kerberos V. 
+
+
+| TCP | 139 | Floresta do ative Directory | Sessão de serviço NetBIOS 
+
+
+| TCP | 389 | Floresta do ative Directory | LDAP 
+
+
+| TCP | 445 | Floresta do ative Directory | Microsoft SMB/CIFS sobre TCP com enquadramento NetBIOS 
+
+
+| TCP | 464 | Floresta do ative Directory | Kerberos V alterar e definir senha (SET_CHANGE) 
+
+
+| TCP | 749 | Floresta do ative Directory | Palavra-passe de alteração e definição Kerberos V do ative Directory (RPCSEC_GSS) 
+
+
+| UDP | 137 | Floresta do ative Directory | Serviço de nomes NetBIOS 
+
+
+| UDP | 138 | Floresta do ative Directory | Serviço de datagrama NetBIOS 
+
+
+| UDP | 464 | Floresta do ative Directory | Administração de chaves Kerberos 
+
+
+| Chamadas de API e AutoSupport | HTTPS | 443 | LIF de gerenciamento de cluster de ONTAP e Internet de saída | Chamadas de API para GCP e ONTAP e envio de mensagens AutoSupport para o NetApp 
+
+
+| Chamadas de API | TCP | 3000 | LIF de gerenciamento de clusters ONTAP | Chamadas de API para ONTAP 
+
+
+| DNS | UDP | 53 | DNS | Usado para resolução de DNS pelo Cloud Manager 
+|===

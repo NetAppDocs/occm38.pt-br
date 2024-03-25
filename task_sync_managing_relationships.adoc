@@ -1,0 +1,129 @@
+---
+sidebar: sidebar 
+permalink: task_sync_managing_relationships.html 
+keywords: sync, immediate, now, schedule, minutes, hours, on, off, delete, group, accelerate, accelerating, grouping, multiple data brokers, sync now, turn off, turn on, sync schedule, settings, change settings, recently modified files, delete files on target, retries, retry, file types, exclude file type, include file type, delete relationship 
+summary: Você pode gerenciar relacionamentos de sincronização a qualquer momento sincronizando dados imediatamente, alterando horários e muito mais. 
+---
+= Gerenciando relacionamentos de sincronização
+:toc: macro
+:hardbreaks:
+:allow-uri-read: 
+:toc: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+:toc-position: content
+
+
+[role="lead"]
+Você pode gerenciar relacionamentos de sincronização a qualquer momento sincronizando dados imediatamente, alterando horários e muito mais.
+
+
+
+== Realizar uma sincronização de dados imediata
+
+Em vez de esperar pela próxima sincronização agendada, você pode pressionar um botão para sincronizar imediatamente os dados entre a origem e o destino.
+
+.Passos
+. No *Painel de sincronização*, passe o Mouse sobre a relação de sincronização e clique no menu de ação.
++
+image:screenshot_relationship_menu.gif["Uma captura de tela que mostra o menu de ação que aparece quando você passa o Mouse sobre uma relação de sincronização."]
+
+. Clique em *Sincronizar agora* e, em seguida, clique em *Sincronizar* para confirmar.
++
+image:screenshot_dashboard_actions.gif["Esta captura de tela mostra as ações que você pode executar em um relacionamento de sincronização."]
+
+
+
+.Resultado
+O Cloud Sync inicia o processo de sincronização de dados para a relação.
+
+
+
+== Acelerando o desempenho de sincronização
+
+Acelere o desempenho de uma relação de sincronização adicionando um agente de dados adicional ao relacionamento. O corretor de dados adicional deve ser um corretor de dados _new_.
+
+.Como isso funciona
+Se os corretores de dados existentes no relacionamento forem usados em outras relações de sincronização, o Cloud Sync também adicionará automaticamente o novo corretor de dados a essas relações.
+
+Por exemplo, digamos que você tenha três relacionamentos:
+
+* O relacionamento 1 usa o agente de dados A.
+* O relacionamento 2 usa o corretor de dados B
+* O relacionamento 3 usa o agente de dados A.
+
+
+Você quer acelerar o desempenho do relacionamento 1 para adicionar um novo agente de dados a esse relacionamento (agente de dados C). Como o corretor de dados A também é usado no relacionamento 3, o novo corretor de dados também é automaticamente adicionado ao relacionamento 3.
+
+.Passos
+. Certifique-se de que pelo menos um dos corretores de dados existentes no relacionamento esteja on-line.
+. Passe o Mouse sobre a relação de sincronização e clique no menu de ação.
+. Clique em *Accelerate*.
++
+image:screenshot_accelerate.gif["Uma captura de tela do Cloud Sync que mostra o menu de ação para uma relação de sincronização. Acelerar é realçado com o ponteiro do rato."]
+
+. Siga as instruções para criar um novo corretor de dados.
+
+
+.Resultado
+O Cloud Sync adiciona o novo agente de dados às relações de sincronização. O desempenho da próxima sincronização de dados deve ser acelerado.
+
+
+
+== Alterar as definições de uma relação de sincronização
+
+Modifique as configurações que definem como os arquivos de origem e as pastas são sincronizados e mantidos no local de destino.
+
+. Passe o Mouse sobre a relação de sincronização e clique no menu de ação.
+. Clique em *Configurações*.
+. Modifique qualquer uma das definições.
++
+image:screenshot_sync_settings.gif["Uma captura de tela que mostra as configurações de uma relação de sincronização."]
+
++
+[[deleteonsource]] aqui está uma breve descrição de cada configuração:
+
++
+Programação:: Escolha uma programação recorrente para futuras sincronizações ou desative a programação de sincronização. Você pode agendar uma relação para sincronizar dados a cada 1 minutos.
+Tenta novamente:: Defina o número de vezes que o Cloud Sync deve tentar sincronizar um arquivo antes de ignorá-lo.
+Ficheiros modificados recentemente:: Escolha excluir arquivos que foram modificados recentemente antes da sincronização programada.
+Eliminar ficheiros na origem:: Escolha excluir arquivos do local de origem depois que o Cloud Sync copiar os arquivos para o local de destino. Essa opção inclui o risco de perda de dados porque os arquivos de origem são excluídos após serem copiados.
++
+--
+Se você ativar essa opção, também precisará alterar um parâmetro no arquivo local.json no corretor de dados. Abra o arquivo e altere o parâmetro chamado _workers.transferrer.delete-on-source_ para *true*.
+
+--
+Excluir arquivos no destino:: Escolha excluir arquivos do local de destino, se eles foram excluídos da origem. O padrão é nunca excluir arquivos do local de destino.
+Marcação de objetos:: Quando o AWS S3 é o destino em uma relação de sincronização, o Cloud Sync marca objetos S3 com metadados relevantes para a operação de sincronização. Você pode desativar a marcação de objetos S3, se não for desejado em seu ambiente. Não há impactos no Cloud Sync se você desabilitar a marcação: O Cloud Sync apenas armazena os metadados de sincronização de uma maneira diferente.
+Tipos de ficheiros:: Defina os tipos de arquivo a serem incluídos em cada sincronização: Arquivos, diretórios e links simbólicos.
+Excluir extensões de arquivos:: Especifique extensões de arquivo para excluir da sincronização digitando a extensão do arquivo e pressionando *Enter*. Por exemplo, digite _log_ ou _.log_ para excluir arquivos *.log. Não é necessário um separador para várias extensões. O vídeo a seguir fornece uma breve demonstração:
++
+--
+video::video_file_extensions.mp4[width=840,height=240]
+--
+Tamanho do ficheiro:: Escolha sincronizar todos os arquivos, independentemente do seu tamanho ou apenas arquivos que estão em um intervalo de tamanho específico.
+Data de modificação:: Escolha todos os arquivos independentemente da data da última modificação, arquivos modificados após uma data específica, antes de uma data específica ou entre um intervalo de tempo.
+Copiar listas de controlo de acesso para o destino:: Escolha copiar listas de controle de acesso (ACLs) entre compartilhamentos SMB de origem e compartilhamentos SMB de destino. Observe que essa opção só está disponível para relacionamentos de sincronização criados após a versão de 23 de fevereiro de 2020.
+
+
+. Clique em *Salvar configurações*.
+
+
+.Resultado
+O Cloud Sync modifica a relação de sincronização com as novas configurações.
+
+
+
+== Excluindo relacionamentos
+
+Você pode excluir uma relação de sincronização, se não precisar mais sincronizar dados entre a origem e o destino. Esta ação não exclui a instância do corretor de dados e não exclui dados do destino.
+
+.Passos
+. Passe o Mouse sobre a relação de sincronização e clique no menu de ação.
+. Clique em *Delete* e, em seguida, clique em *Delete* novamente para confirmar.
+
+
+.Resultado
+O Cloud Sync exclui a relação de sincronização.

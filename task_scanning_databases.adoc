@@ -1,0 +1,147 @@
+---
+sidebar: sidebar 
+permalink: task_scanning_databases.html 
+keywords: cloud compliance, enable cloud compliance, outbound internet, endpoints, cloud compliance internet, web browser connectivity, cloud compliance access, privacy, compliance, databases, database schemas, Oracle, SAP HANA, SQL Server, MongoDB, PostgreSQL 
+summary: Conclua algumas etapas para começar a verificar seus esquemas de banco de dados com o Cloud Compliance. 
+---
+= Digitalização de esquemas de banco de dados
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Conclua algumas etapas para começar a verificar seus esquemas de banco de dados com o Cloud Compliance.
+
+
+
+== Início rápido
+
+Comece rapidamente seguindo estas etapas ou role para baixo até as seções restantes para obter detalhes completos.
+
+
+
+==== image:number1.png["Número 1"] Rever pré-requisitos da base de dados
+
+[role="quick-margin-para"]
+Certifique-se de que a sua base de dados é suportada e de que tem as informações necessárias para se ligar à base de dados.
+
+
+
+==== image:number2.png["Número 2"] Implante a instância do Cloud Compliance
+
+[role="quick-margin-para"]
+link:task_deploy_cloud_compliance.html["Implante o Cloud Compliance no Cloud Manager"^] se ainda não houver uma instância implantada.
+
+
+
+==== image:number3.png["Número 3"] Adicione o servidor de banco de dados
+
+[role="quick-margin-para"]
+Adicione o servidor de banco de dados que você deseja acessar.
+
+
+
+==== image:number4.png["Número 4"] Selecione os esquemas
+
+[role="quick-margin-para"]
+Selecione os esquemas que pretende digitalizar.
+
+
+
+== Rever pré-requisitos
+
+Revise os pré-requisitos a seguir para garantir que você tenha uma configuração compatível antes de ativar o Cloud Compliance.
+
+
+
+=== Bancos de dados compatíveis
+
+O Cloud Compliance pode verificar esquemas dos seguintes bancos de dados:
+
+* MongoDB
+* Oracle
+* PostgreSQL
+* SAP HANA
+* SQL Server (MSSQL)
+
+
+
+IMPORTANT: O recurso de coleta de estatísticas *deve estar ativado* no banco de dados.
+
+
+
+=== Requisitos de banco de dados
+
+Qualquer banco de dados com conetividade com a instância de conformidade com a nuvem pode ser verificado, independentemente de onde esteja hospedado. Você só precisa das seguintes informações para se conetar ao banco de dados:
+
+* Endereço IP ou nome do host
+* Porta
+* Nome do serviço (somente para acessar bancos de dados Oracle)
+* Credenciais que permitem acesso de leitura aos esquemas
++
+Ao escolher um nome de usuário e senha, é importante escolher um que tenha permissões de leitura completas para todos os esquemas e tabelas que você deseja digitalizar. Recomendamos que você crie um usuário dedicado para o sistema de conformidade com a nuvem com todas as permissões necessárias.
+
+
+
+*Observação:* para MongoDB, é necessária uma função de administração somente leitura.
+
+
+
+== Adicionando o servidor de banco de dados
+
+Você deve ter link:task_deploy_cloud_compliance.html["Já implantou uma instância do Cloud Compliance no Cloud Manager"^].
+
+Adicione o servidor de banco de dados onde os esquemas residem.
+
+. Na página _Scan Configuration_, clique no botão *Add DB Server*.
++
+image:screenshot_compliance_add_db_server_button.png["Uma captura de tela da página Configuração de digitalização, onde você pode clicar no botão Adicionar servidor de banco de dados."]
+
+. Introduza as informações necessárias para identificar o servidor da base de dados.
++
+.. Selecione o tipo de banco de dados.
+.. Insira a porta e o nome do host ou endereço IP para se conetar ao banco de dados.
+.. Para bancos de dados Oracle, insira o nome do serviço.
+.. Insira as credenciais para que o Cloud Compliance possa acessar o servidor.
+.. Clique em *Add DB Server*.
++
+image:screenshot_compliance_add_db_server_dialog.png["Uma captura de tela da página Adicionar servidor de banco de dados para que você possa identificar o banco de dados."]
+
+
+
+
+
+O banco de dados é adicionado à lista de diretórios de trabalho.
+
+
+
+== Ativar e desativar verificações de conformidade em esquemas de banco de dados
+
+Você pode parar ou começar a digitalizar esquemas a qualquer momento.
+
+. Na página _Scan Configuration_, clique no botão *Configuration* do banco de dados que deseja configurar.
++
+image:screenshot_compliance_db_server_config.png["Uma captura de tela da página Configuração de digitalização, onde você pode selecionar o botão Configuração."]
+
+. Selecione os esquemas que deseja digitalizar movendo o controle deslizante para a direita.
++
+image:screenshot_compliance_select_schemas.png["Uma captura de tela da página Configuração de digitalização, onde você pode escolher os esquemas a serem verificados."]
+
+
+
+.Resultado
+O Cloud Compliance começa a verificar os esquemas de banco de dados que você ativou. Se houver algum erro, eles aparecerão na coluna Status, juntamente com a ação necessária para corrigir o erro.
+
+
+
+== Removendo um banco de dados do Cloud Manager
+
+Se você não quiser mais digitalizar um determinado banco de dados, você pode excluí-lo da interface do Cloud Manager e parar todas as verificações.
+
+Na página _Scan Configuration_, clique no image:screenshot_gallery_options.gif["Botão mais"] botão na linha do banco de dados e clique em *Remove DB Server*.
+
+image:screenshot_compliance_remove_db.png["Uma captura de tela do botão Remover servidor de banco de dados da página Configuração de digitalização."]

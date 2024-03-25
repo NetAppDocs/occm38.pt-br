@@ -1,0 +1,102 @@
+---
+sidebar: sidebar 
+permalink: task_adding_gcp_accounts.html 
+keywords: permissions, gcp, data tiering, tiering, setup, requirements, account for data tiering, account for tiering, interoperable, interoperability, interoperable storage access keys, access keys 
+summary: Você pode gerenciar dois tipos de credenciais do Google Cloud Platform a partir do Cloud Manager as credenciais associadas à instância de VM Connector e às chaves de acesso ao storage usadas com um sistema Cloud Volumes ONTAP 9,6 para categorização de dados. 
+---
+= Gerenciamento de credenciais e assinaturas do GCP para o Cloud Manager
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Você pode gerenciar dois tipos de credenciais do Google Cloud Platform a partir do Cloud Manager: As credenciais associadas à instância de VM Connector e às chaves de acesso ao storage usadas com um sistema Cloud Volumes ONTAP 9,6 para link:concept_data_tiering.html["categorização de dados"].
+
+
+
+== Associar uma assinatura do Marketplace às credenciais do GCP
+
+Ao implantar um conetor no GCP, o Cloud Manager cria um conjunto padrão de credenciais associadas à instância de VM do Connector. Essas são as credenciais que o Cloud Manager usa para implantar o Cloud Volumes ONTAP.
+
+A qualquer momento, você pode alterar a assinatura do Marketplace associada a essas credenciais. A assinatura permite criar um sistema Cloud Volumes ONTAP com pagamento conforme o uso e usar outros serviços de nuvem da NetApp.
+
+.Passos
+. No canto superior direito do console do Cloud Manager, clique no ícone Configurações e selecione *credenciais*.
+. Passe o Mouse sobre um conjunto de credenciais e clique no menu de ação.
+. No menu, clique em *assinatura associada*.
++
+image:screenshot_gcp_add_subscription.gif["Uma captura de tela da página credenciais, onde você pode adicionar uma assinatura às credenciais do GCP no menu."]
+
+. Selecione um projeto e uma assinatura do Google Cloud na lista suspensa ou clique em *Adicionar assinatura* e siga as etapas para criar uma nova assinatura.
++
+image:screenshot_gcp_associate.gif["Uma captura de tela de um projeto e assinatura do Google Cloud selecionados para credenciais do Google Cloud."]
+
+. Clique em *Associate*.
+
+
+
+
+== Configuração e adição de contas do GCP para categorização de dados com o Cloud Volumes ONTAP 9,6
+
+Se você quiser habilitar um sistema Cloud Volumes ONTAP 9,6 para link:concept_data_tiering.html["categorização de dados"], você precisa fornecer ao Cloud Manager uma chave de acesso ao armazenamento para uma conta de serviço que tenha permissões de administrador de armazenamento. O Cloud Manager usa as chaves de acesso para configurar e gerenciar um bucket do Cloud Storage para categorização de dados.
+
+
+TIP: Para usar a disposição de dados em categorias com o Cloud Volumes ONTAP 9,7, siga a etapa 4 em link:task_getting_started_gcp.html["Introdução ao Cloud Volumes ONTAP no Google Cloud Platform"].
+
+
+
+=== Configurar uma conta de serviço e chaves de acesso para o Google Cloud Storage
+
+Uma conta de serviço permite que o Cloud Manager autentique e acesse buckets do Cloud Storage usados para categorização de dados. As chaves são necessárias para que o Google Cloud Storage saiba quem está fazendo a solicitação.
+
+.Passos
+. Abra o console do IAM do GCP e https://cloud.google.com/iam/docs/creating-custom-roles#creating_a_custom_role["Crie uma conta de serviço que tenha a função Administrador do storage"^]o .
++
+image:screenshot_gcp_service_account_role.gif["Uma captura de tela do console do IAM do GCP que mostra a seleção da função Administrador do storage para uma conta de serviço."]
+
+. Vá para https://console.cloud.google.com/storage/settings["Configurações de armazenamento do GCP"^].
+. Se você for solicitado, selecione um projeto.
+. Clique no separador *interoperabilidade*.
+. Se ainda não o tiver feito, clique em *Ativar acesso à interoperabilidade*.
+. Em *chaves de acesso para contas de serviço*, clique em *criar uma chave para uma conta de serviço*.
+. Selecione a conta de serviço criada na etapa 1.
++
+image:screenshot_gcp_access_key.gif["Uma captura de tela do console de armazenamento do GCP que mostra uma conta de serviço selecionada para uma nova chave de acesso."]
+
+. Clique em *criar chave*.
+. Copie a chave de acesso e o segredo.
++
+Você precisará inserir essas informações no Cloud Manager ao adicionar a conta do GCP para categorização de dados.
+
+
+
+
+
+=== Adicionando uma conta do GCP ao Cloud Manager
+
+Agora que você tem uma chave de acesso para uma conta de serviço, pode adicioná-la ao Cloud Manager.
+
+.O que você vai precisar
+Você precisa criar um conetor antes de alterar as configurações do Cloud Manager. link:concept_connectors.html#how-to-create-a-connector["Saiba como"].
+
+.Passos
+. No canto superior direito do console do Cloud Manager, clique no ícone Configurações e selecione *credenciais*.
++
+image:screenshot_settings_icon.gif["Uma captura de tela que mostra o ícone Configurações no canto superior direito do console do Cloud Manager."]
+
+. Clique em *Adicionar credenciais* e selecione *Google Cloud*.
+. Introduza a chave de acesso e o segredo da conta de serviço.
++
+As chaves permitem que o Cloud Manager configure um bucket do Cloud Storage para categorização de dados.
+
+. Confirme se os requisitos da política foram atendidos e clique em *criar conta*.
+
+
+.O que se segue?
+Agora é possível habilitar a disposição de dados em categorias em volumes individuais em um sistema Cloud Volumes ONTAP 9,6 ao criá-los, modificá-los ou replicá-los. Para obter detalhes, link:task_tiering.html["Disposição em camadas dos dados inativos em storage de objetos de baixo custo"]consulte .
+
+Mas antes de fazer isso, certifique-se de que a sub-rede na qual o Cloud Volumes ONTAP reside esteja configurada para o acesso privado do Google. Para obter instruções, https://cloud.google.com/vpc/docs/configure-private-google-access["Documentação do Google Cloud: Configurando o acesso privado do Google"^] consulte .

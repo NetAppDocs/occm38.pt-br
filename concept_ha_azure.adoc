@@ -1,0 +1,91 @@
+---
+sidebar: sidebar 
+permalink: concept_ha_azure.html 
+keywords: high availability, HA, concepts, understanding, overview, takeover, giveback, rpo, rto, nondisruptive, ha pairs, node, nodes, recovery point objective, recovery time objective, nas, nfs, cifs, iscsi, mpio, alua, failover, failure, azure, shared storage, active, passive, load balancer, availability set, storage accounts, page blobs 
+summary: 'Um par de alta disponibilidade (HA) da Cloud Volumes ONTAP fornece confiabilidade empresarial e operações contínuas em caso de falhas em seu ambiente de nuvem. No Azure, o storage é compartilhado entre os dois nós.' 
+---
+= Pares de alta disponibilidade no Azure
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Um par de alta disponibilidade (HA) da Cloud Volumes ONTAP fornece confiabilidade empresarial e operações contínuas em caso de falhas em seu ambiente de nuvem. No Azure, o storage é compartilhado entre os dois nós.
+
+
+
+== Componentes HA
+
+Uma configuração do Cloud Volumes ONTAP HA no Azure inclui os seguintes componentes:
+
+image:diagram_ha_azure.png["Uma imagem conceitual que mostra um balanceador de carga gerenciando o tráfego de entrada do Cloud Manager e de clientes, dois nós Cloud Volumes ONTAP em um conjunto de disponibilidade, discos SSD para dados de inicialização e Blobs de página para dados de clientes."]
+
+Observe o seguinte sobre os componentes do Azure que o Cloud Manager implanta para você:
+
+Azure Standard Load Balancer:: O balanceador de carga gerencia o tráfego de entrada para o par de HA do Cloud Volumes ONTAP.
+Disponibilidade definida:: O conjunto de disponibilidade garante que os nós estejam em diferentes domínios de falha e atualização.
+Discos:: Os dados do cliente residem nos blobs da página do Premium Storage. Cada nó tem acesso ao storage do outro nó. Também é necessário armazenamento adicional para link:reference_default_configs.html#boot-and-root-data-for-cloud-volumes-ontap["dados de inicialização, raiz e núcleo"]o .
+Contas de armazenamento::
++
+--
+* Uma conta de armazenamento é necessária para discos gerenciados.
+* Uma ou mais contas de armazenamento são necessárias para os blobs de página de armazenamento Premium, uma vez que o limite de capacidade de disco por conta de armazenamento é atingido.
++
+https://docs.microsoft.com/en-us/azure/storage/common/storage-scalability-targets["Documentação do Azure: Escalabilidade do Azure Storage e metas de desempenho para contas de storage"^].
+
+* Uma conta de storage é necessária para a disposição de dados em categorias no storage Azure Blob.
+* A partir do Cloud Volumes ONTAP 9,7, as contas de storage criadas pelo Cloud Manager para pares de HA são contas de storage v2 de uso geral.
+* Você pode habilitar uma conexão HTTPS de um par de HA do Cloud Volumes ONTAP 9,7 para contas de storage do Azure ao criar um ambiente de trabalho. Observe que ativar essa opção pode afetar o desempenho de gravação. Não é possível alterar a configuração depois de criar o ambiente de trabalho.
+
+
+--
+
+
+
+
+== RPO e rto
+
+Uma configuração de HA mantém a alta disponibilidade dos dados da seguinte forma:
+
+* O objetivo do ponto de restauração (RPO) é de 0 segundos. Seus dados são consistentes transacionalmente, sem perda de dados.
+* O objetivo de tempo de recuperação (rto) é de 60 segundos. Em caso de interrupção, os dados devem estar disponíveis em 60 segundos ou menos.
+
+
+
+
+== Takeover de storage e giveback
+
+Semelhante a um cluster físico do ONTAP, o storage em um par de HA do Azure é compartilhado entre nós. As conexões com o armazenamento do parceiro permitem que cada nó acesse o armazenamento do outro no caso de um _takeover_. Os mecanismos de failover de caminho de rede garantem que os clientes e hosts continuem a se comunicar com o nó sobrevivente. O parceiro _devolve_ armazenamento quando o nó é colocado de volta na linha.
+
+Para configurações nas, os endereços IP de dados são migrados automaticamente entre nós de HA se ocorrerem falhas.
+
+Para iSCSI, o Cloud Volumes ONTAP usa e/S multipath (MPIO) e Acesso de Unidade lógica assimétrica (ALUA) para gerenciar o failover de caminho entre os caminhos otimizados para ativos e não otimizados.
+
+
+NOTE: Para obter informações sobre quais configurações de host específicas suportam ALUA, consulte o http://mysupport.netapp.com/matrix["Ferramenta de Matriz de interoperabilidade do NetApp"^] e o Guia de instalação e configuração de Utilitários de host do sistema operacional do seu host.
+
+
+
+== Configurações de storage
+
+Você pode usar um par de HA como uma configuração ativo-ativo, na qual ambos os nós fornecem dados aos clientes ou como uma configuração ativo-passivo, na qual o nó passivo responde a solicitações de dados somente se ele tiver ocupado o storage para o nó ativo.
+
+
+
+== Limitações DE HA
+
+As limitações a seguir afetam os pares de HA do Cloud Volumes ONTAP no Azure:
+
+* Os pares DE HA são compatíveis com o padrão Cloud Volumes ONTAP, Premium e BYOL. Explorar não é suportado.
+* NFSv4 não é suportado. NFSv3 é suportado.
+* Pares HA não são suportados em algumas regiões.
++
+https://cloud.netapp.com/cloud-volumes-global-regions["Consulte a lista de regiões do Azure suportadas"^].
+
+
+
+link:task_deploying_otc_azure.html["Saiba como implantar um sistema HA no Azure"].

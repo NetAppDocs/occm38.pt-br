@@ -1,0 +1,158 @@
+---
+sidebar: sidebar 
+permalink: task_adding_aws_accounts.html 
+keywords: permissions, aws, policy, iam, iam role, role, granting, policy, iam policy, iam user, access keys, arn, cloud provider accounts, aws, cloud provider profile, json, iam, credentials, adding credentials, add credentials 
+summary: Se você quiser implantar o Cloud Volumes ONTAP em diferentes contas da AWS, precisará fornecer as permissões necessárias para essas contas e adicionar os detalhes ao Cloud Manager. A forma como você fornece as permissões depende se deseja fornecer ao Cloud Manager chaves AWS ou o ARN de uma função em uma conta confiável. 
+---
+= Gerenciamento de credenciais e assinaturas da AWS para o Cloud Manager
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Ao criar um sistema Cloud Volumes ONTAP, você precisa selecionar as credenciais e a assinatura da AWS para usar com esse sistema. Se você gerenciar várias assinaturas da AWS, poderá atribuir cada uma delas a diferentes credenciais da AWS na página credenciais.
+
+Antes de adicionar credenciais da AWS ao Cloud Manager, você precisa fornecer as permissões necessárias para essa conta. As permissões permitem que o Cloud Manager gerencie recursos e processos dentro dessa conta da AWS. A forma como você fornece as permissões depende se deseja fornecer ao Cloud Manager chaves AWS ou o ARN de uma função em uma conta confiável.
+
+
+NOTE: Quando você implantou um conetor do Cloud Manager, o Cloud Manager adicionou automaticamente credenciais da AWS para a conta na qual implantou o conetor. Esta conta inicial não é adicionada se você instalou manualmente o software Connector em um sistema existente. link:concept_accounts_aws.html["Saiba mais sobre as credenciais e permissões da AWS"].
+
+*Escolhas*
+
+* <<Concessão de permissões fornecendo chaves da AWS>>
+* <<Concessão de permissões assumindo funções do IAM em outras contas>>
+
+
+.Como posso girar com segurança minhas credenciais da AWS?
+****
+O Cloud Manager permite que você forneça credenciais da AWS de algumas maneiras: Uma função do IAM associada à instância do Connector, assumindo uma função do IAM em uma conta confiável ou fornecendo chaves de acesso da AWS. link:concept_accounts_aws.html["Saiba mais sobre as credenciais e permissões da AWS"].
+
+Com as duas primeiras opções, o Cloud Manager usa o AWS Security Token Service para obter credenciais temporárias que rodam constantemente. Este processo é a melhor prática, é automático e seguro.
+
+Se você fornecer ao Cloud Manager chaves de acesso da AWS, gire as chaves atualizando-as no Cloud Manager em um intervalo regular. Este é um processo completamente manual.
+
+****
+
+
+== Concessão de permissões fornecendo chaves da AWS
+
+Se você quiser fornecer ao Cloud Manager chaves da AWS para um usuário do IAM, precisará conceder as permissões necessárias a esse usuário. A política do IAM do Cloud Manager define as ações e recursos da AWS que o Cloud Manager pode usar.
+
+.Passos
+. Faça download da política do IAM do Cloud Manager no https://mysupport.netapp.com/site/info/cloud-manager-policies["Página de políticas do Cloud Manager"^].
+. No console do IAM, crie sua própria política copiando e colando o texto da política do IAM do Cloud Manager.
++
+https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_create.html["Documentação da AWS: Criando políticas do IAM"^]
+
+. Anexe a política a uma função do IAM ou a um usuário do IAM.
++
+** https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_create.html["Documentação da AWS: Criando funções do IAM"^]
+** https://docs.aws.amazon.com/IAM/latest/UserGuide/access_policies_manage-attach-detach.html["Documentação da AWS: Adicionando e removendo políticas do IAM"^]
+
+
+
+
+.Resultado
+A conta agora tem as permissões necessárias. <<Adição de credenciais da AWS ao Cloud Manager,Agora você pode adicioná-lo ao Cloud Manager>>.
+
+
+
+== Concessão de permissões assumindo funções do IAM em outras contas
+
+Você pode configurar uma relação de confiança entre a conta da AWS de origem na qual implantou a instância do Connector e outras contas da AWS usando funções do IAM. Em seguida, você fornecerá ao Cloud Manager o ARN das funções do IAM das contas confiáveis.
+
+.Passos
+. Vá para a conta de destino onde você deseja implantar o Cloud Volumes ONTAP e criar uma função do IAM selecionando *outra conta da AWS*.
++
+Certifique-se de fazer o seguinte:
+
++
+** Insira o ID da conta onde reside a instância do conetor.
+** Anexe a política do IAM do Cloud Manager, que está disponível no https://mysupport.netapp.com/site/info/cloud-manager-policies["Página de políticas do Cloud Manager"^].
++
+image:screenshot_iam_create_role.gif["Uma captura de tela que mostra a página criar função no Console do AWS IAM. Em Selecionar tipo de entidade confiável, outra conta da AWS é selecionada."]
+
+
+
+. Vá para a conta de origem onde reside a instância do conetor e selecione a função do IAM que está anexada à instância.
++
+.. Clique em *Anexar políticas* e, em seguida, clique em *criar política*.
+.. Crie uma política que inclua a ação "sts:AssumeRole" e o ARN da função que você criou na conta de destino.
++
+*Exemplo*
+
++
+[source, json]
+----
+{
+ "Version": "2012-10-17",
+ "Statement": {
+   "Effect": "Allow",
+   "Action": "sts:AssumeRole",
+   "Resource": "arn:aws:iam::ACCOUNT-B-ID:role/ACCOUNT-B-ROLENAME"
+}
+}
+----
+
+
+
+
+.Resultado
+A conta agora tem as permissões necessárias. <<Adição de credenciais da AWS ao Cloud Manager,Agora você pode adicioná-lo ao Cloud Manager>>.
+
+
+
+== Adição de credenciais da AWS ao Cloud Manager
+
+Depois de fornecer uma conta da AWS com as permissões necessárias, você pode adicionar as credenciais dessa conta ao Cloud Manager. Isso permite que você inicie sistemas Cloud Volumes ONTAP nessa conta.
+
+.Passos
+. No canto superior direito do console do Cloud Manager, clique no ícone Configurações e selecione *credenciais*.
++
+image:screenshot_settings_icon.gif["Uma captura de tela que mostra o ícone Configurações no canto superior direito do console do Cloud Manager."]
+
+. Clique em *Adicionar credenciais* e selecione *AWS*.
+. Forneça chaves da AWS ou o ARN de uma função IAM confiável.
+. Confirme se os requisitos da política foram atendidos e clique em *continuar*.
+. Escolha a assinatura paga conforme o uso que você deseja associar às credenciais ou clique em *Adicionar assinatura* se você ainda não tiver uma.
++
+Para criar um sistema Cloud Volumes ONTAP com pagamento conforme o uso, as credenciais da AWS devem estar associadas a uma assinatura do Cloud Volumes ONTAP no mercado AWS.
+
+. Clique em *Add*.
+
+
+.Resultado
+Agora você pode alternar para um conjunto diferente de credenciais da página Detalhes e credenciais ao criar um novo ambiente de trabalho:
+
+image:screenshot_accounts_switch_aws.gif["Uma captura de tela que mostra a seleção entre contas de provedor de nuvem depois de clicar em trocar conta na página Detalhes  credenciais."]
+
+
+
+== Associando uma assinatura da AWS às credenciais
+
+Depois de adicionar suas credenciais da AWS ao Cloud Manager, você pode associar uma assinatura do AWS Marketplace a essas credenciais. A assinatura permite criar um sistema Cloud Volumes ONTAP com pagamento conforme o uso e usar outros serviços de nuvem da NetApp.
+
+Há dois cenários em que você pode associar uma assinatura do AWS Marketplace depois de adicionar as credenciais ao Cloud Manager:
+
+* Você não associou uma assinatura quando adicionou inicialmente as credenciais ao Cloud Manager.
+* Você deseja substituir uma assinatura existente do AWS Marketplace por uma nova assinatura.
+
+
+.O que você vai precisar
+Você precisa criar um conetor antes de alterar as configurações do Cloud Manager. link:concept_connectors.html#how-to-create-a-connector["Saiba como"].
+
+.Passos
+. No canto superior direito do console do Cloud Manager, clique no ícone Configurações e selecione *credenciais*.
+. Passe o Mouse sobre um conjunto de credenciais e clique no menu de ação.
+. No menu, clique em *assinatura associada*.
++
+image:screenshot_aws_add_subscription.gif["Uma captura de tela da página credenciais, onde você pode adicionar uma assinatura às credenciais da AWS no menu."]
+
+. Selecione uma assinatura na lista suspensa ou clique em *Adicionar assinatura* e siga as etapas para criar uma nova assinatura.
++
+video::video_subscribing_aws.mp4[width=848,height=480]
+

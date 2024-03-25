@@ -1,0 +1,184 @@
+---
+sidebar: sidebar 
+permalink: task_generating_compliance_reports.html 
+keywords: report, privacy, risk, privacy risk assessment, compliance status, severity, compliance, privacy risk, data subjects, privacy, credit cards, pci dss, hipaa 
+summary: O Cloud Compliance fornece relatórios que você pode usar para entender melhor o status do programa de privacidade de dados da sua organização. 
+---
+= Visualização de relatórios de conformidade
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+O Cloud Compliance fornece relatórios que você pode usar para entender melhor o status do programa de privacidade de dados da sua organização.
+
+Por padrão, o dashboard do Cloud Compliance exibe dados de conformidade para todos os ambientes de trabalho e bancos de dados. Se desejar exibir relatórios que contenham dados apenas para alguns dos ambientes de trabalho<<Selecionar os ambientes de trabalho para relatórios,selecione esses ambientes de trabalho>>, .
+
+
+NOTE: A NetApp não pode garantir 100% de precisão dos dados pessoais e dados pessoais confidenciais que o Cloud Compliance identifica. Deve sempre validar as informações através da revisão dos dados.
+
+
+
+== Relatório de avaliação de risco de privacidade
+
+O Relatório de avaliação de risco de privacidade fornece uma visão geral do status de risco à privacidade da sua organização, conforme exigido pelas regulamentações de privacidade, como GDPR e CCPA. O relatório inclui as seguintes informações:
+
+Status de conformidade:: A <<Pontuação de gravidade,pontuação de gravidade>> e a distribuição de dados, sejam eles não sensíveis, pessoais ou sensíveis.
+Visão geral da avaliação:: Uma discriminação dos tipos de dados pessoais encontrados, bem como das categorias de dados.
+Sujeitos de dados nesta avaliação:: O número de pessoas, por localização, para as quais foram encontrados identificadores nacionais.
+
+
+
+
+=== Gerando o Relatório de avaliação de risco de Privacidade
+
+Vá para a guia conformidade para gerar o relatório.
+
+.Passos
+. Na parte superior do Cloud Manager, clique em *Cloud Compliance*.
+. Em *relatórios*, clique no ícone de download ao lado de *avaliação de risco de privacidade*.
++
+image:screenshot_privacy_risk_assessment.gif["Uma captura de tela da guia conformidade no Cloud Manager que mostra o painel relatórios onde você pode clicar em avaliação de risco de privacidade."]
+
+
+
+.Resultado
+O Cloud Compliance gera um relatório em PDF que você pode revisar e enviar para outros grupos conforme necessário.
+
+
+
+=== Pontuação de gravidade
+
+O Cloud Compliance calcula a pontuação de gravidade para o Relatório de avaliação de risco de privacidade com base em três variáveis:
+
+* A percentagem de dados pessoais de todos os dados.
+* A percentagem de dados pessoais sensíveis de todos os dados.
+* O percentual de arquivos que incluem titulares de dados, determinado por identificadores nacionais, como IDs nacionais, números de Segurança Social e números de identificação fiscal.
+
+
+A lógica utilizada para determinar a pontuação é a seguinte:
+
+[cols="27,73"]
+|===
+| Pontuação de gravidade | Lógica 
+
+
+| 0 | Todas as três variáveis são exatamente 0% 
+
+
+| 1 | Uma das variáveis é maior que 0% 
+
+
+| 2 | Uma das variáveis é maior que 3% 
+
+
+| 3 | Duas das variáveis são maiores que 3% 
+
+
+| 4 | Três das variáveis são maiores que 3% 
+
+
+| 5 | Uma das variáveis é maior que 6% 
+
+
+| 6 | Duas das variáveis são maiores que 6% 
+
+
+| 7 | Três das variáveis são maiores que 6% 
+
+
+| 8 | Uma das variáveis é maior que 15% 
+
+
+| 9 | Duas das variáveis são maiores que 15% 
+
+
+| 10 | Três das variáveis são maiores que 15% 
+|===
+
+
+== Relatório PCI DSS
+
+O Relatório padrão de Segurança de dados da indústria de cartões de pagamento (PCI DSS) pode ajudá-lo a identificar a distribuição de informações de cartão de crédito entre seus arquivos. O relatório inclui as seguintes informações:
+
+Visão geral:: Quantos arquivos contêm informações de cartão de crédito e em que ambientes de trabalho.
+Criptografia:: A porcentagem de arquivos que contêm informações de cartão de crédito que estão em ambientes de trabalho criptografados ou não criptografados. Esta informação é específica do Cloud Volumes ONTAP.
+Proteção contra ransomware:: A porcentagem de arquivos que contêm informações de cartão de crédito que estão em ambientes de trabalho que possuem ou não proteção contra ransomware ativada. Esta informação é específica do Cloud Volumes ONTAP.
+Retenção:: O período de tempo em que os arquivos foram modificados pela última vez. Isso é útil porque você não deve manter as informações do cartão de crédito por mais tempo do que precisa processá-las.
+Distribuição de informações de cartão de crédito:: Os ambientes de trabalho onde as informações do cartão de crédito foram encontradas e se a criptografia e a proteção contra ransomware estão ativadas.
+
+
+
+
+=== Gerando o Relatório PCI DSS
+
+Vá para a guia conformidade para gerar o relatório.
+
+.Passos
+. Na parte superior do Cloud Manager, clique em *Cloud Compliance*.
+. Em *relatórios*, clique no ícone de download ao lado de *Relatório PCI DSS*.
++
+image:screenshot_pci_dss.gif["Uma captura de tela da guia conformidade no Cloud Manager que mostra o painel relatórios onde você pode clicar em avaliação de risco de privacidade."]
+
+
+
+.Resultado
+O Cloud Compliance gera um relatório em PDF que você pode revisar e enviar para outros grupos conforme necessário.
+
+
+
+== Relatório HIPAA
+
+O Relatório HIPAA (Health Insurance Portability and Accountability Act) pode ajudá-lo a identificar arquivos contendo informações de saúde. Criado para auxiliar a organização a obedecer às leis de privacidade de dados HIPAA. As informações que o Cloud Compliance procura incluem:
+
+* Padrão de referência de saúde
+* Código médico ICD-10-CM
+* Código médico ICD-9-CM
+* RH – categoria Saúde
+* Categoria de dados da aplicação de integridade
+
+
+O relatório inclui as seguintes informações:
+
+Visão geral:: Quantos arquivos contêm informações de saúde e em quais ambientes de trabalho.
+Criptografia:: A porcentagem de arquivos que contêm informações de integridade que estão em ambientes de trabalho criptografados ou não criptografados. Esta informação é específica do Cloud Volumes ONTAP.
+Proteção contra ransomware:: A porcentagem de arquivos que contêm informações de integridade que estão em ambientes de trabalho que possuem ou não proteção contra ransomware habilitada. Esta informação é específica do Cloud Volumes ONTAP.
+Retenção:: O período de tempo em que os arquivos foram modificados pela última vez. Isso é útil porque você não deve manter as informações de saúde por mais tempo do que precisa processá-las.
+Distribuição de informações em Saúde:: Os ambientes de trabalho onde as informações de integridade foram encontradas e se a criptografia e a proteção contra ransomware estão ativadas.
+
+
+
+
+=== Gerando o Relatório HIPAA
+
+Vá para a guia conformidade para gerar o relatório.
+
+.Passos
+. Na parte superior do Cloud Manager, clique em *Cloud Compliance*.
+. Em *relatórios*, clique no ícone de download ao lado de *Relatório HIPAA*.
++
+image:screenshot_hipaa.gif["Uma captura de tela da guia conformidade no Cloud Manager que mostra o painel relatórios onde você pode clicar em HIPAA."]
+
+
+
+.Resultado
+O Cloud Compliance gera um relatório em PDF que você pode revisar e enviar para outros grupos conforme necessário.
+
+
+
+== Selecionar os ambientes de trabalho para relatórios
+
+Você pode filtrar o conteúdo do dashboard do Cloud Compliance para ver os dados de conformidade de todos os ambientes de trabalho e bancos de dados ou apenas para ambientes de trabalho específicos.
+
+Quando você filtra o painel, o Cloud Compliance escoa os dados de conformidade e os relatórios apenas para os ambientes de trabalho selecionados.
+
+.Passos
+. Clique no menu suspenso filtro, selecione os ambientes de trabalho para os quais deseja exibir dados e clique em *Exibir*.
++
+image:screenshot_cloud_compliance_filter.gif["Uma captura de tela para selecionar os ambientes de trabalho para os relatórios que você deseja executar."]
+
+

@@ -1,0 +1,76 @@
+---
+sidebar: sidebar 
+permalink: concept_overview.html 
+keywords: overview, concepts, features, use case, days, 14 days 
+summary: O Cloud Manager permite que especialistas DE TI e arquitetos de nuvem gerenciem centralmente sua infraestrutura multicloud híbrida usando as soluções de nuvem da NetApp. 
+---
+= Saiba mais sobre o Cloud Manager
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+O Cloud Manager permite que especialistas DE TI e arquitetos de nuvem gerenciem centralmente sua infraestrutura multicloud híbrida usando as soluções de nuvem da NetApp.
+
+
+
+== Caraterísticas
+
+O Cloud Manager é uma plataforma de gerenciamento de classe empresarial baseada em SaaS que mantém você no controle dos seus dados, onde quer que eles estejam.
+
+* Configure e use https://cloud.netapp.com/ontap-cloud["Cloud Volumes ONTAP"^] para um gerenciamento de dados eficiente em vários protocolos nas nuvens.
+* Configurar e utilizar serviços de armazenamento de ficheiros: https://cloud.netapp.com/azure-netapp-files["Azure NetApp Files"^], , https://cloud.netapp.com/cloud-volumes-service-for-aws["Cloud Volumes Service para AWS"^] E https://cloud.netapp.com/cloud-volumes-service-for-gcp["Cloud Volumes Service para Google Cloud"^].
+* Descubra e gerencie clusters do ONTAP locais criando volumes, fazendo backup na nuvem, replicando dados na nuvem híbrida e dispondo dados pouco acessados em categorias na nuvem.
+* Habilite serviços de nuvem e software integrados, como https://cloud.netapp.com/cloud-compliance["Conformidade com a nuvem"^], https://cloud.netapp.com/cloud-insights["Cloud Insights"^], https://cloud.netapp.com/cloud-backup-service["Cloud Backup Service"^], https://netapp.io/persistent-storage-provisioner-for-kubernetes/["Trident"^]e muito mais.
+
+
+https://cloud.netapp.com/cloud-manager["Saiba mais sobre o Cloud Manager"^].
+
+
+
+== Fornecedores de storage de objetos compatíveis
+
+O Cloud Manager permite gerenciar o storage de nuvem e usar serviços de nuvem na Amazon Web Services, Microsoft Azure e Google Cloud.
+
+
+
+== Custo
+
+O software Cloud Manager é gratuito da NetApp.
+
+Para a maioria das tarefas, o Cloud Manager solicita que você implante um conetor em sua rede de nuvem, o que resulta em cobranças do seu provedor de nuvem para a instância de computação e o armazenamento associado. Você tem a opção de executar o software Connector em suas instalações.
+
+
+
+== Como o Cloud Manager funciona
+
+O Cloud Manager inclui uma interface baseada em SaaS integrada ao NetApp Cloud Central e conetores que gerenciam o Cloud Volumes ONTAP e outros serviços de nuvem.
+
+
+
+=== Software como serviço
+
+O Cloud Manager pode ser acessado por meio das APIs a https://cloudmanager.netapp.com["Interface de usuário baseada em SaaS"^] e. Essa experiência SaaS permite que você acesse automaticamente os recursos mais recentes à medida que são lançados e alterne facilmente entre suas contas e conetores do Cloud Central.
+
+
+
+=== Centro de nuvem da NetApp
+
+https://cloud.netapp.com["Centro de nuvem da NetApp"^] fornece um local centralizado para acessar e https://www.netapp.com/us/products/cloud-services/use-cases-for-netapp-cloud-services.aspx["Serviços de nuvem da NetApp"^] gerenciar o . Com a autenticação de usuário centralizada, você pode usar o mesmo conjunto de credenciais para acessar o Cloud Manager e outros serviços de nuvem, como o Cloud Insights.
+
+Ao fazer login no Cloud Manager pela primeira vez, você será solicitado a criar uma conta _Cloud Central_. Essa conta fornece alocação a vários clientes e permite organizar usuários e recursos em _workspaces_ isolados.
+
+
+
+=== Conetores
+
+Na maioria dos casos, um administrador de conta precisará implantar um _Connector_ na sua nuvem ou na rede local. O conetor permite que o Cloud Manager gerencie recursos e processos em seu ambiente de nuvem pública.
+
+Um conetor deve permanecer sempre em funcionamento. É importante para a saúde e operação contínuas dos serviços que você habilitar.
+
+Por exemplo, um conetor é um componente chave na integridade e operação dos sistemas Cloud Volumes ONTAP PAYGO. Se um conetor for desligado, os sistemas Cloud Volumes ONTAP PAYGO desligarão após perder a comunicação com um conetor por mais de 14 dias.
+
+link:concept_connectors.html["Saiba mais sobre quando os conetores são necessários e como funcionam"].

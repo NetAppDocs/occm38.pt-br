@@ -1,0 +1,140 @@
+---
+sidebar: sidebar 
+permalink: task_planning_your_config_gcp.html 
+keywords: license, disk, ebs, storage, size, write speed, volume usage, explore, standard, premium, byol, capacity, limit, configurations, virtual machine, vm, regions, supported disks, disk types, use profile, thin provisioning, deduplication, compression, Cloud Volumes ONTAP explore, Cloud Volumes ONTAP standard, Cloud Volumes ONTAP premium, Cloud Volumes ONTAP byol, shared instance, dedicated instance, write speed, high write speed, normal write speed, network information, worksheet, limit, limits, storage limits, volume limit, aggregate limit, maximum volume size, maximum aggregate size 
+summary: Ao implantar o Cloud Volumes ONTAP, você pode escolher um sistema pré-configurado que atenda aos requisitos de workload ou criar sua própria configuração. Se você escolher sua própria configuração, você deve entender as opções disponíveis para você. 
+---
+= Planejando sua configuração do Cloud Volumes ONTAP no Google Cloud
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Ao implantar o Cloud Volumes ONTAP no Google Cloud, você pode escolher um sistema pré-configurado que atenda aos requisitos de carga de trabalho ou criar sua própria configuração. Se você escolher sua própria configuração, você deve entender as opções disponíveis para você.
+
+
+
+== Escolhendo um tipo de licença
+
+O Cloud Volumes ONTAP está disponível em duas opções de preço: Pagamento conforme o uso e traga sua própria licença (BYOL). Para pagamento conforme o uso, você pode escolher entre três licenças: Explore, Standard ou Premium. Cada licença oferece diferentes opções de computação e capacidade.
+
+https://docs.netapp.com/us-en/cloud-volumes-ontap/reference_configs_gcp_97.html["Configurações compatíveis com o Cloud Volumes ONTAP 9,7 no GCP"^]
+
+
+
+== Compreender os limites de armazenamento
+
+O limite de capacidade bruta de um sistema Cloud Volumes ONTAP está vinculado à licença. Limites adicionais afetam o tamanho dos agregados e volumes. Você deve estar ciente desses limites à medida que planeja sua configuração.
+
+https://docs.netapp.com/us-en/cloud-volumes-ontap/reference_limits_gcp_97.html["Limites de armazenamento para o Cloud Volumes ONTAP 9,7 no GCP"]
+
+
+
+== Dimensionamento do seu sistema na GCP
+
+O dimensionamento do seu sistema Cloud Volumes ONTAP pode ajudar você a atender aos requisitos de performance e capacidade. Você deve estar ciente de alguns pontos-chave ao escolher um tipo de máquina, tipo de disco e tamanho de disco:
+
+Tipo de máquina:: Veja os tipos de máquina suportados no http://docs.netapp.com/cloud-volumes-ontap/us-en/index.html["Notas de versão do Cloud Volumes ONTAP"^] e, em seguida, reveja os detalhes do Google sobre cada tipo de máquina suportado. Combine seus requisitos de carga de trabalho com o número de vCPUs e memória para o tipo de máquina. Observe que cada núcleo da CPU aumenta o desempenho da rede.
++
+--
+Consulte o seguinte para obter mais detalhes:
+
+* https://cloud.google.com/compute/docs/machine-types#n1_machine_types["Documentação do Google Cloud: N1 tipos de máquina padrão"^]
+* https://cloud.google.com/docs/compare/data-centers/networking#performance["Documentação do Google Cloud: Desempenho"^]
+
+
+--
+Tipo de disco do GCP:: Ao criar volumes para Cloud Volumes ONTAP, você precisa escolher o storage de nuvem subjacente que o Cloud Volumes ONTAP usa para um disco. O tipo de disco pode ser _Zonal SSD Persistent Disks_ ou _Zonal Standard Persistent Disks_.
++
+--
+Os discos persistentes SSD são os melhores para workloads que exigem altas taxas de IOPS aleatório, enquanto os discos persistentes padrão são econômicos e podem lidar com operações de leitura/gravação sequenciais. Para obter mais detalhes, https://cloud.google.com/compute/docs/disks/#pdspecs["Documentação do Google Cloud: Discos persistentes zonais (padrão e SSD)"^] consulte .
+
+--
+Tamanho do disco do GCP:: Você precisa escolher um tamanho de disco inicial ao implantar um sistema Cloud Volumes ONTAP. Depois disso, você pode permitir que o Cloud Manager gerencie a capacidade de um sistema para você, mas se quiser criar agregados, esteja ciente do seguinte:
++
+--
+* Todos os discos em um agregado devem ter o mesmo tamanho.
+* Determine o espaço de que você precisa, levando em consideração o desempenho.
+* O desempenho dos discos persistentes é dimensionado automaticamente com o tamanho do disco e o número de vCPUs disponíveis para o sistema.
++
+Consulte o seguinte para obter mais detalhes:
+
++
+** https://cloud.google.com/compute/docs/disks/#pdspecs["Documentação do Google Cloud: Discos persistentes zonais (padrão e SSD)"^]
+** https://cloud.google.com/compute/docs/disks/performance["Documentação do Google Cloud: Otimizando o desempenho do disco persistente e do SSD local"^]
+
+
+
+
+--
+
+
+
+
+== Planilha de informações de rede do GCP
+
+Ao implantar o Cloud Volumes ONTAP no GCP, você precisa especificar detalhes sobre sua rede virtual. Você pode usar uma Planilha para coletar as informações do administrador.
+
+[cols="30,70"]
+|===
+| Informações do GCP | O seu valor 
+
+
+| Região |  
+
+
+| Zona |  
+
+
+| Rede VPC |  
+
+
+| Sub-rede |  
+
+
+| Política de firewall (se estiver usando a sua própria) |  
+|===
+
+
+== Escolhendo uma velocidade de escrita
+
+O Cloud Manager permite escolher uma configuração de velocidade de gravação para sistemas Cloud Volumes ONTAP de nó único. Antes de escolher uma velocidade de gravação, você deve entender as diferenças entre as configurações normal e alta e os riscos e recomendações ao usar alta velocidade de gravação.
+
+
+
+==== Diferença entre velocidade de gravação normal e alta velocidade de gravação
+
+Quando você escolhe a velocidade de gravação normal, os dados são gravados diretamente no disco, reduzindo assim a probabilidade de perda de dados no caso de uma falha não planejada do sistema.
+
+Quando você escolhe alta velocidade de gravação, os dados são armazenados em buffer na memória antes de serem gravados no disco, o que proporciona um desempenho de gravação mais rápido. Devido a esse armazenamento em cache, existe o potencial de perda de dados se ocorrer uma falha não planejada do sistema.
+
+A quantidade de dados que pode ser perdida no caso de uma falha não planejada do sistema é a extensão dos dois últimos pontos de consistência. Um ponto de consistência é o ato de gravar dados armazenados em buffer no disco. Um ponto de consistência ocorre quando o log de gravação está cheio ou após 10 segundos (o que ocorrer primeiro). No entanto, o desempenho do volume do AWS EBS pode afetar o tempo de processamento do ponto de consistência.
+
+
+
+==== Quando usar alta velocidade de gravação
+
+A alta velocidade de gravação é uma boa opção se for necessário um desempenho de gravação rápido para sua carga de trabalho e você pode resistir ao risco de perda de dados no caso de uma interrupção não planejada do sistema.
+
+
+
+==== Recomendações ao usar alta velocidade de gravação
+
+Se você ativar alta velocidade de gravação, deve garantir a proteção contra gravação na camada de aplicação.
+
+
+
+== Escolhendo um perfil de uso de volume
+
+O ONTAP inclui vários recursos de eficiência de storage que podem reduzir a quantidade total de storage de que você precisa. Ao criar um volume no Cloud Manager, você pode escolher um perfil que ative esses recursos ou um perfil que os desabilite. Você deve aprender mais sobre esses recursos para ajudá-lo a decidir qual perfil usar.
+
+Os recursos de eficiência de storage da NetApp oferecem os seguintes benefícios:
+
+Thin Provisioning:: Apresenta storage mais lógico para hosts ou usuários do que você realmente tem no pool de storage físico. Em vez de pré-alocar espaço de armazenamento, o espaço de armazenamento é alocado dinamicamente a cada volume à medida que os dados são gravados.
+Deduplicação:: Melhora a eficiência localizando blocos idênticos de dados e substituindo-os por referências a um único bloco compartilhado. Essa técnica reduz os requisitos de capacidade de storage eliminando blocos redundantes de dados que residem no mesmo volume.
+Compactação:: Reduz a capacidade física necessária para armazenar dados comprimindo dados dentro de um volume em armazenamento primário, secundário e de arquivo.
+

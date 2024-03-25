@@ -1,0 +1,252 @@
+---
+sidebar: sidebar 
+permalink: task_scanning_s3.html 
+keywords: cloud compliance, amazon s3, s3 buckets, amazon s3 buckets, scan s3 buckets, scan amazon s3 buckets, enable compliance s3, enable compliance on s3, s3 working environment 
+summary: O Cloud Compliance pode verificar seus buckets do Amazon S3 para identificar os dados pessoais e confidenciais que residem no storage de objetos do S3. O Cloud Compliance pode verificar qualquer bucket da conta, independentemente de ter sido criado para uma solução da NetApp. 
+---
+= Introdução ao Cloud Compliance para Amazon S3
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+O Cloud Compliance pode verificar seus buckets do Amazon S3 para identificar os dados pessoais e confidenciais que residem no storage de objetos do S3. O Cloud Compliance pode verificar qualquer bucket da conta, independentemente de ter sido criado para uma solução da NetApp.
+
+
+
+== Início rápido
+
+Comece rapidamente seguindo estas etapas ou role para baixo até as seções restantes para obter detalhes completos.
+
+
+
+==== image:number1.png["Número 1"] Configure os requisitos do S3 em seu ambiente de nuvem
+
+[role="quick-margin-para"]
+Garanta que seu ambiente de nuvem atenda aos requisitos de conformidade com a nuvem, incluindo a preparação de uma função do IAM e a configuração da conectividade do Cloud Compliance para o S3. <<Rever os pré-requisitos do S3,Veja a lista completa>>.
+
+
+
+==== image:number2.png["Número 2"] Implante a instância do Cloud Compliance
+
+[role="quick-margin-para"]
+link:task_deploy_cloud_compliance.html["Implante o Cloud Compliance no Cloud Manager"^] se ainda não houver uma instância implantada.
+
+
+
+==== image:number3.png["Número 3"] Ative a conformidade no seu ambiente de trabalho S3
+
+[role="quick-margin-para"]
+Selecione o ambiente de trabalho do Amazon S3, clique em *Ativar conformidade* e selecione uma função do IAM que inclua as permissões necessárias.
+
+
+
+==== image:number4.png["Número 4"] Selecione os intervalos para digitalizar
+
+[role="quick-margin-para"]
+Selecione os buckets que você gostaria de verificar e o Cloud Compliance começará a digitalizá-los.
+
+
+
+== Rever os pré-requisitos do S3
+
+Os requisitos a seguir são específicos para a digitalização de buckets S3.
+
+[[policy-requirements]]
+Configure uma função do IAM para a instância do Cloud Compliance:: O Cloud Compliance precisa de permissões para se conetar aos buckets do S3 na sua conta e verificá-los. Configure uma função do IAM que inclua as permissões listadas abaixo. O Cloud Manager solicita que você selecione uma função do IAM ao ativar o Cloud Compliance no ambiente de trabalho do Amazon S3.
++
+--
+[source, json]
+----
+{
+  "Version": "2012-10-17",
+  "Statement": [
+      {
+          "Effect": "Allow",
+          "Action": [
+              "s3:Get*",
+              "s3:List*",
+              "s3:HeadBucket"
+          ],
+          "Resource": "*"
+      },
+      {
+          "Effect": "Allow",
+          "Action": [
+              "iam:GetPolicyVersion",
+              "iam:GetPolicy",
+              "iam:ListAttachedRolePolicies"
+          ],
+          "Resource": [
+              "arn:aws:iam::*:policy/*",
+              "arn:aws:iam::*:role/*"
+          ]
+      }
+  ]
+}
+----
+--
+Fornecer conectividade do Cloud Compliance para o Amazon S3:: O Cloud Compliance precisa de uma conexão com o Amazon S3. A melhor maneira de fornecer essa conexão é por meio de um VPC Endpoint ao serviço S3. Para obter instruções, https://docs.aws.amazon.com/AmazonVPC/latest/UserGuide/vpce-gateway.html#create-gateway-endpoint["Documentação da AWS: Criando um endpoint do Gateway"^] consulte .
++
+--
+Quando você criar o VPC Endpoint, certifique-se de selecionar a região, VPC e tabela de rotas que corresponde à instância do Cloud Compliance. Você também deve modificar o grupo de segurança para adicionar uma regra HTTPS de saída que permita o tráfego para o endpoint S3. Caso contrário, o Cloud Compliance não pode se conetar ao serviço S3.
+
+Se tiver algum problema, consulte https://aws.amazon.com/premiumsupport/knowledge-center/connect-s3-vpc-endpoint/["AWS Support Knowledge Center: Por que não consigo me conetar a um bucket do S3 usando um endpoint VPC de gateway?"^]
+
+Uma alternativa é fornecer a conexão usando um NAT Gateway.
+
+
+NOTE: Você não pode usar um proxy para chegar ao S3 pela internet.
+
+--
+
+
+
+
+== Implantando a instância de Cloud Compliance
+
+link:task_deploy_cloud_compliance.html["Implante o Cloud Compliance no Cloud Manager"^] se ainda não houver uma instância implantada.
+
+Você precisa implantar a instância em um AWS Connector para que o Cloud Manager descubra automaticamente os buckets do S3 nessa conta da AWS e os exiba em um ambiente de trabalho do Amazon S3.
+
+
+
+== Ativar a conformidade no seu ambiente de trabalho S3
+
+Ative o Cloud Compliance no Amazon S3 depois de verificar os pré-requisitos.
+
+.Passos
+. Na parte superior do Cloud Manager, clique em *ambientes de trabalho*.
+. Selecione o ambiente de trabalho do Amazon S3.
++
+image:screenshot_s3_we.gif["Uma captura de tela de um ícone de ambiente de trabalho do Amazon S3"]
+
+. No painel à direita, clique em *Ativar conformidade*.
++
+image:screenshot_s3_enable_compliance.gif["Uma captura de tela da ativação do serviço Cloud Compliance no painel Serviços"]
+
+. Quando solicitado, atribua uma função do IAM à instância do Cloud Compliance que tem <<Requirements specific to S3,as permissões necessárias>>o .
++
+image:screenshot_s3_compliance_iam_role.gif["Uma captura de tela de inserção da função do AWS IAM para conformidade com a nuvem"]
+
+. Clique em *Ativar conformidade*.
+
+
+
+TIP: Você também pode habilitar verificações de conformidade para um ambiente de trabalho na página Configuração de digitalização clicando no image:screenshot_gallery_options.gif[""] botão e selecionando *Ativar conformidade*.
+
+.Resultado
+O Cloud Manager atribui a função IAM à instância.
+
+
+
+== Ativar e desativar verificações de conformidade em buckets do S3
+
+Depois que o Cloud Manager ativar o Cloud Compliance no Amazon S3, a próxima etapa é configurar os buckets que você deseja analisar.
+
+Quando o Cloud Manager está em execução na conta da AWS que tem os buckets do S3 que você deseja verificar, ele descobre esses buckets e os exibe em um ambiente de trabalho do Amazon S3.
+
+O Cloud Compliance também <<Digitalização de buckets a partir de contas adicionais da AWS,Examine os buckets do S3 que estão em diferentes contas da AWS>>pode .
+
+.Passos
+. Selecione o ambiente de trabalho do Amazon S3.
+. No painel à direita, clique em *Configurar baldes*.
++
+image:screenshot_s3_configure_buckets.gif["Uma captura de tela clicando em Configurar baldes para escolher os buckets S3 que você deseja digitalizar"]
+
+. Ative a conformidade nos buckets que você deseja analisar.
++
+image:screenshot_s3_select_buckets.gif["Uma captura de tela de seleção dos buckets S3 que você deseja digitalizar"]
+
+
+
+.Resultado
+O Cloud Compliance começa a verificar os buckets do S3 ativados. Se houver algum erro, eles aparecerão na coluna Status, juntamente com a ação necessária para corrigir o erro.
+
+
+
+== Digitalização de buckets a partir de contas adicionais da AWS
+
+Você pode verificar buckets do S3 em uma conta diferente da AWS atribuindo uma função dessa conta para acessar a instância existente do Cloud Compliance.
+
+.Passos
+. Vá para a conta AWS de destino onde você deseja analisar buckets do S3 e criar uma função do IAM selecionando *outra conta da AWS*.
++
+image:screenshot_iam_create_role.gif[""]
+
++
+Certifique-se de fazer o seguinte:
+
++
+** Insira o ID da conta onde reside a instância do Cloud Compliance.
+** Altere a duração máxima da sessão CLI/API* de 1 hora para 12 horas e salve essa alteração.
+** Anexe a política do Cloud Compliance IAM. Certifique-se de que tem as permissões necessárias.
++
+[source, json]
+----
+{
+  "Version": "2012-10-17",
+  "Statement": [
+      {
+          "Effect": "Allow",
+          "Action": [
+              "s3:Get*",
+              "s3:List*",
+              "s3:HeadBucket"
+          ],
+          "Resource": "*"
+      },
+  ]
+}
+----
+
+
+. Vá para a conta da AWS de origem onde reside a instância do Cloud Compliance e selecione a função do IAM anexada à instância.
++
+.. Altere a duração máxima da sessão CLI/API* de 1 hora para 12 horas e salve essa alteração.
+.. Clique em *Anexar políticas* e, em seguida, clique em *criar política*.
+.. Crie uma política que inclua a ação "sts:AssumeRole" e o ARN da função que você criou na conta de destino.
++
+[source, json]
+----
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": "sts:AssumeRole",
+            "Resource": "arn:aws:iam::<ADDITIONAL-ACCOUNT-ID>:role/<ADDITIONAL_ROLE_NAME>"
+        },
+        {
+            "Effect": "Allow",
+            "Action": [
+                "iam:GetPolicyVersion",
+                "iam:GetPolicy",
+                "iam:ListAttachedRolePolicies"
+            ],
+            "Resource": [
+                "arn:aws:iam::*:policy/*",
+                "arn:aws:iam::*:role/*"
+            ]
+        }
+    ]
+}
+----
++
+A conta de perfil de instância do Cloud Compliance agora tem acesso à conta AWS adicional.
+
+
+
+. Vá para a página *Configuração de digitalização do Amazon S3* e a nova conta da AWS será exibida. Observe que pode levar alguns minutos para que o Cloud Compliance sincronize o ambiente de trabalho da nova conta e mostre essas informações.
++
+image:screenshot_activate_and_select_buckets.png[""]
+
+. Clique em *Activate Compliance & Select Buckets* (Ativar conformidade e Selecionar baldes*) e selecione os baldes que pretende digitalizar.
+
+
+.Resultado
+O Cloud Compliance começa a verificar os novos buckets do S3 ativados.

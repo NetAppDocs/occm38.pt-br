@@ -1,0 +1,45 @@
+---
+sidebar: sidebar 
+permalink: task_configuring_proxy.html 
+keywords: proxy, proxy server, proxy, internet 
+summary: Se suas políticas corporativas determinarem que você usa um servidor proxy para toda a comunicação HTTP com a Internet, você deverá configurar o Cloud Manager para usar esse servidor proxy. O servidor proxy pode estar na nuvem ou na rede. 
+---
+= Configurando um conetor para usar um servidor proxy
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Se suas políticas corporativas determinarem que você usa um servidor proxy para toda a comunicação HTTP com a Internet, então você deve configurar seus conetores para usar esse servidor proxy. O servidor proxy pode estar na nuvem ou na rede.
+
+Quando você configura um conetor para usar um servidor proxy, esse conetor e os sistemas Cloud Volumes ONTAP que ele gerencia (incluindo quaisquer mediadores de HA), todos usam o servidor proxy.
+
+.Passos
+. https://docs.netapp.com/us-en/occm/task_logging_in.html["Faça login na interface SaaS do Cloud Manager"^] De uma máquina que tenha uma conexão de rede com a instância do conetor.
++
+Se o conetor não tiver um endereço IP público, você precisará de uma conexão VPN ou precisará se conetar a partir de um host de salto que esteja na mesma rede que o conetor.
+
+. Clique no menu suspenso *Connector* e clique em *Go to local UI* para obter um conetor específico.
++
+image:screenshot_connector_local_ui.gif["Uma captura de tela que mostra o ícone do conetor no cabeçalho e a ação ir para a IU local."]
+
++
+A interface do Cloud Manager em execução no conetor é carregada em uma nova guia do navegador.
+
+. No canto superior direito do console do Cloud Manager, clique no ícone Configurações e selecione *Configurações do Cloud Manager*.
++
+image:screenshot_settings_icon.gif["Uma captura de tela que mostra o ícone Configurações no canto superior direito do console do Cloud Manager."]
+
+. Em Proxy HTTP, digite o servidor usando a sintaxe http://_address:port_[], especifique um nome de usuário e senha se a autenticação básica for necessária para o servidor e clique em *Salvar*.
++
+
+NOTE: O Cloud Manager não suporta senhas que incluem o caractere A.
+
+
+
+.Resultado
+Depois de especificar o servidor proxy, os novos sistemas Cloud Volumes ONTAP são configurados automaticamente para usar o servidor proxy ao enviar mensagens AutoSupport. Se você não especificou o servidor proxy antes que os usuários criem sistemas Cloud Volumes ONTAP, eles devem usar o Gerenciador do sistema para definir manualmente o servidor proxy nas opções do AutoSupport para cada sistema.

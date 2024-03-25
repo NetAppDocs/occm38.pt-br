@@ -1,0 +1,53 @@
+---
+sidebar: sidebar 
+permalink: task_monitoring_costs.html 
+keywords: cost, costs, storage, compute, savings, aws, aws costs, billing 
+summary: Com o Cloud Manager, você pode visualizar os custos associados à execução do Cloud Volumes ONTAP na AWS. Você também pode ver quanto dinheiro você economizou usando os recursos do NetApp que podem reduzir os custos de armazenamento. 
+---
+= Monitoramento dos custos de recursos da AWS
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+O Cloud Manager permite visualizar os custos de recursos associados à execução do Cloud Volumes ONTAP na AWS. Você também pode ver quanto dinheiro você economizou usando os recursos do NetApp que podem reduzir os custos de armazenamento.
+
+.Sobre esta tarefa
+O Cloud Manager atualiza os custos ao atualizar a página. Você deve consultar a AWS para obter detalhes de custo final.
+
+.Passo
+. Verifique se o Cloud Manager pode obter informações de custo da AWS:
++
+.. Verifique se a política do IAM que fornece permissões ao Cloud Manager inclui as seguintes ações:
++
+[source, json]
+----
+"ce:GetReservationUtilization",
+"ce:GetDimensionValues",
+"ce:GetCostAndUsage",
+"ce:GetTags"
+----
++
+Essas ações estão incluídas no último https://mysupport.netapp.com/site/info/cloud-manager-policies["Política do Cloud Manager"^]. Os novos sistemas implantados a partir do NetApp Cloud Central incluem automaticamente essas permissões.
+
+.. https://docs.aws.amazon.com/awsaccountbilling/latest/aboutv2/activating-tags.html["Ative a tag *WorkingEnvironmentId*"^].
++
+Para controlar seus custos da AWS, o Cloud Manager atribui uma tag de alocação de custos às instâncias do Cloud Volumes ONTAP. Depois de criar seu primeiro ambiente de trabalho, ative a tag *WorkingEnvironmentId*. As tags definidas pelo usuário não aparecem nos relatórios de cobrança da AWS até que você os ative no console de Gerenciamento de custos e cobrança.
+
+
+
+. Na página ambientes de trabalho, selecione um ambiente de trabalho Cloud Volumes ONTAP e clique em *custo*.
++
+A página custo exibe os custos dos meses atuais e anteriores e mostra suas economias anuais com o NetApp, se você ativou os recursos de economia de custos do NetApp em volumes.
+
++
+A imagem a seguir mostra uma página de custo de amostra:
+
++
+image:screenshot_cost.gif["Captura de tela: Mostra os custos por mês para uma instância do Cloud Volumes ONTAP."]
+
+

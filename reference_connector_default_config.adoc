@@ -1,0 +1,70 @@
+---
+sidebar: sidebar 
+permalink: reference_connector_default_config.html 
+keywords: linux, user name, operating system, installation files, installation folder, folder, log, logs, service, mysql, packages, linux 
+summary: Se você precisar solucionar problemas do conetor, ele pode ajudar a entender como ele está configurado. 
+---
+= Configuração padrão para o conetor
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Se você precisar solucionar problemas do conetor, ele pode ajudar a entender como ele está configurado.
+
+* Se você implantou o conetor do Cloud Manager (ou diretamente do mercado de um provedor de nuvem), observe o seguinte:
++
+** Na AWS, o nome de usuário da instância do EC2 Linux é EC2-user.
+** O sistema operativo da imagem é o seguinte:
++
+*** AWS: Red Hat Enterprise Linux 7,5 (HVM)
+*** Azure: Red Hat Enterprise Linux 7,6 (HVM)
+*** GCP: CentOS 7,6
++
+O sistema operacional não inclui uma GUI. Tem de utilizar um terminal para aceder ao sistema.
+
+
+
+
+
+* A pasta de instalação do conetor reside no seguinte local:
++
+/opt/application/NetApp/cloudmanager
+
+* Os arquivos de log estão contidos na seguinte pasta:
++
+/opt/application/NetApp/cloudmanager/log
+
+* O serviço Cloud Manager é chamado occm.
+* O serviço occm depende do serviço MySQL.
++
+Se o serviço MySQL estiver inativo, o serviço occm também estará inativo.
+
+* O Cloud Manager instala os seguintes pacotes no host Linux, se eles ainda não estiverem instalados:
++
+** 7Zip
+** AWSCLI
+** Docker
+** Java
+** Kubectl
+** MySQL
+** Tridentctl
+** Puxa
+** Wget
+
+
+* O conetor usa as seguintes portas no host Linux:
++
+** 80 para acesso HTTP
+** 443 para acesso HTTPS
+** 3306 para o banco de dados do Cloud Manager
+** 8080 para o proxy da API do Cloud Manager
+** 8666 para a API Service Manager
+** 8777 para a Health-Checker Container Service API
+
+
+

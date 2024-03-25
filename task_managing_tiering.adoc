@@ -1,0 +1,131 @@
+---
+sidebar: sidebar 
+permalink: task_managing_tiering.html 
+keywords: discover, volumes, report, hot, cold, inactive, active, capacity, used capacity, savings, health, failed 
+summary: Agora que você descobriu e categorizou dados do seu primeiro cluster do ONTAP, pode categorizar dados de volumes adicionais, descobrir clusters adicionais e muito mais. 
+---
+= Gerenciamento de categorização de dados nos clusters
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Agora que você configurou a disposição de dados em categorias dos clusters do ONTAP, pode categorizar dados de volumes adicionais, alterar a política de disposição em categorias de um volume e muito mais.
+
+
+
+== Disposição em camadas de dados de volumes adicionais
+
+Configure a disposição de dados em categorias para volumes adicionais a qualquer momento, por exemplo, depois de criar um novo volume.
+
+.Passos
+. Na parte superior do Cloud Manager, clique em *Categorização*.
+. No *Painel de cluster*, clique em *volumes de nível* para o cluster.
+. Para cada volume, clique no image:screenshot_edit_icon.gif["Uma captura de tela do ícone de edição que aparece no final de cada linha na tabela para separar volumes"] ícone, selecione uma política de disposição em camadas, ajuste opcionalmente os dias de resfriamento e clique em *aplicar*.
++
+link:concept_cloud_tiering.html#volume-tiering-policies["Saiba mais sobre as políticas de disposição em camadas de volume"].
+
++
+image:https://docs.netapp.com/us-en/cloud-tiering/media/screenshot_volumes_select.gif["Uma captura de tela que mostra os volumes selecionados na página Selecionar volumes de origem."]
+
++
+
+TIP: Não é necessário configurar o armazenamento de objetos porque ele já estava configurado quando você configurou a disposição em camadas inicialmente para o cluster. O ONTAP categorizará os dados inativos desses volumes no mesmo armazenamento de objetos.
+
+. Quando terminar, clique em *Fechar*.
+
+
+
+
+== Alteração da política de disposição em camadas de um volume
+
+A alteração da política de disposição em camadas de um volume altera a forma como o ONTAP classifica os dados inativos no storage de objetos. A alteração começa a partir do momento em que você altera a política - ela altera apenas o comportamento de disposição em camadas subsequente para o volume.
+
+.Passos
+. Na parte superior do Cloud Manager, clique em *Categorização*.
+. No *Painel de cluster*, clique em *volumes de nível* para o cluster.
+. Clique no image:screenshot_edit_icon.gif["Uma captura de tela do ícone de edição que aparece no final de cada linha na tabela para separar volumes"] ícone, selecione uma política de disposição em camadas, ajuste opcionalmente os dias de resfriamento e clique em *aplicar*.
++
+link:concept_cloud_tiering.html#volume-tiering-policies["Saiba mais sobre as políticas de disposição em camadas de volume"].
+
+
+
+
+
+== Gerenciamento de configurações de disposição em camadas em agregados
+
+Cada agregado tem duas configurações que você pode ajustar: O limite de preenchimento de categorias e se o relatório de dados inativos está ativado.
+
+Disposição em camadas no limite de plenitude:: Definir o limite para um número menor reduz a quantidade de dados necessária para ser armazenada na camada de performance antes da disposição em categorias. Isso pode ser útil para grandes agregados que contêm poucos dados ativos.
++
+--
+Definir o limite para um número maior aumenta a quantidade de dados necessários para serem armazenados na camada de performance antes da disposição em camadas. Isso pode ser útil para soluções projetadas para categorizar somente quando os agregados estiverem próximos da capacidade máxima.
+
+--
+Relatórios de dados inativos:: O relatório de dados inativos (IDR) usa um período de resfriamento de 31 dias para determinar quais dados são considerados inativos. A quantidade de dados inativos em camadas depende das políticas de disposição em camadas definidas nos volumes. Essa quantidade pode ser diferente da quantidade de dados frios detetados pelo IDR usando um período de resfriamento de 31 dias.
++
+--
+
+TIP: É melhor manter o IDR ativado porque ajuda a identificar seus dados inativos e oportunidades de economia. O IDR deve permanecer habilitado se a disposição de dados tiver sido ativada em um agregado.
+
+--
+
+
+.Passos
+. Na parte superior do Cloud Manager, clique em *Categorização*.
+. Na página *disposição em camadas na nuvem*, clique no ícone de menu de um cluster e selecione *Gerenciar agregados*.
++
+image:https://docs.netapp.com/us-en/cloud-tiering/media/screenshot_manage_aggregates.gif["Uma captura de tela do Painel de cluster que mostra um cluster e o menu de ação expandido."]
+
+. Na página *Gerenciar agregados*, clique no image:screenshot_edit_icon.gif["Uma captura de tela do ícone de edição que aparece no final de cada linha na tabela para gerenciar agregados"]ícone de um agregado na tabela.
+. Modifique o limite de preenchimento e escolha se deseja ativar ou desativar o relatório de dados inativos.
++
+image:https://docs.netapp.com/us-en/cloud-tiering/media/screenshot_edit_aggregate.gif["Uma captura de tela que mostra um controle deslizante para modificar o limite de preenchimento de categorias e um botão para ativar ou desativar relatórios de dados inativos."]
+
+. Clique em *aplicar*.
+
+
+
+
+== Analisar as informações de disposição em camadas de um cluster
+
+Talvez você queira ver a quantidade de dados na camada de nuvem e a quantidade de dados nos discos. Ou, talvez você queira ver a quantidade de dados ativos e inativos nos discos do cluster. O Cloud Tiering fornece essas informações para cada cluster.
+
+.Passos
+. Na parte superior do Cloud Manager, clique em *Categorização*.
+. No *Painel de cluster*, clique em *mais informações* para um cluster.
++
+image:https://docs.netapp.com/us-en/cloud-tiering/media/screenshot_more_info.gif["Uma captura de tela que mostra o botão mais informações, que está disponível no Painel de cluster para cada cluster."]
+
+. Reveja os detalhes sobre o cluster.
++
+Aqui está um exemplo:
+
++
+image:https://docs.netapp.com/us-en/cloud-tiering/media/screenshot_cluster_info.gif["Uma captura de tela que mostra o relatório do cluster, que detalha a capacidade total usada, a capacidade usada do cluster, as informações do cluster e as informações de armazenamento de objetos."]
+
+
+
+
+
+== Fixação da saúde operacional
+
+Falhas podem acontecer. Quando isso acontece, o Cloud Tiering exibe um status de integridade operacional "Falha" no Painel de cluster. A integridade reflete o status do sistema ONTAP e do Cloud Manager.
+
+.Passos
+. Identifique quaisquer clusters que tenham uma integridade operacional de "Falha".
++
+image:https://docs.netapp.com/us-en/cloud-tiering/media/screenshot_tiering_health.gif["Uma captura de tela que mostra um status de integridade de disposição em camadas com falha para um cluster."]
+
+. Passe o Mouse sobre o image:https://docs.netapp.com/us-en/cloud-tiering/media/screenshot_info_icon.gif["Uma captura de tela do ícone i que mostra o motivo da falha"] ícone para ver o motivo da falha.
+. Corrija o problema:
++
+.. Verifique se o cluster do ONTAP está operacional e se ele tem uma conexão de entrada e saída para seu provedor de storage de objetos.
+.. Verifique se o Cloud Manager tem conexões de saída para o serviço Cloud Tiering, para o armazenamento de objetos e para os clusters ONTAP detetados.
+
+
+

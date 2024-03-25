@@ -1,0 +1,64 @@
+---
+sidebar: sidebar 
+permalink: task_setting_up_ontap_cloud.html 
+keywords: set up, setting up, ntp, time, synch, autosupport, asup, ems, lif, svm, backup, configuration files, config, snapcenter, snapdrive, ntp server, svm management lif, management lif 
+summary: Depois de implantar o Cloud Volumes ONTAP, você pode configurá-lo sincronizando a hora do sistema usando o NTP e executando algumas tarefas opcionais do Gerenciador do sistema ou da CLI. 
+---
+= Configurar o Cloud Volumes ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Depois de implantar o Cloud Volumes ONTAP, você pode configurá-lo sincronizando a hora do sistema usando o NTP e executando algumas tarefas opcionais do Gerenciador do sistema ou da CLI.
+
+[cols="30,70"]
+|===
+| Tarefa | Descrição 
+
+
+| Sincronize a hora do sistema usando NTP  a| 
+Especificar um servidor NTP sincroniza o tempo entre os sistemas da rede, o que pode ajudar a evitar problemas devido a diferenças de tempo.
+
+Especifique um servidor NTP usando a API do Cloud Manager ou a partir da interface do usuário quando você configura um servidor CIFS.
+
+* link:task_managing_storage.html#modifying-the-cifs-server["Modificação do servidor CIFS"]
+* link:api.html["Guia do desenvolvedor de API do Cloud Manager"^]
+
+
+Por exemplo, aqui está a API para um sistema de nó único na AWS:
+
+image:screenshot_ntp_server_api.gif["Uma captura de tela da interface Swagger que mostra a chamada da API NTP."]
+
+
+
+| Opcional: Configurar o AutoSupport | O AutoSupport monitora proativamente a integridade do sistema e envia mensagens automaticamente para o suporte técnico da NetApp por padrão. Se o administrador da conta tiver adicionado um servidor proxy ao Cloud Manager antes de iniciar a instância, o Cloud Volumes ONTAP será configurado para usar esse servidor proxy para mensagens do AutoSupport. Você deve testar o AutoSupport para garantir que ele possa enviar mensagens. Para obter instruções, consulte a Ajuda do System Manager ou o http://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-sag/home.html["Referência de administração do sistema ONTAP 9"^]. 
+
+
+| Opcional: Configure o Cloud Manager como o proxy AutoSupport  a| 
+Se o seu ambiente exigir um servidor proxy para enviar mensagens do AutoSupport, você pode configurar o Cloud Manager para agir como proxy. Nenhuma configuração para o Cloud Manager é necessária, além do acesso à Internet. Você simplesmente precisa ir para a CLI para Cloud Volumes ONTAP e executar o seguinte comando:
+
+....
+system node autosupport modify -proxy-url <cloud-manager-ip-address>
+....
+
+
+| Opcional: Configurar EMS | O sistema de Gestão de Eventos (EMS) recolhe e apresenta informações sobre eventos que ocorrem em sistemas Cloud Volumes ONTAP. Para receber notificações de eventos, você pode definir destinos de eventos (endereços de e-mail, hosts de intercetação SNMP ou servidores syslog) e rotas de eventos para uma determinada gravidade de evento. Você pode configurar o EMS usando a CLI. Para obter instruções, consulte http://docs.netapp.com/ontap-9/topic/com.netapp.doc.exp-ems/home.html["Guia expresso de configuração de EMS do ONTAP 9"^] . 
+
+
+| Opcional: Crie uma interface de rede de gerenciamento (LIF) SVM para sistemas de HA em várias zonas de disponibilidade da AWS  a| 
+Uma interface de rede (LIF) de gerenciamento de máquina virtual de storage (SVM) é necessária se você quiser usar o SnapCenter ou o SnapDrive para Windows com um par de HA. O LIF de gerenciamento da SVM deve usar um endereço IP _flutuante_ ao usar um par de HA em várias zonas de disponibilidade da AWS.
+
+O Cloud Manager solicita que você especifique o endereço IP flutuante ao iniciar o par de HA. Se você não tiver especificado o endereço IP, você poderá criar o SVM Management LIF a partir do System Manager ou da CLI. O exemplo a seguir mostra como criar o LIF a partir da CLI:
+
+....
+network interface create -vserver svm_cloud -lif svm_mgmt -role data -data-protocol none -home-node cloud-01 -home-port e0a -address 10.0.2.126 -netmask 255.255.255.0 -status-admin up -firewall-policy mgmt
+....
+
+
+| Opcional: Altere o local de backup dos arquivos de configuração | O Cloud Volumes ONTAP cria automaticamente arquivos de backup de configuração que contêm informações sobre as opções configuráveis que ele precisa para operar corretamente. Por padrão, o Cloud Volumes ONTAP faz backup dos arquivos para o host do conetor a cada oito horas. Se você quiser enviar os backups para um local alternativo, você pode alterar o local para um servidor FTP ou HTTP em seu data center ou na AWS. Por exemplo, talvez você já tenha um local de backup para seus sistemas de storage FAS. Você pode alterar o local de backup usando a CLI. Consulte http://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-sag/home.html["Referência de administração do sistema ONTAP 9"^] . 
+|===

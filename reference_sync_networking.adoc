@@ -1,0 +1,102 @@
+---
+sidebar: sidebar 
+permalink: reference_sync_networking.html 
+keywords: networking, 443, port, ports, port 443, connections, connectivity, path, paths, vpn 
+summary: A rede para Cloud Sync inclui conetividade entre o agente de dados e os locais de origem e destino, e comunicação de saída do agente de dados para o Cloud Sync usando a porta 443. 
+---
+= Visão geral de rede para Cloud Sync
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+A rede para Cloud Sync inclui conetividade entre o agente de dados e os locais de origem e destino, e uma conexão de saída à Internet do agente de dados através da porta 443.
+
+
+
+== Localização do agente de dados
+
+É possível instalar o agente de dados na nuvem ou no local.
+
+
+
+=== Agente de dados na nuvem
+
+A imagem a seguir mostra o agente de dados em execução na nuvem, na AWS, GCP ou Azure. A origem e o destino podem estar em qualquer local, desde que haja uma conexão com o corretor de dados. Por exemplo, você pode ter uma conexão VPN do seu data center para o seu provedor de nuvem.
+
+
+NOTE: Quando o Cloud Sync implanta o agente de dados na AWS, Azure ou GCP, ele cria um grupo de segurança que ativa a comunicação de saída necessária.
+
+image:diagram_networking_cloud.png["Um diagrama que mostra o serviço Cloud Sync, o agente de dados em execução na nuvem e conexões com a origem e o destino."]
+
+
+
+=== Agente de dados no local
+
+A imagem a seguir mostra o agente de dados em execução no local, em um data center. Novamente, a fonte e o alvo podem estar em qualquer local, desde que haja uma conexão com o corretor de dados.
+
+image:diagram_networking_onprem.png["Um diagrama que mostra o serviço Cloud Sync, o agente de dados em execução no local e conexões com a origem e o destino."]
+
+
+
+== Requisitos de rede
+
+* A origem e o destino devem ter uma conexão de rede com o corretor de dados.
++
+Por exemplo, se um servidor NFS estiver no data center e o agente de dados estiver na AWS, você precisará de uma conexão de rede (VPN ou Direct Connect) da rede para a VPC.
+
+* O corretor de dados precisa de uma conexão de saída de Internet para que possa pesquisar o serviço Cloud Sync para tarefas na porta 443.
+* A NetApp recomenda configurar o agente de origem, destino e dados para usar um serviço de protocolo de tempo de rede (NTP). A diferença de tempo entre os três componentes não deve exceder 5 minutos.
+
+
+
+
+== Endpoints de rede
+
+O corretor de dados NetApp requer acesso de saída à Internet pela porta 443 para se comunicar com o serviço Cloud Sync e entrar em Contato com alguns outros serviços e repositórios. Seu navegador da Web local também requer acesso a endpoints para determinadas ações. Se você precisar limitar a conetividade de saída, consulte a seguinte lista de endpoints ao configurar seu firewall para tráfego de saída.
+
+
+
+=== Pontos de extremidade do agente de dados
+
+O corretor de dados entra em Contato com os seguintes pontos finais:
+
+[cols="38,62"]
+|===
+| Endpoints | Finalidade 
+
+
+| olcentgbl.trafficmanager.net:443 | Para entrar em Contato com um repositório para atualizar pacotes CentOS para o host do data broker. Esse endpoint é contatado somente se você instalar manualmente o data broker em um host CentOS. 
+
+
+| rpm.nodesource.com:443 registry.npmjs.org:443 nodejs.org:443 | Para contatar repositórios para atualizar o Node.js, npm e outros pacotes de 3rd partes usados no desenvolvimento. 
+
+
+| tgz.pm2.io:443 | Para acessar um repositório para atualizar o PM2, que é um pacote de 3rd partes usado para monitorar o Cloud Sync. 
+
+
+| sqs.us-east-1.amazonaws.com:443 kinesis.us-east-1.amazonaws.com:443 | Para entrar em Contato com os serviços da AWS que o Cloud Sync usa para operações (enfileirando arquivos, registrando ações e fornecendo atualizações para o agente de dados). 
+
+
+| s3._region_.amazonaws.com:443 por exemplo: s3.us-east-2.amazonaws.com:443 https://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region["Consulte a documentação da AWS para obter uma lista de endpoints do S3"^] | Para entrar em Contato com o Amazon S3 quando um relacionamento de sincronização incluir um bucket do S3. 
+
+
+| cf.cloudsync.NetApp.com:443 repo.cloudsync.NetApp.com:443 | Para contactar o serviço Cloud Sync. 
+
+
+| support.NetApp.com:443 | Para entrar em Contato com o suporte da NetApp ao usar uma licença BYOL para relacionamentos de sincronização. 
+
+
+| fedoraproject.org:443 | Para instalar o 7z na máquina virtual do corretor de dados durante a instalação e atualizações. O 7z é necessário para enviar mensagens AutoSupport para o suporte técnico da NetApp. 
+|===
+
+
+=== Endpoints do navegador da Web
+
+O seu navegador da Web precisa de acesso ao seguinte ponto final para transferir registos para fins de resolução de problemas:
+
+logs.cloudsync.NetApp.com:443

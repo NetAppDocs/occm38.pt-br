@@ -1,0 +1,278 @@
+---
+sidebar: sidebar 
+permalink: task_replicating_data.html 
+keywords: ontap, cluster, discover, manage, cloud manager, hybrid cloud, replication policy, policy, replication, replicating, snapmirror, snapvault, data replication, fanout, cascade, source, destination, schedule, relationship, break, resync, max transfer, maximum transfer rate, rate, transfer rate, reverse resync, status, replication status, intercluster lif, replication requirement, requirements, disaster recovery, DR, archive, archiving, retention 
+summary: É possível replicar dados entre os ambientes de trabalho do Cloud Manager. Você pode escolher uma replicação de dados única para mover dados de/para a nuvem, ou uma programação recorrente para recuperação de desastres ou retenção de longo prazo. 
+---
+= Replicação de dados entre sistemas
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+É possível replicar dados entre ambientes de trabalho escolhendo uma replicação de dados única para transferência de dados ou uma programação recorrente para recuperação de desastres ou retenção de longo prazo. Por exemplo, você pode configurar a replicação de dados de um sistema ONTAP local para o Cloud Volumes ONTAP para recuperação de desastres.
+
+O Cloud Manager simplifica a replicação de dados entre volumes em sistemas separados, usando as tecnologias SnapMirror e SnapVault. Basta identificar o volume de origem e o volume de destino e escolher uma política de replicação e uma programação. O Cloud Manager compra os discos necessários, configura relacionamentos, aplica a política de replicação e, em seguida, inicia a transferência de linha de base entre volumes.
+
+
+NOTE: A transferência da linha de base inclui uma cópia completa dos dados de origem. As transferências subsequentes contêm cópias diferenciais dos dados de origem.
+
+O Cloud Manager permite a replicação de dados entre os seguintes tipos de ambientes de trabalho:
+
+* De um sistema Cloud Volumes ONTAP para outro sistema Cloud Volumes ONTAP
+* Entre um sistema Cloud Volumes ONTAP e um cluster ONTAP no local
+* Desde um cluster ONTAP no local até outro cluster ONTAP no local
+
+
+
+
+== Requisitos de replicação de dados
+
+Antes de replicar dados, confirme se os requisitos específicos são atendidos nos sistemas Cloud Volumes ONTAP e nos clusters do ONTAP.
+
+Requisitos de versão:: Você deve verificar se os volumes de origem e destino estão executando versões compatíveis do ONTAP antes de replicar dados. Para obter detalhes, consulte http://docs.netapp.com/ontap-9/topic/com.netapp.doc.pow-dap/home.html["Guia de alimentação de proteção de dados"^] .
+Requisitos específicos do Cloud Volumes ONTAP::
++
+--
+* O grupo de segurança da instância deve incluir as regras de entrada e saída necessárias: Especificamente, regras para ICMP e portas 11104 e 11105.
++
+Essas regras estão incluídas no grupo de segurança predefinido.
+
+* Para replicar dados entre dois sistemas Cloud Volumes ONTAP em sub-redes diferentes, as sub-redes devem ser roteadas juntas (essa é a configuração padrão).
+* Para replicar dados entre um sistema Cloud Volumes ONTAP na AWS e um sistema no Azure, você precisa ter uma conexão VPN entre a VPC AWS e o VNet do Azure.
+
+
+--
+Requisitos específicos dos clusters do ONTAP::
++
+--
+* Uma licença SnapMirror ativa deve ser instalada.
+* Se o cluster estiver em suas instalações, você deve ter uma conexão da rede corporativa para a AWS ou Azure, que normalmente é uma conexão VPN.
+* Os clusters do ONTAP devem atender a requisitos adicionais de sub-rede, porta, firewall e cluster.
++
+Para obter detalhes, consulte o Guia expresso de peering de cluster e SVM para sua versão do ONTAP.
+
+
+
+--
+
+
+
+
+== Configurando a replicação de dados entre sistemas
+
+É possível replicar dados entre sistemas Cloud Volumes ONTAP e clusters do ONTAP escolhendo uma replicação de dados única, que pode ajudar você a migrar dados de e para a nuvem, ou uma programação recorrente que pode ajudar na recuperação de desastres ou retenção de longo prazo.
+
+.Sobre esta tarefa
+O Cloud Manager é compatível com configurações de proteção de dados simples, de fanout e em cascata:
+
+* Em uma configuração simples, a replicação ocorre do volume A ao volume B..
+* Em uma configuração de fanout, a replicação ocorre do Volume A para vários destinos.
+* Em uma configuração em cascata, a replicação ocorre do volume A para o volume B e do volume B para o volume C.
+
+
+Você pode configurar configurações de fanout e cascata no Cloud Manager configurando várias replicações de dados entre sistemas. Por exemplo, replicando um volume do sistema A para o sistema B e replicando o mesmo volume do sistema B para o sistema C.
+
+.Passos
+. Na página ambientes de trabalho, selecione o ambiente de trabalho que contém o volume de origem e, em seguida, arraste-o para o ambiente de trabalho para o qual pretende replicar o volume:
++
+image:screenshot_drag_and_drop.gif["Captura de tela: Mostra um ambiente de trabalho sendo colocado em cima de outro ambiente de trabalho para iniciar o processo de replicação de dados."]
+
+. Se as páginas de Configuração de peering de origem e destino forem exibidas, selecione todas as LIFs entre clusters para o relacionamento de pares de cluster.
++
+A rede entre clusters deve ser configurada de modo que os pares de cluster tenham _pair-wise full-mesh connectivity_, o que significa que cada par de clusters em um relacionamento de cluster peer tem conetividade entre todas as suas LIFs entre clusters.
+
++
+Essas páginas aparecem se um cluster ONTAP que tem várias LIFs for a origem ou o destino.
+
+. Na página seleção de volume de origem, selecione o volume que deseja replicar.
+. Na página Nome do volume de destino e disposição em categorias, especifique o nome do volume de destino, escolha um tipo de disco subjacente, altere qualquer uma das opções avançadas e clique em *continuar*.
++
+Se o destino for um cluster do ONTAP, você também deverá especificar o SVM de destino e o agregado.
+
+. Na página taxa máxima de transferência, especifique a taxa máxima (em megabytes por segundo) na qual os dados podem ser transferidos.
+. Na página Política de replicação, escolha uma das políticas padrão ou clique em *políticas adicionais* e selecione uma das políticas avançadas.
++
+Para obter ajuda, link:task_replicating_data.html#choosing-a-replication-policy["Escolhendo uma política de replicação"]consulte .
+
++
+Se você escolher uma política de backup personalizado (SnapVault), os rótulos associados à política deverão corresponder aos rótulos das cópias Snapshot no volume de origem. Para obter mais informações, link:task_replicating_data.html#how-backup-policies-work["Como funcionam as políticas de backup"]consulte .
+
+. Na página Agendar, escolha uma cópia única ou uma programação recorrente.
++
+Várias programações padrão estão disponíveis. Se você quiser uma programação diferente, você deve criar uma nova programação no cluster _destination_ usando o System Manager.
+
+. Na página Revisão, revise suas seleções e clique em *ir*.
+
+
+.Resultado
+O Cloud Manager inicia o processo de replicação de dados. Você pode exibir detalhes sobre a replicação na página Status da replicação.
+
+
+
+== Gerenciamento de cronogramas e relacionamentos de replicação de dados
+
+Depois de configurar a replicação de dados entre dois sistemas, você poderá gerenciar o cronograma e o relacionamento de replicação de dados no Cloud Manager.
+
+.Passos
+. Na página ambientes de trabalho, exiba o status da replicação para todos os ambientes de trabalho no espaço de trabalho ou para um ambiente de trabalho específico:
++
+[cols="15,85"]
+|===
+| Opção | Ação 
+
+
+| Todos os ambientes de trabalho no espaço de trabalho  a| 
+Na parte superior do Cloud Manager, clique em *replicação*.
+
+
+
+| Um ambiente de trabalho específico  a| 
+Abra o ambiente de trabalho e clique em *replicações*.
+
+|===
+. Revise o status das relações de replicação de dados para verificar se elas estão íntegras.
++
+
+NOTE: Se o Status de uma relação estiver ocioso e o Mirror State não for inicializado, você deverá inicializar a relação do sistema de destino para que a replicação de dados ocorra de acordo com a programação definida. Você pode inicializar o relacionamento usando o System Manager ou a interface de linha de comando (CLI). Esses estados podem aparecer quando o sistema de destino falha e, em seguida, volta online.
+
+. Selecione o ícone de menu ao lado do volume de origem e escolha uma das ações disponíveis.
++
+image:screenshot_replication_managing.gif["Captura de tela: Mostra a lista de ações disponíveis na página Status da replicação."]
+
++
+A tabela a seguir descreve as ações disponíveis:
+
++
+[cols="15,85"]
+|===
+| Ação | Descrição 
+
+
+| Pausa | Quebra a relação entre os volumes de origem e destino e ativa o volume de destino para acesso aos dados. Essa opção é normalmente usada quando o volume de origem não pode servir dados devido a eventos como corrupção de dados, exclusão acidental ou um estado off-line. Para obter informações sobre como configurar um volume de destino para acesso a dados e reativar um volume de origem, consulte o Guia expresso de recuperação de desastres de volume do ONTAP 9. 
+
+
+| Ressincronizar  a| 
+Restabelece uma relação quebrada entre volumes e retoma a replicação de dados de acordo com a programação definida.
+
+
+IMPORTANT: Quando você ressincroniza os volumes, o conteúdo no volume de destino é substituído pelo conteúdo no volume de origem.
+
+Para executar uma ressincronização reversa, que ressincroniza os dados do volume de destino para o volume de origem, consulte o http://docs.netapp.com/ontap-9/topic/com.netapp.doc.exp-sm-ic-fr/home.html["Guia expresso de recuperação de desastres em volume do ONTAP 9"^].
+
+
+
+| Ressincronização reversa | Inverte as funções dos volumes de origem e destino. O conteúdo do volume de origem original é substituído pelo conteúdo do volume de destino. Isso é útil quando você deseja reativar um volume de origem que ficou offline. Quaisquer dados gravados no volume de origem original entre a última replicação de dados e a hora em que o volume de origem foi desativado não são preservados. 
+
+
+| Editar Agendamento | Permite escolher um agendamento diferente para replicação de dados. 
+
+
+| Informações da política | Mostra a política de proteção atribuída à relação de replicação de dados. 
+
+
+| Editar taxa de transferência máxima | Permite editar a taxa máxima (em kilobytes por segundo) na qual os dados podem ser transferidos. 
+
+
+| Atualização | Inicia uma transferência incremental para atualizar o volume de destino. 
+
+
+| Eliminar | Exclui a relação de proteção de dados entre os volumes de origem e destino, o que significa que a replicação de dados não ocorre mais entre os volumes. Esta ação não ativa o volume de destino para acesso aos dados. Essa ação também excluirá o relacionamento entre pares de cluster e o relacionamento entre pares de máquina virtual de armazenamento (SVM), se não houver outros relacionamentos de proteção de dados entre os sistemas. 
+|===
+
+
+.Resultado
+Depois de selecionar uma ação, o Cloud Manager atualiza a relação ou a programação.
+
+
+
+== Escolhendo uma política de replicação
+
+Talvez você precise de ajuda para escolher uma política de replicação ao configurar a replicação de dados no Cloud Manager. Uma política de replicação define como o sistema de storage replica dados de um volume de origem para um volume de destino.
+
+
+
+=== O que as políticas de replicação fazem
+
+O sistema operacional ONTAP cria automaticamente backups chamados cópias Snapshot. Uma cópia Snapshot é uma imagem somente leitura de um volume que captura o estado do sistema de arquivos em um ponto no tempo.
+
+Ao replicar dados entre sistemas, replica cópias Snapshot de um volume de origem para um volume de destino. Uma política de replicação especifica quais cópias Snapshot devem ser replicadas do volume de origem para o volume de destino.
+
+
+TIP: As políticas de replicação também são chamadas de políticas _protection_ porque são baseadas nas tecnologias SnapMirror e SnapVault, que fornecem proteção para recuperação de desastres e backup e recuperação de disco a disco.
+
+A imagem a seguir mostra a relação entre cópias Snapshot e políticas de replicação:
+
+image:diagram_replication_policies.png["Esta ilustração mostra as cópias Snapshot em um volume de origem e uma política de replicação que especifica a replicação de todas as cópias Snapshot específicas ou do volume de origem para o volume de destino."]
+
+
+
+=== Tipos de políticas de replicação
+
+Existem três tipos de políticas de replicação:
+
+* Uma política _Mirror_ replica cópias Snapshot recém-criadas para um volume de destino.
++
+Use essas cópias Snapshot para proteger o volume de origem em preparação para a recuperação de desastres ou para replicação de dados única. Pode ativar o volume de destino para acesso aos dados a qualquer momento.
+
+* Uma política de _Backup_ replica cópias Snapshot específicas para um volume de destino e normalmente as retém por um período de tempo maior do que no volume de origem.
++
+Você pode restaurar os dados dessas cópias Snapshot quando os dados forem corrompidos ou perdidos e mantê-los para conformidade com os padrões e outros fins relacionados à governança.
+
+* Uma política _Mirror and Backup_ fornece recuperação de desastres e retenção de longo prazo.
++
+Cada sistema inclui uma política de espelhamento e backup padrão, que funciona bem em muitas situações. Se você achar que precisa de políticas personalizadas, você pode criar suas próprias usando o System Manager.
+
+
+
+As imagens a seguir mostram a diferença entre as políticas Mirror (espelho) e Backup (cópia de segurança). Uma política de espelhamento espelha as cópias Snapshot disponíveis no volume de origem.
+
+image:diagram_replication_snapmirror.png["Esta ilustração mostra cópias Snapshot em um volume de origem e em um volume de destino Mirror que espelha o volume de origem."]
+
+Em geral, uma política de backup retém as cópias Snapshot por mais tempo do que as retidas no volume de origem:
+
+image:diagram_replication_snapvault.png["Essa ilustração mostra as cópias Snapshot em um volume de origem e em um volume de destino do backup que inclui mais cópias snapshot porque o SnapVault retém as cópias Snapshot para retenção a longo prazo."]
+
+
+
+=== Como as políticas de backup funcionam
+
+Diferentemente das políticas de espelhamento, as políticas de backup (SnapVault) replicam cópias Snapshot específicas para um volume de destino. É importante entender como as políticas de backup funcionam se você quiser usar suas próprias políticas em vez das políticas padrão.
+
+
+
+==== Entendendo a relação entre rótulos de cópia Snapshot e políticas de backup
+
+Uma política do Snapshot define como o sistema cria cópias Snapshot de volumes. A política especifica quando criar as cópias Snapshot, quantas cópias devem ser mantidas e como rotulá-las. Por exemplo, um sistema pode criar uma cópia Snapshot todos os dias às 12:10 da manhã, manter as duas cópias mais recentes e rotulá-las "diariamente".
+
+Uma política de backup inclui regras que especificam quais cópias Snapshot rotuladas para replicação em um volume de destino e quantas cópias devem reter. Os rótulos definidos em uma política de backup devem corresponder a um ou mais rótulos definidos em uma política de snapshot. Caso contrário, o sistema não poderá replicar cópias Snapshot.
+
+Por exemplo, uma política de backup que inclui os rótulos "diário" e "semanal" resulta na replicação de cópias Snapshot que incluem apenas esses rótulos. Nenhuma outra cópia Snapshot é replicada, como mostrado na imagem a seguir:
+
+image:diagram_replication_snapvault_policy.png["Esta ilustração mostra uma política Snapshot, um volume de origem, as cópias Snapshot criadas a partir da política Snapshot e, em seguida, a replicação dessas cópias Snapshot para um volume de destino com base em uma política de backup, que especifica a replicação das cópias Snapshot com os rótulos \"diário\" e \"semanal\""]
+
+
+
+==== Políticas padrão e políticas personalizadas
+
+A política padrão do Snapshot cria cópias Snapshot por hora, diárias e semanais, mantendo seis cópias por hora, duas por dia e duas por semana.
+
+Você pode usar facilmente uma política de backup padrão com a política Snapshot padrão. As políticas de backup padrão replicam cópias Snapshot diárias e semanais, retendo sete cópias Snapshot diárias e 52 cópias Snapshot semanais.
+
+Se você criar políticas personalizadas, os rótulos definidos por essas políticas devem corresponder. Você pode criar políticas personalizadas usando o System Manager.
+
+
+
+== Replicação de dados do NetApp HCI para o Cloud Volumes ONTAP
+
+Se você estiver tentando replicar dados do NetApp HCI para o Cloud Volumes ONTAP, pode fazê-lo em um sistema NetApp HCI executando o software NetApp Element usando o SnapMirror. Como alternativa, você pode replicar dados em volumes criados em um sistema ONTAP Select executado como convidado virtual em uma solução da NetApp HCI para o Cloud Volumes ONTAP.
+
+Consulte os seguintes relatórios técnicos para obter detalhes:
+
+* https://www.netapp.com/us/media/tr-4641.pdf["Relatório Técnico 4641: Proteção de dados NetApp HCI"^]
+* https://www.netapp.com/us/media/tr-4651.pdf["Relatório Técnico 4651: Arquitetura e Configuração do NetApp SolidFire SnapMirror"^]
+

@@ -1,0 +1,164 @@
+---
+sidebar: sidebar 
+permalink: task_creating_connectors.html 
+keywords: create connector in aws, create connector in azure, create connector in gcp, launch connector in aws, launch connector in azure, launch connector in gcp, deploy connector in aws, deploy connector in azure, deploy connector in gcp 
+summary: Um administrador de conta precisará implantar um conetor antes de usar a maioria dos recursos do Cloud Manager. O conetor permite que o Cloud Manager gerencie recursos e processos em seu ambiente de nuvem pública. Esta página descreve como criar um conetor diretamente do Cloud Manager. 
+---
+= Criando um conetor do Cloud Manager
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Um administrador de conta precisa implantar um _Connector_ antes de poder usar a maioria dos recursos do Cloud Manager. O conetor permite que o Cloud Manager gerencie recursos e processos em seu ambiente de nuvem pública. Esta página descreve como criar um conetor diretamente do Cloud Manager.
+
+Essas etapas devem ser concluídas por um usuário que tenha a função Administrador da conta. Um administrador do espaço de trabalho não pode criar um conetor.
+
+link:concept_connectors.html["Aprenda quando um conetor é necessário"].
+
+
+TIP: Quando você cria seu primeiro ambiente de trabalho do Cloud Volumes ONTAP, o Cloud Manager solicitará que você crie um conetor se você ainda não tiver um.
+
+
+
+== Criando um conetor na AWS
+
+O Cloud Manager permite que você crie um conetor na AWS diretamente a partir de sua interface de usuário. Também tem a opção de link:task_launching_aws_mktp.html["Crie o conetor no AWS Marketplace"], ou link:task_installing_linux.html["baixe o software e instale-o em seu próprio host"].
+
+.O que você vai precisar
+* Uma chave de acesso da AWS e uma chave secreta para um usuário do IAM que tenha o https://mysupport.netapp.com/site/info/cloud-manager-policies["permissões necessárias"^].
+* Uma VPC, sub-rede e um par de chaves na sua região da AWS escolhida.
+
+
+.Passos
+. Se você estiver criando seu primeiro ambiente de trabalho, clique em *Adicionar ambiente de trabalho* e siga as instruções. Caso contrário, clique no ícone do conetor e selecione *Adicionar conetor*.
++
+image:screenshot_connector_add.gif["Uma captura de tela que mostra o ícone do conetor no cabeçalho e a ação Adicionar conetor."]
+
+. Clique em *Let's Start*.
+. Escolha *Amazon Web Services* como seu provedor de nuvem.
++
+Lembre-se de que o conetor deve ter uma conexão de rede com o tipo de ambiente de trabalho que você está criando e os serviços que você está planejando habilitar.
+
++
+link:reference_networking_cloud_manager.html["Saiba mais sobre os requisitos de rede para o conetor"].
+
+. Revise o que você precisará e clique em *continuar*.
+. Forneça as informações necessárias:
++
+** *Credenciais da AWS*: Insira um nome para a instância e especifique a chave de acesso e a chave secreta da AWS que atendem aos requisitos de permissões.
+** *Localização*: Especifique uma região, VPC e sub-rede da AWS para a instância.
+** *Rede*: Selecione o par de chaves a utilizar com a instância, se pretende ativar um endereço IP público e, opcionalmente, especificar uma configuração de proxy.
+** *Grupo de segurança*: Escolha se deseja criar um novo grupo de segurança ou se deseja selecionar um grupo de segurança existente que permita o acesso HTTP, HTTPS e SSH de entrada.
++
+
+NOTE: Não há tráfego de entrada para o conetor, a menos que você o inicie. HTTP e HTTPS fornecem acesso ao link:concept_connectors.html#the-local-user-interface["IU local"], que você usará em circunstâncias raras. O SSH só é necessário se você precisar se conetar ao host para solução de problemas.
+
+
+
+. Clique em *criar*.
++
+A instância deve estar pronta em cerca de 7 minutos. Você deve permanecer na página até que o processo esteja concluído.
+
+
+
+
+
+== Criando um conetor no Azure
+
+O Cloud Manager permite que você crie um conetor no Azure diretamente a partir de sua interface de usuário. Também tem a opção de link:task_launching_azure_mktp.html["Crie o conetor no Azure Marketplace"], ou para link:task_installing_linux.html["baixe o software e instale-o em seu próprio host"].
+
+.O que você vai precisar
+* A https://mysupport.netapp.com/site/info/cloud-manager-policies["permissões necessárias"^] para a sua conta Azure.
+* Uma subscrição do Azure.
+* Uma VNet e uma sub-rede na sua região do Azure escolhida.
+
+
+.Passos
+. Se você estiver criando seu primeiro ambiente de trabalho, clique em *Adicionar ambiente de trabalho* e siga as instruções. Caso contrário, clique no ícone do conetor e selecione *Adicionar conetor*.
++
+image:screenshot_connector_add.gif["Uma captura de tela que mostra o ícone do conetor no cabeçalho e a ação Adicionar conetor."]
+
+. Clique em *Let's Start*.
+. Escolha *Microsoft Azure* como seu provedor de nuvem.
++
+Lembre-se de que o conetor deve ter uma conexão de rede com o tipo de ambiente de trabalho que você está criando e os serviços que você está planejando habilitar.
+
++
+link:reference_networking_cloud_manager.html["Saiba mais sobre os requisitos de rede para o conetor"].
+
+. Revise o que você precisará e clique em *continuar*.
+. Se você for solicitado, faça login na sua conta Microsoft, que deve ter as permissões necessárias para criar a máquina virtual.
++
+O formulário é de propriedade e hospedado pela Microsoft. Suas credenciais não são fornecidas ao NetApp.
+
+. Forneça as informações necessárias:
++
+** *Autenticação da VM*: Insira um nome para a máquina virtual e um nome de usuário e senha ou chave pública.
+** *Configurações básicas*: Escolha uma assinatura do Azure, uma região do Azure e se deseja criar um novo grupo de recursos ou usar um grupo de recursos existente.
+** *Rede*: Escolha uma VNet e uma sub-rede, se deseja ativar um endereço IP público e, opcionalmente, especifique uma configuração de proxy.
+** *Grupo de segurança*: Escolha se deseja criar um novo grupo de segurança ou se deseja selecionar um grupo de segurança existente que permita o acesso HTTP, HTTPS e SSH de entrada.
++
+
+NOTE: Não há tráfego de entrada para o conetor, a menos que você o inicie. HTTP e HTTPS fornecem acesso ao link:concept_connectors.html#the-local-user-interface["IU local"], que você usará em circunstâncias raras. O SSH só é necessário se você precisar se conetar ao host para solução de problemas.
+
+
+
+. Clique em *criar*.
++
+A máquina virtual deve estar pronta em cerca de 7 minutos. Você deve permanecer na página até que o processo esteja concluído.
+
+
+
+
+
+== Criando um conetor no GCP
+
+O Cloud Manager permite criar um conetor no GCP diretamente a partir da interface de usuário. Você também tem a opção de link:task_installing_linux.html["baixe o software e instale-o em seu próprio host"].
+
+.O que você vai precisar
+* A https://mysupport.netapp.com/site/info/cloud-manager-policies["permissões necessárias"^] para a sua conta do Google Cloud.
+* Um projeto do Google Cloud.
+* Uma conta de serviço que tem as permissões necessárias para criar e gerenciar o Cloud Volumes ONTAP.
+* Uma VPC e uma sub-rede na região escolhida pelo Google Cloud.
+
+
+.Passos
+. Se você estiver criando seu primeiro ambiente de trabalho, clique em *Adicionar ambiente de trabalho* e siga as instruções. Caso contrário, clique no ícone do conetor e selecione *Adicionar conetor*.
++
+image:screenshot_connector_add.gif["Uma captura de tela que mostra o ícone do conetor no cabeçalho e a ação Adicionar conetor."]
+
+. Clique em *Let's Start*.
+. Escolha *Google Cloud Platform* como seu provedor de nuvem.
++
+Lembre-se de que o conetor deve ter uma conexão de rede com o tipo de ambiente de trabalho que você está criando e os serviços que você está planejando habilitar.
+
++
+link:reference_networking_cloud_manager.html["Saiba mais sobre os requisitos de rede para o conetor"].
+
+. Revise o que você precisará e clique em *continuar*.
+. Se você for solicitado, faça login na sua conta do Google, que deve ter as permissões necessárias para criar a instância da máquina virtual.
++
+O formulário é de propriedade e hospedado pelo Google. Suas credenciais não são fornecidas ao NetApp.
+
+. Forneça as informações necessárias:
++
+** *Configurações básicas*: Insira um nome para a instância da máquina virtual e especifique uma conta de projeto e serviço que tenha as permissões necessárias.
+** *Localização*: Especifique uma região, zona, VPC e sub-rede para a instância.
+** *Rede*: Escolha se deseja ativar um endereço IP público e, opcionalmente, especificar uma configuração de proxy.
+** *Política de firewall*: Escolha se deseja criar uma nova política de firewall ou se deseja selecionar uma política de firewall existente que permita o acesso HTTP, HTTPS e SSH de entrada.
++
+
+NOTE: Não há tráfego de entrada para o conetor, a menos que você o inicie. HTTP e HTTPS fornecem acesso ao link:concept_connectors.html#the-local-user-interface["IU local"], que você usará em circunstâncias raras. O SSH só é necessário se você precisar se conetar ao host para solução de problemas.
+
+
+
+. Clique em *criar*.
++
+A instância deve estar pronta em cerca de 7 minutos. Você deve permanecer na página até que o processo esteja concluído.
+
+

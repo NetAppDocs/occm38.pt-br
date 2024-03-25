@@ -1,0 +1,434 @@
+---
+settings:
+  name: Cloud Manager 3.8
+  nss_product: OnCommand Cloud Manager
+  downlevel: true
+  internal:
+    pdf_enabled: false
+  prod:
+    pdf_enabled: true
+    harmony_enabled: false
+  langs: pt-br,us-en,ja-jp,ko-kr,zh-cn,zh-tw,de-de,es-es,fr-fr,it-it
+sidebar:
+  entries:
+  - title: Documentos do Cloud Manager
+    url: "/index.html"
+  - title: Notas de lançamento
+    entries:
+    - title: Cloud Manager
+      entries:
+      - title: O que há de novo
+        url: "/reference_new_occm.html"
+      - title: Transição para SaaS
+        url: "/concept_saas.html"
+      - title: Problemas conhecidos
+        url: "/reference_issues.html"
+      - title: Limitações conhecidas
+        url: "/reference_limitations.html"
+    - title: Cloud Volumes ONTAP
+      url: https://docs.netapp.com/us-en/cloud-volumes-ontap/
+  - title: Mudanças importantes
+    url: "/reference_key_changes.html"
+  - title: Comece a usar o Cloud Manager
+    entries:
+    - title: Saiba mais sobre o Cloud Manager
+      url: "/concept_overview.html"
+    - title: Visão geral da rede
+      url: "/reference_networking.html"
+    - title: Inscreva-se no Cloud Central
+      url: "/task_signing_up.html"
+    - title: Faça login no Cloud Manager
+      url: "/task_logging_in.html"
+    - title: Configure uma conta do Cloud Central
+      entries:
+      - title: Saiba mais sobre as contas do Cloud Central
+        url: "/concept_cloud_central_accounts.html"
+      - title: Configure uma conta
+        url: "/task_setting_up_cloud_central_accounts.html"
+    - title: Configure um conetor
+      entries:
+      - title: Saiba mais sobre conetores
+        url: "/concept_connectors.html"
+      - title: Requisitos de rede
+        url: "/reference_networking_cloud_manager.html"
+      - title: Crie um conetor na AWS
+        url: "/task_creating_connectors_aws.html"
+      - title: Crie um conetor no Azure
+        url: "/task_creating_connectors_azure.html"
+      - title: Crie um conetor na GCP
+        url: "/task_creating_connectors_gcp.html"
+    - title: Onde ir a seguir
+      url: "/reference_whats_next.html"
+  - title: Gerenciar o Cloud Volumes ONTAP
+    entries:
+    - title: Aprenda
+      entries:
+      - title: Visão geral
+        url: "/concept_overview_cvo.html"
+      - title: Armazenamento
+        entries:
+        - title: Discos e agregados
+          url: "/concept_storage.html"
+        - title: Categorização de dados
+          url: "/concept_data_tiering.html"
+        - title: Gerenciamento de storage
+          url: "/concept_storage_management.html"
+        - title: Flash Cache
+          url: "/concept_flash_cache.html"
+        - title: STORAGE WORM
+          url: "/concept_worm.html"
+      - title: Pares de alta disponibilidade
+        entries:
+        - title: Pares DE HA na AWS
+          url: "/concept_ha.html"
+        - title: Pares DE HA no Azure
+          url: "/concept_ha_azure.html"
+      - title: A avaliar
+        url: "/concept_evaluating.html"
+      - title: Licenciamento
+        url: "/concept_licensing.html"
+      - title: Segurança
+        url: "/concept_security.html"
+      - title: Desempenho
+        url: "/concept_performance.html"
+      - title: Configurações compatíveis
+        url: https://docs.netapp.com/us-en/cloud-volumes-ontap/index.html
+      - title: Regiões suportadas
+        url: https://cloud.netapp.com/cloud-volumes-global-regions
+      - title: Configuração padrão
+        url: "/reference_default_configs.html"
+    - title: Comece a usar a AWS
+      entries:
+      - title: Início rápido
+        url: "/task_getting_started_aws.html"
+      - title: Planeje sua configuração
+        url: "/task_planning_your_config.html"
+      - title: Configure a rede
+        entries:
+        - title: Requisitos de rede
+          url: "/reference_networking_aws.html"
+        - title: Configure um gateway de trânsito da AWS
+          url: "/task_setting_up_transit_gateway.html"
+        - title: Regras do grupo de segurança para a AWS
+          url: "/reference_security_groups.html"
+      - title: Configure o AWS KMS
+        url: "/task_setting_up_kms.html"
+      - title: Inicie um sistema na AWS
+        url: "/task_deploying_otc_aws.html"
+      - title: Comece a usar o AWS C2S
+        url: https://docs.netapp.com/us-en/occm/media/c2s.pdf
+    - title: Comece a usar o Azure
+      entries:
+      - title: Início rápido
+        url: "/task_getting_started_azure.html"
+      - title: Planeje sua configuração
+        url: "/task_planning_your_config_azure.html"
+      - title: Configure a rede
+        url: "/reference_networking_azure.html"
+      - title: Inicie um sistema no Azure
+        url: "/task_deploying_otc_azure.html"
+    - title: Comece a usar o GCP
+      entries:
+      - title: Início rápido
+        url: "/task_getting_started_gcp.html"
+      - title: Planeje sua configuração
+        url: "/task_planning_your_config_gcp.html"
+      - title: Configure a rede
+        url: "/reference_networking_gcp.html"
+      - title: Use chaves de criptografia gerenciadas pelo cliente
+        url: "/task_setting_up_gcp_encryption.html"
+      - title: Inicie um sistema no GCP
+        url: "/task_deploying_gcp.html"
+    - title: Provisione e gerencie o storage
+      entries:
+      - title: Criar volumes, agregados e LUNs
+        url: "/task_provisioning_storage.html"
+      - title: Gerenciar volumes e agregados
+        url: "/task_managing_storage.html"
+      - title: Categorize os dados inativos no storage de objetos
+        url: "/task_tiering.html"
+      - title: Gerenciar VMs de storage
+        url: "/task_managing_svms.html"
+      - title: Use o ONTAP como storage persistente
+        url: "/task_connecting_kubernetes.html"
+      - title: Criptografar volumes com criptografia NetApp
+        url: "/task_encrypting_volumes.html"
+    - title: Replique dados
+      url: "/task_replicating_data.html"
+    - title: Monitorar o desempenho
+      entries:
+      - title: Saiba mais sobre Monitoramento
+        url: "/concept_monitoring.html"
+      - title: Comece agora
+        url: "/task_getting_started_monitoring.html"
+    - title: Aprimorar a proteção contra ransomware
+      url: "/task_protecting_ransomware.html"
+    - title: Administrar
+      entries:
+      - title: Registre sistemas de pagamento conforme o uso
+        url: "/task_registering.html"
+      - title: Configure o Cloud Volumes ONTAP
+        url: "/task_setting_up_ontap_cloud.html"
+      - title: Gerenciar licenças do BYOL
+        url: "/task_managing_licenses.html"
+      - title: Atualizar o software
+        url: "/task_updating_ontap_cloud.html"
+      - title: Modifique as configurações do sistema
+        url: "/task_modifying_ontap_cloud.html"
+      - title: Sistemas de paragem e arranque
+        url: "/task_managing_state.html"
+      - title: Monitorar os custos da AWS
+        url: "/task_monitoring_costs.html"
+      - title: Conete-se ao Cloud Volumes ONTAP
+        url: "/task_connecting_to_otc.html"
+      - title: Adicione sistemas existentes
+        url: "/task_adding_ontap_cloud.html"
+      - title: Eliminar sistemas
+        url: "/task_deleting_working_env.html"
+  - title: Provisionar volumes usando um serviço de arquivos
+    entries:
+    - title: Azure NetApp Files
+      entries:
+      - title: Saiba mais sobre o Azure NetApp Files
+        url: "/concept_azure_netapp_files.html"
+      - title: Configure o Azure NetApp Files
+        url: "/task_manage_anf.html"
+      - title: Criar e gerenciar volumes
+        url: "/task_manage_anf_volumes.html"
+    - title: Cloud Volumes Service para AWS
+      entries:
+      - title: Saiba mais sobre o Cloud Volumes Service para AWS
+        url: "/concept_cvs_aws.html"
+      - title: Implante e gerencie o Cloud volumes
+        url: "/task_manage_cvs_aws.html"
+      - title: Gerenciar snapshots do Cloud volumes
+        url: "/task_manage_cloud_volumes_snapshots.html"
+      - title: Referência
+        entries:
+        - title: Níveis de serviço e capacidade alocada
+          url: "/reference_cvs_service_levels_and_quotas.html"
+        - title: Configurações do grupo de segurança da AWS para servidores Windows
+            AD
+          url: "/reference_security_groups_windows_ad_servers.html"
+    - title: Cloud Volumes Service para GCP
+      entries:
+      - title: Saiba mais sobre o Cloud Volumes Service para GCP
+        url: "/concept_cvs_gcp.html"
+      - title: Configurar o Cloud Volumes Service para o GCP
+        url: "/task_setup_cvs_gcp.html"
+      - title: Crie e gerencie o Cloud volumes
+        url: "/task_manage_cvs_gcp.html"
+      - title: Gerenciar snapshots do Cloud volumes
+        url: "/task_manage_cloud_volumes_gcp_snapshots.html"
+  - title: Gerenciar clusters do ONTAP
+    entries:
+    - title: Descubra os clusters do ONTAP
+      url: "/task_discovering_ontap.html"
+    - title: Gerenciar o ONTAP volumes
+      url: "/task_provisioning_ontap.html"
+  - title: Fazer backup na nuvem
+    entries:
+    - title: Saiba mais sobre o backup na nuvem
+      url: "/concept_backup_to_cloud.html"
+    - title: Comece agora
+      entries:
+      - title: Faça backup do Amazon S3
+        url: "/task_backup_to_s3.html"
+      - title: Faça backup no armazenamento Azure Blob
+        url: "/task_backup_to_azure.html"
+      - title: Fazer backup de sistemas ONTAP no local
+        url: "/task_backup_from_onprem.html"
+    - title: Gerenciar backups e restaurar dados
+      url: "/task_managing_backups.html"
+  - title: Copiar e sincronizar dados
+    entries:
+    - title: Saiba mais sobre o Cloud Sync
+      url: "/concept_cloud_sync.html"
+    - title: Comece agora
+      entries:
+      - title: Início rápido
+        url: "/task_sync_quick_start.html"
+      - title: Prepare a fonte e o destino
+        url: "/reference_sync_requirements.html"
+      - title: Prepare a rede
+        url: "/reference_sync_networking.html"
+      - title: Como instalar um corretor de dados
+        entries:
+        - title: Instale na AWS
+          url: "/task_sync_installing_aws.html"
+        - title: Instalar no Azure
+          url: "/task_sync_installing_azure.html"
+        - title: Instale na GCP
+          url: "/task_sync_installing_gcp.html"
+        - title: Instale em um host Linux
+          url: "/task_sync_installing_linux.html"
+      - title: Crie uma relação de sincronização
+        url: "/task_sync_creating_relationships.html"
+      - title: Pague por relacionamentos de sincronização
+        url: "/task_sync_licensing.html"
+    - title: Tutoriais
+      entries:
+      - title: Copiar ACLs entre compartilhamentos
+        url: "/task_sync_copying_acls.html"
+      - title: Criptografar dados NFS em trânsito
+        url: "/task_sync_nfs_encryption.html"
+    - title: Gerenciar relações de sincronização
+      url: "/task_sync_managing_relationships.html"
+    - title: API
+      url: "/api_sync.html"
+    - title: FAQ
+      url: "/faq_sync.html"
+  - title: Tenha insights sobre a privacidade de dados
+    entries:
+    - title: Saiba mais sobre o Cloud Compliance
+      url: "/concept_cloud_compliance.html"
+    - title: Comece agora
+      entries:
+      - title: Implante o Cloud Compliance
+        url: "/task_deploy_cloud_compliance.html"
+      - title: Ative a digitalização nas suas fontes de dados
+        entries:
+        - title: Cloud Volumes ONTAP e Azure NetApp Files
+          url: "/task_getting_started_compliance.html"
+        - title: Buckets do Amazon S3
+          url: "/task_scanning_s3.html"
+        - title: Esquemas de banco de dados
+          url: "/task_scanning_databases.html"
+        - title: Dados ONTAP on-premises
+          url: "/task_scanning_onprem.html"
+    - title: Obtenha visibilidade e controle dos dados
+      url: "/task_controlling_private_data.html"
+    - title: Gerar relatórios
+      url: "/task_generating_compliance_reports.html"
+    - title: Responder a um DSAR
+      url: "/task_responding_to_dsar.html"
+    - title: Desative o Cloud Compliance
+      url: "/task_managing_compliance.html"
+    - title: FAQ
+      url: "/faq_cloud_compliance.html"
+  - title: Habilite o compartilhamento global de arquivos em tempo real
+    entries:
+    - title: Saiba mais sobre o Global File Cache
+      url: "/concept_gfc.html"
+    - title: Antes de começar a implantar o Global File Cache
+      url: "/concept_before_you_begin_to_deploy_gfc.html"
+    - title: Como começar
+      url: "/task_gfc_getting_started.html"
+    - title: Antes de começar a implantar o Global File Cache Edge
+      url: "/download_gfc_resources.html"
+    - title: Implante o Global File Cache Edge
+      url: "/task_deploy_gfc_edge_instances.html"
+    - title: Treinamento do usuário final
+      url: "/concept_gfc_enduser_training.html"
+    - title: Informações adicionais
+      url: "/reference_gfc_additional_information.html"
+  - title: Otimizar os custos de computação em nuvem
+    entries:
+    - title: Saiba mais sobre o serviço Compute
+      url: "/concept_compute.html"
+    - title: Comece agora
+      url: "/task_getting_started_compute.html"
+  - title: Categorize os dados na nuvem
+    entries:
+    - title: Saiba mais sobre o Cloud Tiering
+      url: "/concept_cloud_tiering.html"
+    - title: Comece agora
+      entries:
+      - title: Categorize os dados no Amazon S3
+        url: "/task_tiering_onprem_aws.html"
+      - title: Armazene dados em categorias no storage Azure Blob
+        url: "/task_tiering_onprem_azure.html"
+      - title: Categorize os dados no Google Cloud Storage
+        url: "/task_tiering_onprem_gcp.html"
+      - title: Categorize os dados no StorageGRID
+        url: "/task_tiering_onprem_storagegrid.html"
+    - title: Configure o licenciamento
+      url: "/task_licensing_cloud_tiering.html"
+    - title: Gerenciar a disposição de dados em camadas
+      url: "/task_managing_tiering.html"
+    - title: FAQ
+      url: "/faq_cloud_tiering.html"
+    - title: Referência
+      entries:
+      - title: Regiões e classes de armazenamento do Amazon S3 compatíveis
+        url: "/reference_aws_support.html"
+      - title: Camadas e regiões de acesso do Azure compatíveis
+        url: "/reference_azure_support.html"
+      - title: Regiões e classes de armazenamento do Google Cloud compatíveis
+        url: "/reference_google_support.html"
+  - title: Veja buckets do Amazon S3
+    url: "/task_viewing_amazon_s3.html"
+  - title: Administrar o Cloud Manager
+    entries:
+    - title: Encontre a ID do sistema
+      url: "/task_finding_system_id.html"
+    - title: Gerenciar conetores
+      entries:
+      - title: Gerenciar os conetores existentes
+        url: "/task_managing_connectors.html"
+      - title: Mais formas de criar conetores
+        entries:
+        - title: Requisitos do host do conetor
+          url: "/reference_cloud_mgr_reqs.html"
+        - title: Crie a partir do AWS Marketplace
+          url: "/task_launching_aws_mktp.html"
+        - title: Crie a partir do Azure Marketplace
+          url: "/task_launching_azure_mktp.html"
+        - title: Instale manualmente o software
+          url: "/task_installing_linux.html"
+      - title: Configuração padrão
+        url: "/reference_connector_default_config.html"
+    - title: Gerenciar credenciais
+      entries:
+      - title: AWS
+        entries:
+        - title: Saiba mais sobre as credenciais da AWS
+          url: "/concept_accounts_aws.html"
+        - title: Gerenciar credenciais da AWS
+          url: "/task_adding_aws_accounts.html"
+      - title: Azure
+        entries:
+        - title: Saiba mais sobre as credenciais do Azure
+          url: "/concept_accounts_azure.html"
+        - title: Gerenciar credenciais do Azure
+          url: "/task_adding_azure_accounts.html"
+      - title: GCP
+        entries:
+        - title: Saiba mais sobre as credenciais do GCP
+          url: "/concept_accounts_gcp.html"
+        - title: Gerenciar credenciais do GCP
+          url: "/task_adding_gcp_accounts.html"
+      - title: Credenciais do site de suporte da NetApp
+        url: "/task_adding_nss_accounts.html"
+    - title: Gerencie sua conta
+      url: "/task_managing_cloud_central_accounts.html"
+    - title: Instale um certificado HTTPS
+      url: "/task_installing_https_cert.html"
+    - title: Remova os ambientes de trabalho
+      url: "/task_removing.html"
+    - title: Configure as definições de proxy
+      url: "/task_configuring_proxy.html"
+    - title: Substituir bloqueios CIFS no Azure
+      url: "/task_overriding_cifs_locks.html"
+    - title: Referência
+      entries:
+      - title: Funções de utilizador
+        url: "/reference_user_roles.html"
+      - title: Permissões
+        url: "/reference_permissions.html"
+      - title: Páginas do AWS Marketplace
+        url: "/reference_aws_marketplace.html"
+  - title: Use APIs e automação
+    entries:
+    - title: Guia do desenvolvedor de API
+      url: https://docs.netapp.com/us-en/occm/api.html
+    - title: Automatize com as ferramentas de DevOps
+      url: "/reference_infrastructure_as_code.html"
+  - title: Solucionar problemas
+    url: https://kb.netapp.com/Advice_and_Troubleshooting/Cloud_Services
+  - title: Links relacionados
+    url: "/reference_additional_info.html"
+  - title: Versões anteriores
+    url: "/reference_earlier_versions.html"
+  - title: Avisos legais
+    url: "/reference_legal_notices.html"

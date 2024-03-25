@@ -1,0 +1,85 @@
+---
+sidebar: sidebar 
+permalink: task_sync_copying_acls.html 
+keywords: permissions, access control list, acls, ntfs, cifs, smb, shares, robocopy, copy, transfer, activate, operating system, os, ram, cpu, networking, copy acls to the target 
+summary: 'O Cloud Sync pode copiar listas de controle de acesso (ACLs) entre um compartilhamento SMB de origem e um compartilhamento SMB de destino. Se necessário, você pode preservar manualmente as ACLs usando robocopy.' 
+---
+= Cópia de ACLs entre compartilhamentos SMB
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+O Cloud Sync pode copiar listas de controle de acesso (ACLs) entre um compartilhamento SMB de origem e um compartilhamento SMB de destino. Se necessário, você pode preservar manualmente as ACLs usando robocopy.
+
+.Opções
+* <<Configurando o Cloud Sync para copiar ACLs entre servidores SMB,Configure o Cloud Sync para copiar ACLs automaticamente>>
+* <<Copiar manualmente ACLs,Copie manualmente as ACLs>>
+
+
+
+
+== Configurando o Cloud Sync para copiar ACLs entre servidores SMB
+
+Copie ACLs entre servidores SMB habilitando uma configuração quando você cria um relacionamento ou depois de criar um relacionamento.
+
+Observe que esse recurso está disponível para novas relações de sincronização criadas após a versão de 23 de fevereiro de 2020. Se você quiser usar esse recurso com relacionamentos existentes criados antes dessa data, precisará recriar o relacionamento.
+
+.O que você vai precisar
+* Uma nova relação de sincronização ou uma relação de sincronização existente criada após a versão de 23 de fevereiro de 2020.
+* Qualquer tipo de corretor de dados.
++
+Esse recurso funciona com _qualquer_ tipo de agente de dados: AWS, Azure, Google Cloud Platform ou agente de dados local. O agente de dados local pode executar link:task_sync_installing_linux.html["qualquer sistema operacional suportado"]o .
+
+
+
+.Passos para um novo relacionamento
+. No Cloud Sync, clique em *criar nova sincronização*.
+. Arraste e solte *servidor SMB* para a origem e destino e clique em *continuar*.
+. Na página *servidor SMB*:
++
+.. Introduza um novo servidor SMB ou selecione um servidor existente e clique em *continuar*.
+.. Insira credenciais para o servidor SMB.
+.. Selecione *Copiar listas de controle de acesso para o destino* e clique em *continuar*.
++
+image:screenshot_acl_support.gif["Uma captura de tela que mostra a opção de ativar Copiar listas de controle de acesso para o destino."]
+
+
+
+. Siga as instruções restantes para criar a relação de sincronização.
+
+
+.Etapas para um relacionamento existente
+. Passe o Mouse sobre a relação de sincronização e clique no menu de ação.
+. Clique em *Configurações*.
+. Selecione *Copiar listas de controle de acesso para o destino*.
+. Clique em *Salvar configurações*.
+
+
+.Resultado
+Ao sincronizar dados, o Cloud Sync preserva as ACLs entre os compartilhamentos SMB de origem e destino.
+
+
+
+== Copiar manualmente ACLs
+
+Você pode preservar manualmente ACLs entre compartilhamentos SMB usando o comando Windows robocopy.
+
+.Passos
+. Identifique um host do Windows que tenha acesso total a ambos os compartilhamentos SMB.
+. Se qualquer um dos endpoints exigir autenticação, use o comando *uso líquido* para se conetar aos endpoints a partir do host do Windows.
++
+Você deve executar esta etapa antes de usar o robocopy.
+
+. A partir do Cloud Sync, crie uma nova relação entre os compartilhamentos SMB de origem e destino ou sincronize um relacionamento existente.
+. Após a conclusão da sincronização de dados, execute o seguinte comando a partir do host do Windows para sincronizar as ACLs e a propriedade:
++
+ robocopy /E /COPY:SOU /secfix [source] [target] /w:0 /r:0 /XD ~snapshots /UNILOG:”[logfilepath]
++
+Tanto _source_ quanto _target_ devem ser especificados usando o formato UNC. Por exemplo: <server>/<share>/<path>
+
+

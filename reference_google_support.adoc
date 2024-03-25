@@ -1,0 +1,67 @@
+---
+sidebar: sidebar 
+permalink: reference_google_support.html 
+keywords: google, gcp, regions, google regions, gcp regions, storage class, standard storage class 
+summary: O Cloud Tiering é compatível com a classe de storage padrão e a maioria das regiões. 
+---
+= Regiões e classes de armazenamento do Google Cloud compatíveis
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+O Cloud Tiering é compatível com a classe de storage padrão e a maioria das regiões do Google Cloud.
+
+
+
+== Camadas de acesso compatíveis
+
+O Cloud Tiering usa o nível _Standard_ Access para seus dados inativos.
+
+
+
+== Regiões compatíveis do Google Cloud
+
+O Cloud Tiering é compatível com as seguintes regiões.
+
+
+
+=== Américas
+
+* Iowa
+* Los Angeles
+* Montreal
+* N. Virginia
+* Oregon
+* Sao Paulo
+* Carolina do Sul
+
+
+
+
+=== Ásia-Pacífico
+
+* Hong Kong
+* Mumbai
+* Osaka
+* Singapura
+* Sydney
+* Taiwan
+* Tóquio
+
+
+
+
+=== Europa
+
+* Bélgica
+* Finlândia
+* Frankfurt
+* Londres
+* Países Baixos
+* Zurique
+

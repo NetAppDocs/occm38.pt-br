@@ -1,0 +1,180 @@
+---
+sidebar: sidebar 
+permalink: task_getting_started_compliance.html 
+keywords: cloud compliance, get started, enable cloud compliance, cifs credentials, smb credentials, outbound internet, endpoints, cloud compliance internet, web browser connectivity, cloud compliance access, privacy, compliance, dp volumes, data protection volumes 
+summary: Conclua algumas etapas para começar a usar o Cloud Compliance para Azure NetApp Files ou Cloud Volumes ONTAP na AWS ou Azure. 
+---
+= Primeiros passos com o Cloud Compliance para Cloud Volumes ONTAP e Azure NetApp Files
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Conclua algumas etapas para dar os primeiros passos com o Cloud Compliance for Cloud Volumes ONTAP ou Azure NetApp Files.
+
+
+
+== Início rápido
+
+Comece rapidamente seguindo estas etapas ou role para baixo até as seções restantes para obter detalhes completos.
+
+
+
+==== image:number1.png["Número 1"] Implante a instância do Cloud Compliance
+
+[role="quick-margin-para"]
+link:task_deploy_cloud_compliance.html["Implante o Cloud Compliance no Cloud Manager"^] se ainda não houver uma instância implantada.
+
+
+
+==== image:number2.png["Número 2"] Habilite o Cloud Compliance em seus ambientes de trabalho
+
+[role="quick-margin-para"]
+Clique em *Cloud Compliance*, selecione a guia *Configuration* e ative as verificações de conformidade para ambientes de trabalho específicos.
+
+
+
+==== image:number3.png["Número 3"] Garanta o acesso aos volumes
+
+[role="quick-margin-para"]
+Agora que o Cloud Compliance está ativado, garanta que ele possa acessar volumes.
+
+[role="quick-margin-list"]
+* A instância de conformidade em nuvem precisa de uma conexão de rede para cada sub-rede Cloud Volumes ONTAP ou sub-rede Azure NetApp Files.
+* Os grupos de segurança do Cloud Volumes ONTAP devem permitir conexões de entrada da instância de conformidade com a nuvem.
+* As políticas de exportação de volume NFS devem permitir o acesso a partir da instância do Cloud Compliance.
+* O Cloud Compliance precisa de credenciais do active Directory para verificar volumes CIFS.
++
+Clique em *Cloud Compliance* > *Scan Configuration* > *Edit CIFS Credentials* e forneça as credenciais. As credenciais podem ser somente leitura, mas fornecer credenciais de administrador garante que o Cloud Compliance possa ler dados que exigem permissões elevadas.
+
+
+
+
+
+==== image:number4.png["Número 4"] Configure volumes para digitalizar
+
+[role="quick-margin-para"]
+Selecione os volumes que você deseja verificar e o Cloud Compliance começará a digitalizá-los.
+
+
+
+== Implantando a instância de Cloud Compliance
+
+link:task_deploy_cloud_compliance.html["Implante o Cloud Compliance no Cloud Manager"^] se ainda não houver uma instância implantada.
+
+
+
+== Habilitando o Cloud Compliance em seus ambientes de trabalho
+
+. Na parte superior do Cloud Manager, clique em *Cloud Compliance* e selecione a guia *Configuration*.
++
+image:screenshot_cloud_compliance_we_scan_config.png["Uma captura de tela da guia Configuração de digitalização imediatamente após a implantação da instância de conformidade em nuvem."]
+
+. Para digitalizar todos os volumes em um ambiente de trabalho, clique em *Ativar conformidade para todos os volumes*.
++
+Para digitalizar apenas determinados volumes num ambiente de trabalho, clique em *ou selecione volumes* e, em seguida, escolha os volumes que pretende digitalizar.
+
+
+
+<<Ativar e desativar verificações de conformidade em volumes,Ativar e desativar verificações de conformidade em volumes>>Consulte para obter detalhes.
+
+.Resultado
+O Cloud Compliance começa a analisar os dados em cada ambiente de trabalho. Os resultados estarão disponíveis no painel de conformidade assim que o Cloud Compliance concluir as verificações iniciais. O tempo que leva depende da quantidade de dados - pode ser de alguns minutos ou horas.
+
+
+
+== Verificar se o Cloud Compliance tem acesso a volumes
+
+Verifique se o Cloud Compliance pode acessar volumes verificando suas políticas de rede, grupos de segurança e exportação. Você precisará fornecer as credenciais CIFS do Cloud Compliance para acessar os volumes CIFS.
+
+.Passos
+. Verifique se há uma conexão de rede entre a instância do Cloud Compliance e cada rede que inclua volumes para Cloud Volumes ONTAP ou Azure NetApp Files.
++
+
+NOTE: Para o Azure NetApp Files, o Cloud Compliance só pode verificar volumes que estejam na mesma região que o Cloud Manager.
+
+. Certifique-se de que o grupo de segurança do Cloud Volumes ONTAP permita o tráfego de entrada da instância de conformidade com a nuvem.
++
+Você pode abrir o grupo de segurança para o tráfego a partir do endereço IP da instância de conformidade na nuvem ou abrir o grupo de segurança para todo o tráfego dentro da rede virtual.
+
+. Certifique-se de que as políticas de exportação de volume NFS incluam o endereço IP da instância de Cloud Compliance para que ela possa acessar os dados em cada volume.
+. Se você usar CIFS, forneça as credenciais do Cloud Compliance para que ele possa verificar os volumes CIFS.
++
+.. Na parte superior do Cloud Manager, clique em *Cloud Compliance*.
+.. Clique na guia *Configuração*.
++
+image:screenshot_cifs_credentials.gif["Uma captura de tela da guia conformidade que mostra o botão Status da digitalização que está disponível no canto superior direito do painel de conteúdo."]
+
+.. Para cada ambiente de trabalho, clique em *Editar credenciais CIFS* e insira o nome de usuário e a senha que o Cloud Compliance precisa para acessar volumes CIFS no sistema.
++
+As credenciais podem ser somente leitura, mas fornecer credenciais de administrador garante que o Cloud Compliance possa ler todos os dados que exigem permissões elevadas. As credenciais são armazenadas na instância do Cloud Compliance.
+
++
+Depois de inserir as credenciais, você verá uma mensagem informando que todos os volumes CIFS foram autenticados com êxito.
+
++
+image:screenshot_cifs_status.gif["Uma captura de tela que mostra a página Configuração de digitalização e um sistema Cloud Volumes ONTAP para o qual as credenciais CIFS foram fornecidas com êxito."]
+
+
+
+. Na página _Scan Configuration_, clique em *View Details* (Ver detalhes) para rever o estado de cada volume CIFS e NFS e corrigir quaisquer erros.
++
+Por exemplo, a imagem a seguir mostra três volumes; um dos quais o Cloud Compliance não pode ser verificado devido a problemas de conetividade de rede entre a instância do Cloud Compliance e o volume.
+
++
+image:screenshot_compliance_volume_details.gif["Uma captura de tela da página Exibir detalhes na configuração de digitalização que mostra três volumes; um dos quais não está sendo verificado devido à conetividade de rede entre o Cloud Compliance e o volume."]
+
+
+
+
+
+== Ativar e desativar verificações de conformidade em volumes
+
+Pode parar ou iniciar a digitalização de volumes num ambiente de trabalho a qualquer momento a partir da página Configuração de digitalização. Recomendamos que você digitalize todos os volumes.
+
+image:screenshot_volume_compliance_selection.png["Uma captura de tela da página de configuração de digitalização, onde você pode ativar ou desativar a digitalização de volumes individuais."]
+
+[cols="40,50"]
+|===
+| Para: | Faça isso: 
+
+
+| Desativar a procura de um volume | Mova o controle deslizante de volume para a esquerda 
+
+
+| Desative a digitalização de todos os volumes | Mova o controle deslizante *Ativar conformidade para todos os volumes* para a esquerda 
+
+
+| Ativar a digitalização de um volume | Mova o controle deslizante de volume para a direita 
+
+
+| Ative a digitalização de todos os volumes | Mova o controle deslizante *Ativar conformidade para todos os volumes* para a direita 
+|===
+
+TIP: Os novos volumes adicionados ao ambiente de trabalho são automaticamente verificados somente quando a configuração *Ativar conformidade para todos os volumes* estiver ativada. Quando esta definição estiver desativada, terá de ativar a digitalização em cada novo volume criado no ambiente de trabalho.
+
+
+
+== Digitalização de volumes de proteção de dados
+
+Por padrão, os volumes de proteção de dados (DP) não são verificados porque não são expostos externamente e o Cloud Compliance não pode acessá-los. Esses volumes geralmente são os volumes de destino para operações do SnapMirror a partir de um cluster do ONTAP no local.
+
+Inicialmente, a lista de volumes do Cloud Compliance identifica esses volumes como _Type_ *DP* com o _Status_ *Not Scanning* e a _Required Action_ *Enable Access to DP volumes*.
+
+image:screenshot_cloud_compliance_dp_volumes.png["Uma captura de tela mostrando o botão Ativar acesso aos volumes DP que você pode selecionar para digitalizar volumes de proteção de dados."]
+
+.Passos
+Se você quiser analisar esses volumes de proteção de dados:
+
+. Clique no botão *Ativar acesso aos volumes DP* na parte superior da página.
+. Ative cada volume DP que você deseja digitalizar ou use o controle *Ativar conformidade para todos os volumes* para habilitar todos os volumes, incluindo todos os volumes DP.
+
+
+Uma vez ativado, o Cloud Compliance cria um compartilhamento NFS a partir de cada volume DP ativado para conformidade, para que possa ser verificado. As políticas de exportação de compartilhamento só permitem acesso a partir da instância de conformidade com a nuvem.
+
+
+NOTE: Apenas os volumes criados inicialmente como volumes NFS no sistema ONTAP de origem são mostrados na lista de volumes. Os volumes de origem criados inicialmente como CIFS não aparecem no Cloud Compliance.

@@ -1,0 +1,86 @@
+---
+sidebar: sidebar 
+permalink: reference_azure_support.html 
+keywords: microsoft azure, azure, hot, access tier, cold, regions 
+summary: O Cloud Tiering é compatível com a camada de acesso ativo e a maioria das regiões. 
+---
+= Camadas e regiões de acesso Blob do Azure compatíveis
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+O Cloud Tiering é compatível com o nível de acesso _Hot_ e a maioria das regiões.
+
+
+
+== Camadas de acesso Azure Blob compatíveis
+
+Quando você configura a disposição de dados em categorias no Azure, o Cloud Tiering usa automaticamente o nível _Hot_ Access para seus dados inativos.
+
+
+
+== Regiões Azure compatíveis
+
+O Cloud Tiering é compatível com as seguintes regiões do Azure.
+
+
+
+=== África
+
+* África do Sul Norte
+
+
+
+
+=== Ásia-Pacífico
+
+* Leste da Austrália
+* Sudeste da Austrália
+* Leste da Ásia
+* Leste do Japão
+* Oeste do Japão
+* Coreia Central
+* Coreia do Sul
+* Sudeste da Ásia
+
+
+
+
+=== Europa
+
+* França Central
+* Alemanha Central
+* Alemanha Nordeste
+* Norte da Europa
+* Sul do Reino Unido
+* Oeste do Reino Unido
+* Europa Ocidental
+
+
+
+
+=== América do Norte
+
+* Canadá Central
+* Leste do Canadá
+* Central US
+* Leste dos EUA
+* East US 2
+* North Central US
+* South Central US
+* Oeste dos EUA
+* West US 2
+* West Central US
+
+
+
+
+=== América do Sul
+
+* Brasil Sul
+

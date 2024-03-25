@@ -1,0 +1,41 @@
+---
+sidebar: sidebar 
+permalink: task_viewing_amazon_s3.html 
+keywords: s3 buckets, s3 storage, s3 working environment, amazon s3 buckets, amazon s3 working environment 
+summary: Depois de instalar um conetor na AWS, o Cloud Manager poderá descobrir automaticamente informações sobre os buckets do Amazon S3 que residem na conta da AWS onde ele é instalado. 
+---
+= Visualização dos buckets do Amazon S3
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Depois de instalar um conetor na AWS, o Cloud Manager poderá descobrir automaticamente informações sobre os buckets do Amazon S3 que residem na conta da AWS onde ele é instalado.
+
+Você pode ver detalhes sobre os buckets do S3, incluindo a região, nível de acesso, classe de storage e se o bucket é usado com o Cloud Volumes ONTAP para backups ou categorização de dados. E você pode verificar os buckets do S3 com o Cloud Compliance.
+
+.Passos
+. link:task_creating_connectors_aws.html["Instale um conetor"] Na conta da AWS onde você deseja exibir seus buckets do Amazon S3.
++
+Você deve ver automaticamente um ambiente de trabalho do Amazon S3 logo depois.
+
++
+image:screenshot_s3_we.gif["Uma captura de tela de um ambiente de trabalho do Amazon S3."]
+
+. Clique no ambiente de trabalho e selecione uma ação no painel direito.
++
+image:screenshot_s3_actions.gif["Uma captura de tela que mostra o painel ações depois de selecionar um ambiente de trabalho do Amazon S3. O painel mostra informações sobre S3: O número de buckets e regiões. O painel também tem duas ações: Ativar conformidade e Exibir buckets."]
+
+. Clique em *Ativar conformidade* para verificar os buckets do S3 em busca de dados pessoais e confidenciais.
++
+Para obter mais detalhes, link:task_scanning_s3.html["Introdução ao Cloud Compliance para Amazon S3"]consulte .
+
+. Clique em *Exibir buckets* para ver detalhes sobre os buckets do S3 na sua conta da AWS.
++
+image:screenshot_amazon_s3.gif["Uma captura de tela que mostra os detalhes de um ambiente de trabalho do Amazon S3: O número total de buckets e o número total de regiões, o número de buckets com serviços ativos e, em seguida, uma tabela que mostra detalhes sobre cada bucket do S3."]
+
+

@@ -1,0 +1,59 @@
+---
+sidebar: sidebar 
+permalink: concept_overview_cvo.html 
+keywords: what is cloud volumes ontap, cloud volumes ontap features, features, cloud volumes ontap overview, overview of cloud volumes ontap 
+summary: Com o Cloud Volumes ONTAP, você otimiza seus custos e performance de storage de nuvem, além de aprimorar a proteção, a segurança e a conformidade dos dados. 
+---
+= Saiba mais sobre o Cloud Volumes ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Com o Cloud Volumes ONTAP, você otimiza seus custos e performance de storage de nuvem, além de aprimorar a proteção, a segurança e a conformidade dos dados.
+
+O Cloud Volumes ONTAP é um dispositivo de storage somente de software que executa o software de gerenciamento de dados ONTAP na nuvem. Ele fornece storage de nível empresarial com os seguintes principais recursos:
+
+* Eficiência de storage
++
+Utilize deduplicação de dados incorporada, compressão, thin Provisioning e clonagem para minimizar os custos de storage.
+
+* Alta disponibilidade
++
+Garanta a confiabilidade empresarial e as operações contínuas em caso de falhas em seu ambiente de nuvem.
+
+* Proteção de dados
++
+A Cloud Volumes ONTAP utiliza o SnapMirror, a tecnologia de replicação líder do setor da NetApp para replicar dados no local para a nuvem de modo que seja fácil ter cópias secundárias disponíveis para vários casos de uso.
+
++
+O Cloud Volumes ONTAP também se integra ao Cloud Backup Service para fornecer recursos de backup e restauração para proteção e arquivamento a longo prazo de seus dados de nuvem.
+
+* Categorização de dados
++
+Alterne entre pools de armazenamento de alto e baixo desempenho sob demanda sem colocar os aplicativos offline.
+
+* Consistência de aplicativos
++
+Garanta a consistência das cópias Snapshot do NetApp usando o NetApp SnapCenter.
+
+* Segurança dos dados
++
+O Cloud Volumes ONTAP é compatível com a criptografia de dados e oferece proteção contra vírus e ransomware.
+
+* Controles de conformidade de privacidade
++
+A integração com o Cloud Compliance ajuda você a entender o contexto dos dados e identificar dados confidenciais.
+
+
+
+
+NOTE: As licenças para os recursos do ONTAP estão incluídas no Cloud Volumes ONTAP.
+
+https://docs.netapp.com/us-en/cloud-volumes-ontap/index.html["Veja as configurações do Cloud Volumes ONTAP compatíveis"^]
+
+https://cloud.netapp.com/ontap-cloud["Saiba mais sobre o Cloud Volumes ONTAP"^]

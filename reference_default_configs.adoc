@@ -1,0 +1,172 @@
+---
+sidebar: sidebar 
+permalink: reference_default_configs.html 
+keywords: svm, LIF, LIFs, configuration backups, attributes, autosize, security style, space guarantee, unix permissions, NTFS, UNIX, boot, root, disks, aggr0, aggr1, svm, svms, storage virtual machine, LIF failover, failover, attributes, volume attributes, boot disk, root disk, licenses, feature licenses, default licenses, ontap licenses, ontap features 
+summary: Entender como o Cloud Volumes ONTAP é configurado por padrão pode ajudá-lo a configurar e administrar seus sistemas, especialmente se você estiver familiarizado com o ONTAP porque a configuração padrão do Cloud Volumes ONTAP é diferente do ONTAP. 
+---
+= Configuração padrão para Cloud Volumes ONTAP
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Entender como o Cloud Volumes ONTAP é configurado por padrão pode ajudá-lo a configurar e administrar seus sistemas, especialmente se você estiver familiarizado com o ONTAP porque a configuração padrão do Cloud Volumes ONTAP é diferente do ONTAP.
+
+
+
+== Predefinições
+
+* O Cloud Volumes ONTAP está disponível como um sistema de nó único na AWS, Azure e GCP, além de par de HA na AWS e no Azure.
+* O Cloud Manager cria uma VM de storage de fornecimento de dados quando implanta o Cloud Volumes ONTAP. Algumas configurações suportam VMs de storage adicionais. link:task_managing_svms.html["Saiba mais sobre como gerenciar VMs de armazenamento"].
+* O Cloud Manager instala automaticamente as seguintes licenças de recurso do ONTAP no Cloud Volumes ONTAP:
++
+** CIFS
+** FlexCache
+** FlexClone
+** ISCSI
+** Criptografia de volume NetApp (somente para sistemas BYOL ou PAYGO registrados)
+** NFS
+** SnapMirror
+** SnapRestore
+** SnapVault
+
+
+* Várias interfaces de rede são criadas por padrão:
++
+** Um LIF de gerenciamento de clusters
+** Um LIF entre clusters
+** LIF de gerenciamento de SVM em sistemas de HA no Azure, sistemas de nó único na AWS e, opcionalmente, em sistemas de HA em várias zonas de disponibilidade da AWS
+** Um LIF de gerenciamento de nós
+** Um iSCSI data LIF
+** LIF de dados CIFS e NFS
++
+
+NOTE: O failover de LIF é desativado por padrão para o Cloud Volumes ONTAP devido aos requisitos do EC2. A migração de um LIF para uma porta diferente rompe o mapeamento externo entre endereços IP e interfaces de rede na instância, tornando o LIF inacessível.
+
+
+
+* O Cloud Volumes ONTAP envia backups de configuração para o conetor usando HTTPS.
++
+Os backups são acessíveis de https://ipaddress/occm/offboxconfig/[] onde _ipaddress_ é o endereço IP do host do conetor.
+
+* O Cloud Manager define alguns atributos de volume de maneira diferente de outras ferramentas de gerenciamento (System Manager ou CLI, por exemplo).
++
+A tabela a seguir lista os atributos de volume que o Cloud Manager define de forma diferente dos padrões:
+
++
+[cols="15,85"]
+|===
+| Atributo | Valor definido pelo Cloud Manager 
+
+
+| Modo de tamanho automático | crescer 
+
+
+| Dimensionamento automático máximo  a| 
+1.000 por cento
+
+
+NOTE: O Administrador da conta pode modificar este valor a partir da página Configurações.
+
+
+
+| Estilo de segurança | NTFS para volumes CIFS UNIX para volumes NFS 
+
+
+| Estilo de garantia de espaço | nenhum 
+
+
+| Permissões UNIX (somente NFS) | 777 
+|===
++
+Consulte a página man _volume create_ para obter informações sobre esses atributos.
+
+
+
+
+
+== Dados de inicialização e raiz para Cloud Volumes ONTAP
+
+Além do storage para dados de usuário, o Cloud Manager também compra storage de nuvem para dados de inicialização e raiz em cada sistema Cloud Volumes ONTAP.
+
+
+
+=== AWS
+
+* Dois discos por nó para dados de inicialização e raiz:
++
+** 9,7: Disco IO1 de 160 gb para dados de inicialização e um disco GP2 de 220 gb para dados de raiz
+** 9,6: Disco IO1 de 93 gb para dados de inicialização e um disco GP2 de 140 gb para dados de raiz
+** 9,5: Disco IO1 de 45 gb para dados de inicialização e um disco GP2 de 140 gb para dados de raiz
+
+
+* Um instantâneo EBS para cada disco de arranque e disco raiz
+* Para pares HA, um volume EBS para a instância Mediator, que é de aproximadamente 8 GB
+
+
+
+
+=== Azure (nó único)
+
+* Três discos SSD premium:
++
+** Um disco de 10 GB para dados de inicialização
+** Um disco de 140 GB para dados de raiz
+** Um disco de 128 GB para NVRAM
++
+Se a máquina virtual que você escolheu para o Cloud Volumes ONTAP oferecer suporte a SSDs Ultra, o sistema usará um SSD Ultra para NVRAM, em vez de um SSD Premium.
+
+
+
+* Um disco rígido padrão de 1024 GB para guardar núcleos
+* Um snapshot do Azure para cada disco de inicialização e disco raiz
+
+
+
+
+=== Azure (pares de HA)
+
+* Dois discos SSD premium de 10 GB para o volume de inicialização (um por nó)
+* Dois blobs de página de armazenamento Premium de 140 GB para o volume raiz (um por nó)
+* Dois discos HDD padrão de 1024 GB para guardar núcleos (um por nó)
+* Dois discos SSD premium de 128 GB para NVRAM (um por nó)
+* Um snapshot do Azure para cada disco de inicialização e disco raiz
+
+
+
+
+=== GCP
+
+* Um disco persistente padrão de 10 GB para dados de inicialização
+* Um disco persistente padrão de 64 GB para dados de raiz
+* Um disco persistente padrão de 500 GB para NVRAM
+* Um disco persistente padrão de 216 GB para guardar núcleos
+* Um snapshot do GCP para o disco de inicialização e o disco raiz
+
+
+
+
+=== Onde residem os discos
+
+O Cloud Manager estabelece o storage da seguinte forma:
+
+* Os dados de inicialização residem em um disco conetado à instância ou à máquina virtual.
++
+Este disco, que contém a imagem de arranque, não está disponível para o Cloud Volumes ONTAP.
+
+* Os dados de raiz, que contêm a configuração e os logs do sistema, residem no aggr0.
+* O volume raiz da máquina virtual de storage (SVM) reside no aggr1.
+* Os volumes de dados também residem em aggr1.
+
+
+
+
+=== Criptografia
+
+Os discos de inicialização e raiz são sempre criptografados no Azure e no Google Cloud Platform porque a criptografia é habilitada por padrão nesses provedores de nuvem.
+
+Quando você ativa a criptografia de dados na AWS usando o Serviço de Gerenciamento de chaves (KMS), os discos de inicialização e raiz do Cloud Volumes ONTAP também são criptografados. Isso inclui o disco de inicialização da instância de mediador em um par de HA. Os discos são criptografados usando o CMK selecionado quando você cria o ambiente de trabalho.

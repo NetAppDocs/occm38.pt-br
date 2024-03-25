@@ -1,0 +1,936 @@
+---
+sidebar: sidebar 
+permalink: reference_new_occm.html 
+keywords: 'what"s new, features, new, release notes, bugs, limitations, known issues, enhancements, fixes' 
+summary: O Cloud Manager normalmente apresenta uma nova versão todos os meses para oferecer novos recursos, melhorias e correções de bugs. 
+---
+= Novidades do Cloud Manager 3,8
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+O Cloud Manager normalmente apresenta uma nova versão todos os meses para oferecer novos recursos, melhorias e correções de bugs.
+
+
+TIP: Procurando um lançamento anterior? link:https://docs.netapp.com/us-en/occm37/reference_new_occm.html["Novidades em 3,7"^] link:https://docs.netapp.com/us-en/occm36/reference_new_occm.html["Novidades em 3,6"^] link:https://docs.netapp.com/us-en/occm35/reference_new_occm.html["Novidades em 3,5"^]
+
+
+
+== Novo provedor Terraform (19 de outubro de 2020)
+
+Desenvolvemos um novo fornecedor Terraform que as equipes de DevOps podem usar com o Cloud Manager para automatizar e integrar o Cloud Volumes ONTAP à infraestrutura como código.
+
+https://registry.terraform.io/providers/NetApp/netapp-cloudmanager/latest["Veja o fornecedor do NetApp-cloudmanager"^].
+
+
+
+== Atualização do Cloud Manager 3.8.9 (18 out 2020)
+
+Ao aproveitar https://spot.io/products/cloud-analyzer/["Spot's Cloud Analyzer"^]o , o Cloud Manager agora pode fornecer uma análise de custos de alto nível dos seus gastos com computação em nuvem e identificar possíveis economias. Essas informações estão disponíveis no serviço *Compute* no Cloud Manager. link:concept_compute.html["Saiba mais"].
+
+image:screenshot_compute_dashboard.gif["Uma captura de tela que mostra a página análise de custos no Cloud Manager"]
+
+
+
+== Atualização do Cloud Manager 3.8.9 (13 out 2020)
+
+Lançamos duas atualizações do Cloud Tiering:
+
+* O licenciamento para o Cloud Tiering agora está disponível no Cloud Manager.
++
+Pague pela disposição de dados em categorias de um cluster do ONTAP no local para a nuvem por meio de uma assinatura com pagamento conforme o uso, uma licença de disposição em camadas do ONTAP chamada _FabricPool_ ou uma combinação de ambos.
+
+* O serviço autônomo de disposição em camadas na nuvem foi desativado. Agora você deve acessar o Cloud Tiering diretamente no Cloud Manager, onde todos os mesmos recursos e funcionalidades estão disponíveis.
+
+
+
+
+== Cloud Manager 3.8.9 (4 de outubro de 2020)
+
+* <<Melhorias de conformidade com a nuvem>>
+* <<Aprimoramentos do Cloud Volumes Service para AWS>>
+* <<Integração com Cloud Sync>>
+* <<Melhorias no gerenciamento de contas>>
+* <<Mudanças para regiões governamentais>>
+
+
+
+
+=== Melhorias de conformidade com a nuvem
+
+* Uma nova função *Cloud Compliance Viewer* está disponível no Cloud Manager.
++
+Os usuários que recebem essa função só podem exibir informações de conformidade e gerar relatórios para workspaces que eles têm permissão para acessar. Eles não podem gerenciar as configurações de conformidade da nuvem e não podem acessar outros recursos e serviços do Cloud Manager. Essa pode ser a função perfeita para sua equipe jurídica, para que ela possa monitorar os resultados da verificação de conformidade com a nuvem. link:reference_user_roles.html["funções de utilizador"]Consulte para obter detalhes.
+
+* Adicionado suporte para verificar esquemas de banco de dados MongoDB e PostgreSQL. Consulte link:task_scanning_databases.html["digitalização de esquemas de banco de dados"] para obter mais informações.
+* O preço do Cloud Compliance muda a partir de outubro de 7th.
++
+Os primeiros 1 TB de dados verificados pelo Cloud Compliance em um espaço de trabalho do Cloud Manager são gratuitos. Isso inclui dados do Cloud Volumes ONTAP volumes, do Azure NetApp Files volumes, buckets do Amazon S3 e esquemas de banco de dados. É necessária uma subscrição para verificar quaisquer dados adicionais depois de atingir os 1 TB. link:https://cloud.netapp.com/cloud-compliance#pricing["preços"^]Consulte para obter detalhes.
+
+
+
+
+
+=== Aprimoramentos do Cloud Volumes Service para AWS
+
+Ao criar um novo volume, você pode optar por basear esse volume em uma cópia Snapshot existente de outro volume.
+
+
+
+=== Integração com Cloud Sync
+
+O serviço Cloud Sync da NetApp agora está disponível no Cloud Manager. O Cloud Sync oferece uma maneira simples, segura e automatizada de migrar seus dados de qualquer destino de origem para qualquer destino, na nuvem ou no local. link:concept_cloud_sync.html["Saiba mais"].
+
+
+
+=== Melhorias no gerenciamento de contas
+
+Adicionámos mais formas de gerir a sua conta.
+
+* Uma visão geral dos recursos da sua conta já está disponível.
++
+Você pode visualizar rapidamente o número de usuários, espaços de trabalho, conetores e assinaturas na sua conta.
+
+* Você pode alterar o nome da sua conta.
+* Você pode copiar o ID da conta, o ID do workspace ou o ID do conetor.
++
+Copiar esses IDs ajudará com recursos de automação que estamos planejando.
+
+* Você pode desativar o uso da plataforma SaaS.
++
+Não recomendamos desativar a plataforma SaaS a menos que você precise para cumprir com as políticas de segurança da sua empresa. Desativar a plataforma SaaS limita sua capacidade de usar os serviços de nuvem integrados da NetApp. link:task_managing_cloud_central_accounts.html["Saiba mais"].
+
+
+
+image:screenshot_account_management.gif[""]
+
+
+
+=== Mudanças para regiões governamentais
+
+Se você implantar um conetor em uma região do AWS GovCloud, uma região do Azure Gov ou uma região do Azure DoD, o acesso ao Cloud Manager agora estará disponível somente por meio do endereço IP do host de um conetor. O acesso à plataforma SaaS está desativado para toda a conta.
+
+Isso significa que somente usuários privilegiados que podem acessar a VPC/VNet interna do usuário final podem usar a IU ou API do Cloud Manager.
+
+link:reference_limitations.html["Saiba mais sobre esta limitação"].
+
+
+
+== Atualização do Cloud Manager 3.8.8 (22 de setembro de 2020)
+
+Aprimoramos o serviço Kubernetes para facilitar o uso e fornecer recursos adicionais:
+
+* Facilitamos a descoberta dos clusters de Kubernetes executados no serviço Kubernetes gerenciado do seu fornecedor de nuvem.
++
+Basta clicar em *Discover clusters* e o Cloud Manager descobrirá seus clusters gerenciados usando as permissões de provedor de nuvem que você já forneceu.
+
+* Agora, você pode ver mais informações sobre um cluster do Kubernetes descoberto, incluindo seu estado, o número de volumes, classes de armazenamento e muito mais.
++
+image:screenshot_kubernetes_info.gif["Uma captura de tela de um cluster do Kubernetes onde você obtém informações sobre seu estado, número de volumes, classes de armazenamento e muito mais."]
+
+* Adicionamos a verificação de recursos e erros para garantir que a comunicação esteja disponível entre o cluster e o Cloud Volumes ONTAP. E se não for, então vamos informá-lo.
+
+
+link:task_connecting_kubernetes.html["Saiba como começar"].
+
+Observe que a conta de serviço de um conetor requer as seguintes permissões para descobrir e gerenciar clusters do Kubernetes executados no Google Kubernetes Engine (GKE):
+
+[source, yaml]
+----
+- container.*
+----
+
+
+== Atualização do Cloud Manager 3.8.8 (10 de setembro de 2020)
+
+Os seguintes aprimoramentos estão disponíveis ao implantar o Global File Cache por meio do Cloud Manager:
+
+* Um par de HA da Cloud Volumes ONTAP na AWS agora é compatível como a plataforma de storage de back-end para seu storage central.
+* Várias instâncias do Global File Cache Core podem ser implantadas em um design Load Distributed.
+
+
+link:concept_gfc.html["Saiba mais sobre o Global File Cache"].
+
+
+
+== Cloud Manager 3.8.8 (9 de setembro de 2020)
+
+* <<Suporte ao Cloud Volumes Service para Google Cloud>>
+* <<O backup na nuvem agora é compatível com clusters ONTAP no local>>
+* <<Aprimoramentos do backup na nuvem>>
+* <<Melhorias de conformidade com a nuvem>>
+* <<Navegação atualizada>>
+* <<Melhorias na administração>>
+
+
+
+
+=== Suporte ao Cloud Volumes Service para Google Cloud
+
+* Adicione um ambiente de trabalho para gerenciar o Cloud Volumes Service existente para volumes do GCP e para criar novos volumes. link:task_setup_cvs_gcp.html["Saiba como"^].
+* Crie e gerencie volumes NFSv3 e NFSv4,1 para clientes Linux e UNIX e volumes SMB 3.x para clientes Windows.
+* Criar, excluir e restaurar snapshots de volume.
+
+
+
+
+=== O backup na nuvem agora é compatível com clusters ONTAP no local
+
+Comece a fazer backup dos dados dos sistemas ONTAP no local para a nuvem. Habilite o backup na nuvem em seus ambientes de trabalho no local para fazer backup de volumes para storage Azure Blob. link:task_backup_from_onprem.html["Saiba mais"^].
+
+
+
+=== Aprimoramentos do backup na nuvem
+
+Revisamos a interface do usuário para melhor usabilidade:
+
+* Página de lista de volumes para ver facilmente os volumes que estão sendo copiados, juntamente com os backups disponíveis
+* Página de definições de cópia de segurança para ver as definições de cópia de segurança para cada ambiente de trabalho
+
+
+
+
+=== Melhorias de conformidade com a nuvem
+
+* Capacidade de digitalizar dados de bancos de dados
++
+Analise seus bancos de dados para identificar os dados pessoais e confidenciais que residem em cada esquema. Os bancos de dados compatíveis incluem Oracle, SAP HANA e SQL Server (MSSQL). link:task_scanning_databases.html["Saiba mais sobre como digitalizar bancos de dados"^].
+
+* Capacidade de verificar volumes de proteção de dados (DP)
++
+Os volumes DP são volumes de destino das operações do SnapMirror que costumam ser de clusters ONTAP on-premises. Agora você pode identificar facilmente os dados pessoais e confidenciais que residem nesses arquivos no local. link:task_getting_started_compliance.html#scanning-data-protection-volumes["Veja como"^].
+
+
+
+
+
+=== Navegação atualizada
+
+Atualizamos o cabeçalho no Cloud Manager para facilitar a navegação entre os serviços de nuvem da NetApp.
+
+Clique em *Exibir todos os Serviços* e você pode fixar e desfixar os serviços que deseja ver na navegação.
+
+image:screenshot_header.gif["Uma captura de tela que mostra o novo cabeçalho disponível no Cloud Manager."]
+
+Como você pode ver, também atualizamos os menus suspensos conta, Área de trabalho e conetor, para que seja mais fácil visualizar suas seleções atuais.
+
+
+
+=== Melhorias na administração
+
+* Agora você pode remover conetores inativos do Cloud Manager. link:task_managing_connectors.html["Saiba como"].
++
+image:screenshot_connector_remove.gif["Uma captura de tela do widget do conetor onde você pode remover um conetor inativo."]
+
+* Agora você pode substituir a assinatura do Marketplace que está atualmente associada às credenciais do seu provedor de nuvem. Se você precisar alterar a forma como você é cobrado, essa alteração pode ajudá-lo a garantir que você está sendo cobrado por meio da assinatura certa do Marketplace.
++
+Saiba como link:task_adding_aws_accounts.html["Na AWS"], link:task_adding_azure_accounts.html["No Azure"] link:task_adding_gcp_accounts.html["No GCP"]e .
+
+
+
+
+
+== Atualização das permissões necessárias do Azure (6 ago 2020)
+
+Para evitar falhas de implantação do Azure, certifique-se de que sua política do Cloud Manager no Azure inclua a seguinte permissão:
+
+[source, json]
+----
+"Microsoft.Resources/deployments/operationStatuses/read"
+----
+O Azure agora requer essa permissão para algumas implantações de máquinas virtuais (depende do hardware físico subjacente usado durante a implantação).
+
+https://occm-sample-policies.s3.amazonaws.com/Policy_for_cloud_Manager_Azure_3.8.7.json["Veja a política mais recente do Cloud Manager para Azure"^].
+
+
+
+== Cloud Manager 3.8.7 (3 de agosto de 2020)
+
+* <<Nova experiência de software como serviço>>
+* <<Melhorias no Cloud Volumes ONTAP>>
+* <<Melhorias no Azure NetApp Files>>
+* <<Aprimoramentos do Cloud Volumes Service para AWS>>
+* <<Melhorias de conformidade com a nuvem>>
+* <<Aprimoramentos do backup na nuvem>>
+* <<Suporte para Global File Cache>>
+
+
+
+
+=== Nova experiência de software como serviço
+
+Introduzimos totalmente uma experiência de software como serviço no Cloud Manager. Essa nova experiência facilita o uso do Cloud Manager e nos permite fornecer recursos adicionais para gerenciar sua infraestrutura de nuvem híbrida.
+
+O Cloud Manager inclui um https://cloudmanager.netapp.com/["Interface baseada em SaaS"^] que é integrado ao NetApp Cloud Central e conetores que permitem ao Cloud Manager gerenciar recursos e processos em seu ambiente de nuvem pública. (Na verdade, o conetor é o mesmo que o software existente do Cloud Manager instalado.)
+
+
+NOTE: Na maioria dos casos, um conetor é necessário, mas não é necessário usar o Azure NetApp Files, o Cloud Volumes Service ou o Cloud Sync do Cloud Manager.
+
+Como mencionado anteriormente nestas notas de versão, você precisará atualizar o tipo de máquina para seus conetores para acessar os novos recursos que estamos oferecendo. O Cloud Manager solicitará instruções para alterar o tipo de máquina. link:concept_saas.html#the-local-user-interface["Saiba mais"].
+
+
+
+=== Melhorias no Cloud Volumes ONTAP
+
+Dois aprimoramentos estão disponíveis para o Cloud Volumes ONTAP.
+
+* * Várias licenças BYOL para alocar capacidade adicional*
++
+Agora você pode comprar várias licenças para um sistema BYOL da Cloud Volumes ONTAP para alocar mais de 368 TB de capacidade. Por exemplo, você pode comprar duas licenças para alocar até 736 TB de capacidade para o Cloud Volumes ONTAP. Ou você pode comprar quatro licenças para obter até 1,4 PB.
+
++
+O número de licenças que você pode comprar para um único sistema de nó ou par de HA é ilimitado.
+
++
+Esteja ciente de que os limites de disco podem impedir que você alcance o limite de capacidade usando discos sozinhos. Você pode ir além do limite de disco pelo link:concept_data_tiering.html["disposição em camadas dos dados inativos no storage de objetos"^]. Para obter informações sobre limites de disco, https://docs.netapp.com/us-en/cloud-volumes-ontap/["Limites de armazenamento nas Notas de versão do Cloud Volumes ONTAP"^] consulte .
+
++
+link:task_managing_licenses.html["Saiba como adicionar uma nova licença de sistema"].
+
+* *Encrypt discos gerenciados do Azure usando chaves externas*
++
+Agora você pode criptografar discos gerenciados do Azure em sistemas Cloud Volumes ONTAP de nó único usando chaves externas de outra conta. Esse recurso é compatível com APIs.
+
++
+Você só precisa adicionar o seguinte à solicitação de API ao criar o sistema de nó único:
+
++
+[source, json]
+----
+"azureEncryptionParameters": {
+      "key": <azure id of encryptionset>
+  }
+----
++
+Esse recurso requer novas permissões, como mostrado na última https://occm-sample-policies.s3.amazonaws.com/Policy_for_cloud_Manager_Azure_3.8.7.json["Política do Cloud Manager para Azure"^].
+
++
+[source, json]
+----
+"Microsoft.Compute/diskEncryptionSets/read"
+----
+
+
+
+
+=== Melhorias no Azure NetApp Files
+
+Esta versão inclui várias melhorias no suporte do Azure NetApp Files.
+
+* *Configuração do Azure NetApp Files*
++
+Agora você pode configurar e gerenciar o Azure NetApp Files diretamente do Cloud Manager. link:task_manage_anf.html["Saiba como"].
+
+* * Novo suporte ao protocolo*
++
+Agora você pode criar volumes NFSv4,1 e volumes SMB.
+
+* *Gerenciamento de snapshot de volume e pool de capacidade*
++
+O Cloud Manager permite criar, excluir e restaurar snapshots de volume. Você também pode criar novos pools de capacidade e especificar seus níveis de serviço.
+
+* * Capacidade de editar volumes*
++
+Você pode editar um volume alterando seu tamanho e gerenciando tags.
+
+
+
+
+
+=== Aprimoramentos do Cloud Volumes Service para AWS
+
+Há muitas melhorias no Cloud Manager em suporte ao Cloud Volumes Service para AWS.
+
+* * Novo suporte ao protocolo*
++
+Agora você pode criar volumes NFSv4,1, volumes SMB e volumes de protocolo duplo. Anteriormente, você só podia criar e descobrir volumes NFSv3 no Cloud Manager.
+
+* *Suporte instantâneo*
++
+Você pode criar políticas de snapshot para automatizar a criação de snapshots de volume, criar um snapshot sob demanda, restaurar um volume de um snapshot, criar um novo volume com base em um snapshot existente e muito mais. Consulte link:task_manage_cloud_volumes_snapshots.html["Gerenciamento de snapshots do Cloud volumes"] para obter mais informações.
+
+* *Crie o volume inicial em uma região a partir do Cloud Manager*
++
+Antes desta versão, o primeiro volume em cada região tinha que ser criado na interface Cloud Volumes Service para AWS. Agora você pode se inscrever link:https://aws.amazon.com/marketplace/search/results?x=0&y=0&searchTerms=netapp+cloud+volumes+service["Uma das ofertas do NetApp Cloud Volumes Service no AWS Marketplace"^]e criar o primeiro volume a partir do Cloud Manager.
+
+
+
+
+
+=== Melhorias de conformidade com a nuvem
+
+As melhorias a seguir estão agora disponíveis para o Cloud Compliance.
+
+* *Processo de implantação revisado para sua instância de conformidade com a nuvem*
++
+A instância do Cloud Compliance é configurada e implantada usando um novo assistente no Cloud Manager. Após a conclusão da implementação, você ativa o serviço para cada ambiente de trabalho que deseja analisar.
+
+* * Capacidade de selecionar os volumes a serem digitalizados dentro de um ambiente de trabalho*
++
+Agora você pode ativar e desativar a digitalização de volumes individuais em um ambiente de trabalho Cloud Volumes ONTAP ou Azure NetApp Files. Se você não precisar verificar certos volumes para conformidade, desative-os.
+
++
+link:task_getting_started_compliance.html#enabling-and-disabling-compliance-scans-on-individual-volumes["Saiba mais sobre como desativar a digitalização de volumes."^]
+
+* * Abas de navegação para saltar rapidamente para a sua área de interesse*
++
+Novas guias para Dashboard, Investigation e Configuration permitem que você acesse essas seções com mais facilidade.
+
+* *Relatório HIPAA*
++
+Um novo Relatório HIPAA (Health Insurance Portability and Accountability Act) já está disponível. Esse relatório foi elaborado para auxiliar a organização a obedecer às leis de privacidade de dados HIPAA.
+
++
+link:task_generating_compliance_reports.html#hipaa-report["Saiba mais sobre o relatório HIPAA."^]
+
+* *Novo tipo de dados pessoais sensíveis*
++
+O Cloud Compliance agora pode encontrar códigos médicos ICD-9-CM em arquivos.
+
+* *Novo tipo de dados pessoais*
++
+O Cloud Compliance agora pode encontrar dois novos identificadores nacionais em arquivos: Croatian ID (OIB) e Greek ID.
+
+
+
+
+
+=== Aprimoramentos do backup na nuvem
+
+Os aprimoramentos a seguir estão agora disponíveis para o Backup to Cloud.
+
+* *Bring Your own License (BYOL) já está disponível*
++
+O backup para a nuvem só estava disponível com uma licença Pay as You Go (PAYGO). Uma licença BYOL permite que você compre uma licença da NetApp para usar o backup na nuvem por um determinado período de tempo e por um espaço máximo de backup. Quando um dos limites for atingido, você precisará renovar a licença.
+
++
+link:concept_backup_to_cloud.html#cost["Saiba mais sobre a nova licença BYOL do Backup to Cloud."^]
+
+* *Suporte para volumes de proteção de dados (DP)*
++
+É possível fazer backup e restaurar volumes de proteção de dados agora.
+
+
+
+
+
+=== Suporte para Global File Cache
+
+Com o NetApp, você consolida silos de servidores de arquivos distribuídos em um espaço físico do storage global e coeso na nuvem pública. Isso cria um sistema de arquivos globalmente acessível na nuvem que todos os locais distribuídos podem usar como se fossem locais.
+
+A partir desta versão, a instância Global File Cache Management e a instância Core podem ser implantadas e gerenciadas por meio do Cloud Manager. Isso economiza muitas horas durante o processo de implantação inicial e fornece um painel único por meio do Cloud Manager para este e outros sistemas implantados. As instâncias do Global File Cache Edge ainda são implantadas localmente em seus escritórios remotos.
+
+Consulte link:concept_gfc.html["Visão geral do Global File Cache"^] para obter mais informações.
+
+A configuração inicial que pode ser implantada usando o Cloud Manager deve atender aos seguintes requisitos. Outras configurações, como o Cloud Volumes Service, o Azure NetApp Files e o Cloud Volumes Service para AWS e o GCP, continuam sendo implantadas usando os procedimentos legados. https://cloud.netapp.com/global-file-cache/onboarding["Saiba mais"^].
+
+* A plataforma de storage de back-end usada como seu storage central deve ser um ambiente operacional no qual você implantou um par de HA do Cloud Volumes ONTAP no Azure.
++
+Outras plataformas de storage e outros provedores de nuvem não são compatíveis no momento usando o Cloud Manager, mas podem ser implantadas usando procedimentos de implantação legados.
+
+* O GFC Core pode ser implantado apenas como uma instância autônoma.
++
+Se você precisar usar um design Load Distributed que inclua várias instâncias principais, você deve usar os procedimentos legados.
+
+
+
+Esse recurso requer novas permissões, como mostrado na última https://occm-sample-policies.s3.amazonaws.com/Policy_for_cloud_Manager_Azure_3.8.7.json["Política do Cloud Manager para Azure"^].
+
+[source, json]
+----
+"Microsoft.Resources/deployments/operationStatuses/read",
+"Microsoft.Insights/Metrics/Read",
+"Microsoft.Compute/virtualMachines/extensions/write",
+"Microsoft.Compute/virtualMachines/extensions/read",
+"Microsoft.Compute/virtualMachines/extensions/delete",
+"Microsoft.Compute/virtualMachines/delete",
+"Microsoft.Network/networkInterfaces/delete",
+"Microsoft.Network/networkSecurityGroups/delete",
+"Microsoft.Resources/deployments/delete",
+----
+
+
+== Uma experiência melhorada requer um tipo de máquina mais forte (15 de julho de 2020)
+
+À medida que melhoramos a experiência do Cloud Manager, você precisará atualizar seu tipo de máquina para acessar os novos recursos que oferecemos. As melhorias incluirão link:concept_saas.html["Experiência de software como serviço para o Cloud Manager"]integrações de serviços de nuvem novas e aprimoradas.
+
+O Cloud Manager solicitará instruções para alterar o tipo de máquina.
+
+Aqui estão alguns detalhes:
+
+. Para garantir que os recursos adequados estejam disponíveis para a funcionalidade adequada dos novos recursos no Cloud Manager, alteramos a instância padrão, a VM e o tipo de máquina da seguinte forma:
++
+** AWS: t3.xlarge
+** Azure: DS3 v2
+** GCP: N1-standard-4
++
+Esses tamanhos padrão são o mínimo link:reference_cloud_mgr_reqs.html["Com base nos requisitos de CPU e RAM"]suportado .
+
+
+
+. Como parte dessa transição, o Cloud Manager requer acesso ao seguinte endpoint para que ele possa obter imagens de software de componentes de contentor para uma infraestrutura Docker:
++
+\https://cloudmanagerinfraprod.azurecr.io
+
++
+Certifique-se de que o firewall permite o acesso a este endpoint a partir do Cloud Manager.
+
+
+
+
+
+== Cloud Manager 3.8.6 (6 de julho de 2020)
+
+* <<Suporte para volumes iSCSI>>
+* <<Suporte à política de disposição em categorias>>
+
+
+
+
+=== Suporte para volumes iSCSI
+
+Agora, o Cloud Manager permite criar volumes iSCSI para Cloud Volumes ONTAP e clusters ONTAP locais diretamente a partir da interface de usuário.
+
+Quando você cria um volume iSCSI, o Cloud Manager cria automaticamente um LUN para você. Simplificamos a criação de apenas um LUN por volume, para que não haja gerenciamento envolvido. Depois de criar o volume, link:task_provisioning_storage.html#connecting-a-lun-to-a-host["Use o IQN para se conetar ao LUN a partir de seus hosts"].
+
+
+NOTE: Você pode criar LUNs adicionais no System Manager ou na CLI.
+
+
+
+=== Suporte à política de disposição em categorias
+
+Agora, você pode escolher a política de disposição em categorias ao criar ou modificar um volume para o Cloud Volumes ONTAP. Quando você usa a política de disposição em categorias, os dados são imediatamente marcados como inativos e dispostos em camadas no storage de objetos o mais rápido possível. link:concept_data_tiering.html["Saiba mais sobre categorização de dados"].
+
+
+
+== Transição do Cloud Manager para SaaS (22 de junho de 2020)
+
+Apresentamos uma experiência de software como serviço para o Cloud Manager. Essa nova experiência facilita o uso do Cloud Manager e nos permite fornecer recursos adicionais para gerenciar sua infraestrutura de nuvem híbrida. link:concept_saas.html["Saiba mais"].
+
+
+
+== Cloud Manager 3.8.5 (31 de maio de 2020)
+
+* <<É necessária uma nova subscrição no Azure Marketplace>>
+* <<Aprimoramentos do backup na nuvem>>
+* <<Melhorias de conformidade com a nuvem>>
+
+
+
+
+=== É necessária uma nova subscrição no Azure Marketplace
+
+Uma nova assinatura está disponível no Azure Marketplace. Essa assinatura única é necessária para implantar o Cloud Volumes ONTAP 9,7 PAYGO (exceto o sistema de avaliação gratuita de 30 dias). A assinatura também nos permite oferecer recursos adicionais para o Cloud Volumes ONTAP PAYGO e BYOL. Você será cobrado a partir desta assinatura por cada sistema Cloud Volumes ONTAP PAYGO que você criar e cada recurso de add-on que você ativar.
+
+O Cloud Manager solicitará que você assine esta oferta quando você implantar um novo sistema Cloud Volumes ONTAP (9,7 P1 ou posterior).
+
+image:screenshot_azure_marketplace_subscription.gif[""]
+
+
+
+=== Aprimoramentos do backup na nuvem
+
+Os aprimoramentos a seguir estão agora disponíveis para o Backup to Cloud.
+
+* No Azure, agora você pode criar um novo grupo de recursos ou selecionar um grupo de recursos existente em vez de ter o Cloud Manager criar um para você. O grupo de recursos não pode ser alterado depois de ativar o Backup to Cloud.
+* Na AWS, agora você pode fazer backup de instâncias do Cloud Volumes ONTAP que residem em uma conta diferente da conta AWS do Cloud Manager.
+* Opções adicionais estão agora disponíveis ao selecionar o agendamento de backup para volumes. Além das opções de backup diário, semanal e mensal, agora você pode selecionar uma das políticas definidas pelo sistema que oferecem políticas de combinação como 30 backups diários, 13 semanais e 12 mensais.
+* Depois de excluir todos os backups de um volume, agora você pode começar a criar backups novamente para esse volume. Esta era uma limitação conhecida na versão anterior.
+
+
+
+
+=== Melhorias de conformidade com a nuvem
+
+Os aprimoramentos a seguir estão disponíveis para o Cloud Compliance.
+
+* Agora você pode verificar buckets do S3 que estão em contas diferentes da AWS que a instância do Cloud Compliance. Você só precisa criar uma função nessa nova conta para que a instância existente do Cloud Compliance possa se conectar a esses buckets. link:task_scanning_s3.html#scanning-buckets-from-additional-aws-accounts["Saiba mais"].
++
+Se você configurou o Cloud Compliance antes da versão 3,8.5, será necessário modificar o existente link:task_scanning_s3.html#requirements-specific-to-s3["Função do IAM para a instância de Cloud Compliance"] para usar essa funcionalidade.
+
+* Agora você pode filtrar o conteúdo da página de investigação para exibir apenas os resultados que deseja ver. Os filtros incluem ambiente de trabalho, categoria, dados privados, tipo de arquivo, data da última modificação e se as permissões do objeto S3 estão abertas ao acesso público.
++
+image:screenshot_compliance_investigation_filtered.png[""]
+
+* Agora você pode ativar e desativar o Cloud Compliance em um ambiente de trabalho diretamente na guia Cloud Compliance.
+
+
+
+
+== Atualização do Cloud Manager 3.8.4 (10 de maio de 2020)
+
+Lançamos um aprimoramento para o Cloud Manager 3,8.4.
+
+
+
+=== Integração com Cloud Insights
+
+Ao utilizar o serviço Cloud Insights da NetApp, o Cloud Manager fornece insights sobre a integridade e a performance das instâncias do Cloud Volumes ONTAP e ajuda você a solucionar problemas e otimizar a performance do seu ambiente de storage de nuvem. link:concept_monitoring.html["Saiba mais"].
+
+
+
+== Cloud Manager 3.8.4 (3 de maio de 2020)
+
+O Cloud Manager 3.8.4 inclui as seguintes melhorias.
+
+
+
+=== Aprimoramentos do backup na nuvem
+
+Os aprimoramentos a seguir estão agora disponíveis para o Backup to Cloud (anteriormente chamado de _Backup to S3_ para AWS):
+
+* *Fazer backup para armazenamento Azure Blob*
++
+O backup na nuvem agora está disponível para o Cloud Volumes ONTAP no Azure. O backup to Cloud oferece recursos de backup e restauração para proteção e arquivamento de longo prazo de seus dados de nuvem. link:concept_backup_to_cloud.html["Saiba mais"].
+
+* *Excluindo backups*
++
+Agora você pode excluir todos os backups de um volume específico diretamente da interface do Cloud Manager. link:task_managing_backups.html#deleting-backups["Saiba mais"].
+
+
+
+
+
+== Cloud Manager 3.8.3 (5 de abril de 2020)
+
+* <<Integração com o Cloud Tiering>>
+* <<Migração de dados para o Azure NetApp Files>>
+* <<Melhorias de conformidade com a nuvem>>
+* <<Backup para aprimoramentos do S3>>
+* <<Volumes iSCSI usando APIs>>
+
+
+
+
+=== Integração com o Cloud Tiering
+
+O serviço de disposição em camadas de nuvem do NetApp agora está disponível no Cloud Manager. Com o Cloud Tiering, você pode categorizar dados de um cluster ONTAP no local para storage de objetos de baixo custo na nuvem. Isso libera espaço de storage de alta performance no cluster para mais workloads.
+
+link:concept_cloud_tiering.html["Saiba mais"].
+
+
+
+=== Migração de dados para o Azure NetApp Files
+
+Agora é possível migrar dados NFS ou SMB para o Azure NetApp Files diretamente do Cloud Manager. As sincronizações de dados são alimentadas pelo serviço Cloud Sync da NetApp.
+
+link:task_manage_anf.html#migrating-data-to-azure-netapp-files["Saiba como migrar dados para o Azure NetApp Files"].
+
+
+
+=== Melhorias de conformidade com a nuvem
+
+As melhorias a seguir estão agora disponíveis para o Cloud Compliance.
+
+* *Avaliação gratuita de 30 dias para o Amazon S3*
++
+Uma avaliação gratuita de 30 dias agora está disponível para verificar dados do Amazon S3 com o Cloud Compliance. Se você ativou o Cloud Compliance anteriormente no Amazon S3, sua avaliação gratuita de 30 dias estará ativa a partir de hoje (5 de abril de 2020).
+
++
+Uma assinatura do AWS Marketplace é necessária para continuar a digitalizar o Amazon S3 após o término da avaliação gratuita. link:task_scanning_s3.html#subscribing-to-aws-marketplace["Saiba como se inscrever"].
+
++
+https://cloud.netapp.com/cloud-compliance#pricing["Saiba mais sobre a definição de preço para verificar o Amazon S3"^].
+
+* *Novo tipo de dados pessoais*
++
+O Cloud Compliance agora pode encontrar um novo identificador nacional nos arquivos: Brazilian ID (CPF).
+
++
+link:task_controlling_private_data.html#personal-data["Saiba mais sobre os tipos de dados pessoais"].
+
+* *Suporte para categorias adicionais de metadados*
++
+Agora, o Cloud Compliance pode categorizar seus dados em nove categorias adicionais de metadados. link:task_controlling_private_data.html#types-of-categories["Consulte a lista completa das categorias de metadados compatíveis"].
+
+
+
+
+
+=== Backup para aprimoramentos do S3
+
+As melhorias a seguir estão agora disponíveis para o serviço Backup to S3.
+
+* *S3 política de ciclo de vida para backups*
++
+Os backups começam na classe de armazenamento _Standard_ e passam para a classe de armazenamento _Standard-unusual Access_ após 30 dias.
+
+* *Excluindo backups*
++
+Agora você pode excluir backups usando uma API do Cloud Manager. link:task_backup_to_s3.html#deleting-backups["Saiba mais"].
+
+* *Bloquear acesso público*
++
+Agora, o Cloud Manager ativa o https://docs.aws.amazon.com/AmazonS3/latest/dev/access-control-block-public-access.html["Recurso de acesso público do Amazon S3 Block"^] bucket do S3 onde os backups são armazenados.
+
+
+
+
+
+=== Volumes iSCSI usando APIs
+
+As APIs do Cloud Manager agora permitem que você crie volumes iSCSI. link:api.html#_provisioning_iscsi_volumes["Veja um exemplo aqui"^].
+
+
+
+== Cloud Manager 3.8.2 (1 de março de 2020)
+
+* <<Ambientes de trabalho do Amazon S3>>
+* <<Melhorias de conformidade com a nuvem>>
+* <<Versão de NFS para volumes>>
+* <<Suporte para regiões Azure US Gov>>
+
+
+
+
+=== Ambientes de trabalho do Amazon S3
+
+O Cloud Manager agora descobre automaticamente informações sobre os buckets do Amazon S3 que residem na conta da AWS onde são instalados. Isso permite que você veja facilmente detalhes sobre os buckets do S3, incluindo a região, nível de acesso, classe de storage e se o bucket é usado com o Cloud Volumes ONTAP para backups ou categorização de dados. E você pode verificar os buckets do S3 com o Cloud Compliance, conforme descrito abaixo.
+
+image:screenshot_amazon_s3.gif["Uma captura de tela que mostra os detalhes de um ambiente de trabalho do Amazon S3: O número total de buckets e o número total de regiões, o número de buckets com serviços ativos e, em seguida, uma tabela que mostra detalhes sobre cada bucket do S3."]
+
+
+
+=== Melhorias de conformidade com a nuvem
+
+As melhorias a seguir estão agora disponíveis para o Cloud Compliance.
+
+* *Suporte para Amazon S3*
++
+O Cloud Compliance agora pode verificar seus buckets do Amazon S3 para identificar os dados pessoais e confidenciais que residem no storage de objetos do S3. O Cloud Compliance pode verificar qualquer bucket da conta, independentemente de ter sido criado para uma solução da NetApp.
+
++
+link:task_scanning_s3.html["Saiba como começar"].
+
+* *Página de investigação*
++
+Uma nova página de investigação agora está disponível para cada tipo de arquivo pessoal, arquivo pessoal sensível, categoria e tipo de arquivo. A página mostra detalhes sobre os arquivos afetados e permite classificar pelos arquivos que incluem a maioria dos dados pessoais, dados pessoais confidenciais e nomes dos titulares dos dados. Esta página substitui o relatório CSV que estava disponível anteriormente.
+
++
+Aqui está uma amostra:
+
++
+image:screenshot_compliance_investigation.gif["Uma captura de tela da página de investigação."]
+
++
+link:task_controlling_private_data.html["Saiba mais sobre a página de investigação"].
+
+* *Relatório PCI DSS*
++
+Um novo Relatório PCI DSS (Payment Card Industry Data Security Standard) já está disponível. Este relatório pode ajudá-lo a identificar a distribuição de informações de cartão de crédito em seus arquivos. Você pode ver quantos arquivos contêm informações de cartão de crédito, quer os ambientes de trabalho sejam protegidos por criptografia ou proteção contra ransomware, detalhes de retenção e muito mais.
+
++
+link:task_generating_compliance_reports.html["Saiba mais sobre o relatório PCI DSS"].
+
+* *Novo tipo de dados pessoais sensíveis*
++
+O Cloud Compliance agora pode encontrar códigos médicos ICD-10-CM, que são usados na indústria médica e de saúde.
+
+
+
+
+
+=== Versão de NFS para volumes
+
+Agora você pode selecionar a versão NFS para ativar em um volume quando criar ou editar um volume para o Cloud Volumes ONTAP.
+
+image:screenshot_nfs_version.gif["Uma captura de tela que mostra a tela de detalhes do volume onde você pode ativar NFSv3, NFSv4 ou ambos."]
+
+
+
+=== Suporte para regiões Azure US Gov
+
+Os pares de HA do Cloud Volumes ONTAP agora são compatíveis com regiões Azure US Gov.
+
+https://cloud.netapp.com/cloud-volumes-global-regions["Consulte a lista de regiões do Azure suportadas"^].
+
+
+
+== Atualização do Cloud Manager 3.8.1 (16 de fevereiro de 2020)
+
+Lançamos algumas melhorias no Cloud Manager 3,8.1.
+
+
+
+=== Backup para aprimoramentos do S3
+
+* As cópias de backup agora são armazenadas em um bucket do S3 criado pelo Cloud Manager na sua conta da AWS, com um bucket por ambiente de trabalho do Cloud Volumes ONTAP.
+* O backup para S3 agora é compatível com todas as regiões da AWS https://cloud.netapp.com/cloud-volumes-global-regions["Onde o Cloud Volumes ONTAP é suportado"^] .
+* Você pode definir o agendamento de backup para diário, semanal ou mensal.
+* O Cloud Manager não precisa mais configurar _links privados_ para o serviço Backup to S3.
+
+
+Permissões adicionais do S3 são necessárias para esses aprimoramentos. A função do IAM que fornece permissões ao Cloud Manager deve incluir permissões do último https://mysupport.netapp.com/site/info/cloud-manager-policies["Política do Cloud Manager"^].
+
+link:task_backup_to_s3.html["Saiba mais sobre o Backup para S3"].
+
+
+
+=== Atualizações da AWS
+
+Introduzimos o suporte para novas instâncias do EC2 e uma alteração no número de discos de dados suportados para o Cloud Volumes ONTAP 9,6 e 9,7. Confira as alterações nas Notas de versão do Cloud Volumes ONTAP.
+
+* https://docs.netapp.com/us-en/cloud-volumes-ontap/reference_new_97.html["Notas de versão do Cloud Volumes ONTAP 9,7"^]
+* https://docs.netapp.com/us-en/cloud-volumes-ontap/reference_new_96.html["Notas de versão do Cloud Volumes ONTAP 9,6"^]
+
+
+
+
+== Cloud Manager 3.8.1 (2 de fevereiro de 2020)
+
+* <<Melhorias de conformidade com a nuvem>>
+* <<Melhorias nas contas e assinaturas>>
+* <<Melhorias na linha do tempo>>
+
+
+
+
+=== Melhorias de conformidade com a nuvem
+
+As melhorias a seguir estão agora disponíveis para o Cloud Compliance.
+
+* *Suporte para Azure NetApp Files*
++
+Temos o prazer de anunciar que o Cloud Compliance agora pode verificar o Azure NetApp Files para identificar dados pessoais e confidenciais que residem nos volumes.
+
++
+link:task_getting_started_compliance.html["Saiba como começar"].
+
+* *Estado de digitalização*
++
+O Cloud Compliance agora mostra um status de verificação para cada volume CIFS e NFS, incluindo mensagens de erro que podem ser usadas para corrigir quaisquer problemas.
+
++
+image:screenshot_cloud_compliance_status.gif[""]
+
+* * Filtro de painel por ambiente de trabalho *
++
+Agora você pode filtrar o conteúdo do painel do Cloud Compliance para ver os dados de conformidade para ambientes de trabalho específicos.
+
++
+image:screenshot_cloud_compliance_filter.gif[""]
+
+* *Novo tipo de dados pessoais*
++
+O Cloud Compliance agora pode identificar uma Licença de motorista da Califórnia ao digitalizar dados.
+
+* *Suporte para categorias adicionais*
++
+São suportadas três categorias adicionais: Dados de aplicações, registos e ficheiros de base de dados e índice.
+
++
+link:task_controlling_private_data.html#categories["Saiba mais sobre categorias"].
+
+
+
+
+
+=== Melhorias nas contas e assinaturas
+
+Facilitamos a seleção de uma conta da AWS ou de um projeto do GCP e de uma assinatura associada ao mercado para um sistema Cloud Volumes ONTAP de pagamento conforme o uso. Essas melhorias ajudam a garantir que você está pagando a partir da conta ou projeto certo.
+
+Por exemplo, quando você cria um sistema na AWS, clique em *Editar credenciais* se não quiser usar a conta e a assinatura padrão:
+
+image:screenshot_accounts_select_aws.gif["Uma captura de tela da página Detalhes  credenciais no assistente do ambiente de trabalho que mostra o botão Editar credenciais."]
+
+A partir daí, você pode escolher as credenciais da conta que deseja usar e a assinatura associada do AWS Marketplace. Você pode até mesmo adicionar uma assinatura de mercado, se necessário.
+
+image:screenshot_accounts_aws.gif["Uma captura de tela da caixa de diálogo Editar conta e Adicionar assinatura. Essa caixa de diálogo permite escolher uma assinatura e associar as credenciais a uma assinatura."]
+
+E se você gerenciar várias assinaturas da AWS, poderá atribuir cada uma delas a diferentes credenciais da AWS na página credenciais nas configurações:
+
+image:screenshot_aws_add_subscription.gif["Uma captura de tela da página credenciais, onde você pode adicionar uma assinatura às credenciais da AWS no menu."]
+
+link:task_adding_aws_accounts.html["Saiba como gerenciar credenciais da AWS no Cloud Manager"].
+
+
+
+=== Melhorias na linha do tempo
+
+A linha do tempo foi aprimorada para fornecer mais informações sobre os serviços de nuvem da NetApp que você usa.
+
+* A linha de tempo agora mostra ações para todos os sistemas do Cloud Manager dentro da mesma conta do Cloud Central
+* Agora você pode encontrar informações mais facilmente filtrando, pesquisando e adicionando e removendo colunas
+* Agora você pode baixar os dados da linha do tempo em formato CSV
+* No futuro, a linha do tempo mostrará ações para cada serviço de nuvem do NetApp que você usar (mas você pode filtrar as informações para um único serviço)
+
+
+image:screenshot_timeline.gif["Uma captura de tela da linha de tempo que aparece no Cloud Manager. A linha do tempo mostra detalhes sobre as ações que ocorreram no Cloud Manager."]
+
+
+
+== Cloud Manager 3,8 (8 de janeiro de 2020)
+
+* <<Aprimoramentos DE HA no Azure>>
+* <<Melhorias na disposição de dados em categorias no GCP>>
+
+
+
+
+=== Aprimoramentos DE HA no Azure
+
+As melhorias a seguir estão agora disponíveis para pares de HA do Cloud Volumes ONTAP no Azure.
+
+* *Substituir bloqueios CIFS para o Cloud Volumes ONTAP HA no Azure*
++
+Agora você pode habilitar uma configuração no Cloud Manager que impede problemas com o failover de storage do Cloud Volumes ONTAP durante eventos de manutenção do Azure. Quando você ativa essa configuração, o Cloud Volumes ONTAP veta o CIFS bloqueia e redefine as sessões ativas do CIFS. link:task_overriding_cifs_locks.html["Saiba mais"].
+
+* *Ligação HTTPS do Cloud Volumes ONTAP para contas de armazenamento*
++
+Agora você pode habilitar uma conexão HTTPS de um par de HA do Cloud Volumes ONTAP 9,7 para contas de storage do Azure ao criar um ambiente de trabalho. Observe que ativar essa opção pode afetar o desempenho de gravação. Não é possível alterar a configuração depois de criar o ambiente de trabalho.
+
+* *Suporte para contas de armazenamento v2 de uso geral do Azure*
++
+As contas de storage criadas pelo Cloud Manager para pares de HA do Cloud Volumes ONTAP 9,7 agora são contas de storage do v2 de uso geral.
+
+
+
+
+
+=== Melhorias na disposição de dados em categorias no GCP
+
+Os aprimoramentos a seguir estão disponíveis para disposição de dados em categorias do Cloud Volumes ONTAP no GCP.
+
+* * Classes de armazenamento do Google Cloud para categorização de dados*
++
+Agora, você pode escolher uma classe de storage para os dados que o Cloud Volumes ONTAP dispõe para o Google Cloud Storage:
+
++
+** Armazenamento padrão (padrão)
+** Armazenamento Nearline
+** Storage Coldline
++
+https://cloud.google.com/storage/docs/storage-classes["Saiba mais sobre as classes de armazenamento do Google Cloud"^].
+
++
+link:task_tiering.html#changing-the-storage-class-for-tiered-data["Saiba como alterar a classe de armazenamento para Cloud Volumes ONTAP"].
+
+
+
+* *Disposição em camadas de dados usando uma conta de serviço*
++
+A partir da versão 9,7, o Cloud Manager agora define uma conta de serviço na instância do Cloud Volumes ONTAP. Essa conta de serviço fornece permissões para categorização de dados em um bucket do Google Cloud Storage. Esta alteração fornece mais segurança e requer menos configuração. Para obter instruções passo a passo ao implantar um novo sistemalink:task_getting_started_gcp.html["consulte o passo 4 nesta página"], .
+
++
+A imagem a seguir mostra o assistente ambiente de trabalho onde você pode selecionar uma classe de armazenamento e uma conta de serviço:
+
++
+image:screenshot_data_tiering_gcp.gif[""]
+
+
+
+O Cloud Manager requer as seguintes permissões do GCP para esses aprimoramentos, como mostrado na última https://occm-sample-policies.s3.amazonaws.com/Policy_for_Cloud_Manager_3.8.0_GCP.yaml["Política do Cloud Manager para GCP"^].
+
+[source, yaml]
+----
+- storage.buckets.update
+- compute.instances.setServiceAccount
+- iam.serviceAccounts.getIamPolicy
+- iam.serviceAccounts.list
+----

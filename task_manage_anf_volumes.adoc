@@ -1,0 +1,131 @@
+---
+sidebar: sidebar 
+permalink: task_manage_anf_volumes.html 
+keywords: azure netapp files, create volumes, delete volumes, create nfs volumes, delete nfs volumes, netapp account, capacity pool, create capacity pool, azure netapp files permissions, azure permissions, mount path, get mount path, find mount path, mount volume 
+summary: Depois de configurar seu ambiente de trabalho, você pode começar a criar e gerenciar contas do Azure NetApp Files, pools de capacidade, volumes e snapshots. 
+---
+= Criação e gerenciamento de volumes para Azure NetApp Files
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Depois de configurar seu ambiente de trabalho, você pode criar e gerenciar contas do Azure NetApp Files, pools de capacidade, volumes e snapshots.
+
+
+
+== Criando volumes
+
+Você pode criar volumes NFS ou SMB em uma conta do Azure NetApp Files nova ou existente.
+
+.Passos
+. Abra o ambiente de trabalho do Azure NetApp Files.
+. Clique em *Adicionar novo volume*.
+. Forneça as informações necessárias em cada página:
++
+** *Conta Azure NetApp Files*: Escolha uma conta Azure NetApp Files existente ou crie uma nova conta.
++
+image:screenshot_anf_create_account.gif["Uma captura de tela dos campos necessários para criar uma conta do Azure NetApp Files, que inclui um nome, assinatura do Azure, local e grupo de recursos."]
+
+** *Pool de capacidade*: Selecione um pool de capacidade existente ou crie um novo pool de capacidade.
++
+Se você criar um novo pool de capacidade, precisará especificar um tamanho e selecionar um https://docs.microsoft.com/en-us/azure/azure-netapp-files/azure-netapp-files-service-levels["nível de serviço"^].
+
++
+O tamanho mínimo para o pool de capacidade é de 4 TB. Você pode especificar um tamanho em múltiplos de 4 TB.
+
+** *Detalhes e Tags*: Insira um nome e tamanho de volume, o VNet e a sub-rede onde o volume deve residir e, opcionalmente, especifique tags para o volume.
+** *Protocolo*: Escolha o protocolo NFS ou SMB e insira as informações necessárias.
++
+Aqui está um exemplo de detalhes para NFS.
+
++
+image:screenshot_anf_nfs.gif[""]
+
++
+Aqui está um exemplo de detalhes para SMB. Você precisará fornecer informações do ative Directory ao configurar seu primeiro volume SMB.
+
++
+image:screenshot_anf_smb.gif[""]
+
+
+
+. Clique em *Adicionar volume*.
+
+
+
+
+== Volumes de montagem
+
+Acesse as instruções de montagem do Cloud Manager para que você possa montar o volume em um host.
+
+.Passos
+. Abra o ambiente de trabalho.
+. Passe o Mouse sobre o volume e selecione *Monte o volume*.
++
+image:screenshot_anf_hover.gif[""]
+
+. Siga as instruções para montar o volume.
+
+
+
+
+== Editando o tamanho e as tags de um volume
+
+Depois de criar um volume, você pode modificar seu tamanho e tags a qualquer momento.
+
+.Passos
+. Abra o ambiente de trabalho.
+. Passe o Mouse sobre o volume e selecione *Editar*.
+. Modifique o tamanho e as tags conforme necessário.
+. Clique em *aplicar*.
+
+
+
+
+== Gerenciamento de cópias Snapshot
+
+As cópias Snapshot fornecem uma cópia pontual do volume. Criar cópias Snapshot, restaurar os dados para um novo volume e excluir cópias Snapshot.
+
+.Passos
+. Abra o ambiente de trabalho.
+. Passe o Mouse sobre o volume e escolha uma das opções disponíveis para gerenciar cópias Snapshot:
++
+** *Criar uma cópia Snapshot*
+** *Restaurar para um novo volume*
+** *Excluir uma cópia Snapshot*
+
+
+. Siga as instruções para concluir a ação selecionada.
+
+
+
+
+== Eliminar volumes
+
+Exclua os volumes que você não precisa mais.
+
+.Passos
+. Abra o ambiente de trabalho.
+. Passe o Mouse sobre o volume e clique em *Excluir*.
+. Confirme se pretende eliminar o volume.
+
+
+
+
+== A remover Azure NetApp Files
+
+Essa ação remove o Azure NetApp Files do Cloud Manager. Ele não exclui sua conta ou volumes do Azure NetApp Files. Você pode adicionar o Azure NetApp Files de volta ao Cloud Manager a qualquer momento.
+
+.Passos
+. Abra o ambiente de trabalho do Azure NetApp Files.
+. No canto superior direito da página, selecione o menu ações e clique em *Remover Azure NetApp Files*.
++
+image:screenshot_anf_remove.gif[""]
+
+. Clique em *Remover* para confirmar.
+

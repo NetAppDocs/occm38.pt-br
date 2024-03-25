@@ -1,0 +1,201 @@
+---
+sidebar: sidebar 
+permalink: task_gfc_getting_started.html 
+keywords: global file cache, core, management server 
+summary: Você usa o Cloud Manager para implantar o Global File Cache Management Server e o software Global File Cache Core no ambiente de trabalho. 
+---
+= Como começar
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Você usa o Cloud Manager para implantar o Global File Cache Management Server e o software Global File Cache Core no ambiente de trabalho.
+
+
+
+== Ative o Cache de arquivos global usando o Cloud Manager
+
+Nesta configuração, você implantará o servidor de gerenciamento global de cache de arquivos e o núcleo global de cache de arquivos no mesmo ambiente de trabalho em que você criou seu sistema Cloud Volumes ONTAP usando o Cloud Manager.
+
+Observe link:https://www.youtube.com/watch?v=TGIQVssr43A["este vídeo"^] para ver os passos do início ao fim.
+
+
+
+=== Início rápido
+
+Comece rapidamente seguindo estas etapas ou role para baixo até as seções restantes para obter detalhes completos:
+
+
+
+==== image:number1.png["Número 1"] Implante o Cloud Volumes ONTAP
+
+[role="quick-margin-para"]
+Implante o Cloud Volumes ONTAP no Azure ou na AWS e configure compartilhamentos de arquivos SMB. Para obter mais informações, consulte link:task_deploying_otc_azure.html["Iniciar o Cloud Volumes ONTAP no Azure"^] ou link:task_deploying_otc_aws.html["Iniciando o Cloud Volumes ONTAP na AWS"^].
+
+
+
+==== image:number2.png["Número 2"] Implante o Global File Cache Management Server
+
+[role="quick-margin-para"]
+Implante uma instância do servidor de gerenciamento de cache de arquivos global no mesmo ambiente de trabalho que a instância do Cloud Volumes ONTAP.
+
+
+
+==== image:number3.png["Número 3"] Implante o Global File Cache Core
+
+[role="quick-margin-para"]
+Implante uma instância, ou várias instâncias, do núcleo de cache de arquivos global no mesmo ambiente de trabalho que a instância do Cloud Volumes ONTAP e associe-a ao seu domínio do ative Directory.
+
+
+
+==== image:number4.png["Número 4"] Licencie Global File Cache
+
+[role="quick-margin-para"]
+Configure o serviço do Global File Cache License Management Server (LMS) em uma instância do Global File Cache Core. Você precisará de suas credenciais NSS ou de um ID de cliente fornecido pela NetApp para ativar sua assinatura.
+
+
+
+==== image:number5.png["Número 5"] Implante as instâncias do Global File Cache Edge
+
+[role="quick-margin-para"]
+link:task_deploy_gfc_edge_instances.html["Implantando instâncias do Global File Cache Edge"^]Consulte para implantar as instâncias do Global File Cache Edge em cada local remoto. Esta etapa não é feita usando o Cloud Manager.
+
+
+
+=== Implante o Cloud Volumes ONTAP como sua plataforma de storage
+
+Na versão atual, o cache global de arquivos oferece suporte ao Cloud Volumes ONTAP implantado no Azure ou na AWS. Para obter pré-requisitos, requisitos e instruções de implantação detalhadas, link:task_deploying_otc_azure.html["Iniciar o Cloud Volumes ONTAP no Azure"^] consulte ou link:task_deploying_otc_aws.html["Iniciando o Cloud Volumes ONTAP na AWS"^].
+
+Observe o seguinte requisito adicional Global File Cache:
+
+* Você deve configurar compartilhamentos de arquivo SMB na instância do Cloud Volumes ONTAP.
++
+Se nenhum compartilhamento de arquivo SMB estiver configurado na instância, você será solicitado a configurar os compartilhamentos SMB durante a instalação dos componentes Global File Cache.
+
+
+
+
+
+=== Ative o Global File Cache no seu ambiente de trabalho
+
+O assistente Global File Cache orienta você pelas etapas para implantar a instância do Global File Cache Management Server e a instância Global File Cache Core, conforme destacado abaixo.
+
+image:screenshot_gfc_install1.png["Uma captura de tela da página inicial de instalação do Global File Cache."]
+
+.Passos
+. Selecione o ambiente de trabalho em que você implantou o Cloud Volumes ONTAP.
+. No painel Serviços, clique em *Ativar GFC*.
++
+image:screenshot_gfc_install2.png["Uma captura de tela do botão Ativar GFC inicial no ambiente de trabalho para habilitar o Global File Cache."]
+
+. Leia a página Visão geral e clique em *continuar*.
+. Se nenhum compartilhamento SMB estiver disponível na instância do Cloud Volumes ONTAP, você será solicitado a inserir os detalhes do compartilhamento SMB e SMB para criar o compartilhamento agora. Para obter detalhes sobre a configuração SMB, link:concept_before_you_begin_to_deploy_gfc.html#storage-platform-volumes["Plataforma de storage"^]consulte .
++
+Quando terminar, clique em *continuar* para criar o compartilhamento SMB.
+
++
+image:screenshot_gfc_install3.png["Uma captura de tela mostrando as informações necessárias para criar um compartilhamento SMB se um não estiver disponível."]
+
+. Na página Serviço Global de Cache de arquivos, digite o número de instâncias globais de Cache de arquivos que você planeja implantar e verifique se o sistema atende aos requisitos de Configuração de rede e regras de Firewall, configurações do ative Directory e exclusões de antivírus. link:concept_before_you_begin_to_deploy_gfc.html#prerequisites["Pré-requisitos"]Consulte para obter mais detalhes.
++
+image:screenshot_gfc_install4.png["Uma captura de tela mostrando os pré-requisitos antes de implantar as instâncias do Global File Cache Management Server e Core."]
+
+. Depois de verificar se os requisitos foram atendidos ou se você tem as informações para atender a esses requisitos, clique em *continuar*.
+. Insira as credenciais de administrador que você usará para acessar a VM do Global File Cache Management Server e clique em *Ativar serviço GFC*. Para o Azure, insira as credenciais como nome de usuário e senha; para a AWS, selecione o par de chaves apropriado. Você pode alterar o nome da VM/instância, se desejar.
++
+image:screenshot_gfc_install5.png["Uma captura de tela mostrando as informações de configuração necessárias para configurar o Global File Cache Management Server."]
+
+. Depois que o Serviço Global de Gerenciamento de Cache de Arquivo for implantado com sucesso, clique em *continuar*.
+. Para o Global File Cache Core, insira as credenciais do usuário admin para ingressar no domínio do ative Directory e as credenciais do usuário da conta de serviço. Em seguida, clique em *continuar*.
++
+** A instância central do cache de arquivos global deve ser implantada no mesmo domínio do ative Directory que a instância do Cloud Volumes ONTAP.
+** A conta de serviço é um usuário de domínio e faz parte do grupo operadores de backup na instância do Cloud Volumes ONTAP.
++
+image:screenshot_gfc_install6.png["Uma captura de tela mostrando as informações de configuração necessárias para configurar o diretório ativo Global File Cache Core e a conta de serviço."]
+
+
+
+. Insira as credenciais de administrador que você usará para acessar a VM Global File Cache Core e clique em *Deploy GFC Core*. Para o Azure, insira as credenciais como nome de usuário e senha; para a AWS, selecione o par de chaves apropriado. Você pode alterar o nome da VM/instância, se desejar.
++
+image:screenshot_gfc_install7.png["Uma captura de tela mostrando as informações de configuração necessárias para configurar a instância Global File Cache Core."]
+
+. Depois que o Global File Cache Core for implantado com sucesso, clique em *Go to Dashboard*.
++
+image:screenshot_gfc_install8.png["Uma captura de tela mostrando o painel Global File Cache após a instalação estar concluída."]
+
+
+
+O Dashboard mostra que a instância do Management Server e a instância do Core estão *ON* e funcionando.
+
+
+
+=== Licencie sua instalação do Global File Cache
+
+Antes de poder usar o Global File Cache, você precisa configurar o serviço Global File Cache License Management Server (LMS) em uma instância Global File Cache Core. Você precisará de suas credenciais NSS ou de uma ID de cliente fornecida NetApp para ativar sua assinatura.
+
+Neste exemplo, configuraremos o serviço LMS em uma instância Core que você acabou de implantar na nuvem pública. Este é um processo único que configura seu serviço LMS.
+
+.Passos
+. Abra a página Registro de licença de cache de arquivo global no Global File Cache Core (o núcleo que você está designando como seu serviço LMS) usando o seguinte URL. Substitua _<ip_address>_ pelo endereço IP do núcleo global de cache de arquivos: https://<ip_address>/lms/api/v1/config/lmsconfig.html[]
+. Clique em "continuar para este site (não recomendado)" para continuar. É apresentada uma página que permite configurar o LMS ou verificar as informações de licença existentes.
++
+image:screenshot_gfc_license1.png["Uma captura de tela da página Registro de Licença Global File Cache."]
+
+. Escolha o modo de Registro selecionando "On-Premise LMS" ou "Cloud MS".
++
+** "LMS no local" é usado para clientes existentes ou de teste que receberam uma ID de cliente por meio do suporte da NetApp.
+** O "Cloud MS" é usado para clientes que adquiriram licenças de borda de cache de arquivos globais da NetApp da NetApp ou de seus parceiros certificados e que tenham suas credenciais NetApp.
+
+
+. Para o Cloud MS, clique em *Cloud MS*, insira suas credenciais NSS e clique em *Enviar*.
++
+image:screenshot_gfc_license3.png["Uma captura de tela de inserção de credenciais do Cloud MS NSS na página Registro de Licença de Cache de Arquivo Global."]
+
+. Para LMS on-premise, clique em *On-Premise LMS*, insira sua ID de cliente e clique em *Register LMS*.
++
+image:screenshot_gfc_license2.png["Uma captura de tela de inserção de um ID de cliente LMS no local na página Registro de licença de cache de arquivo global."]
+
+
+
+.O que vem a seguir?
+Se você tiver determinado que precisa implantar vários núcleos de Cache de Arquivo Global para oferecer suporte à sua configuração, clique em *Adicionar instância central* no Painel e siga o assistente de implantação.
+
+Depois de concluir sua implantação principal, você precisa fazer link:download_gfc_resources.html["Implante as instâncias do Global File Cache Edge"^] isso em cada um dos escritórios remotos.
+
+
+
+== Implante instâncias principais adicionais
+
+Se a configuração exigir que mais de um Global File Cache Core seja instalado devido a um grande número de instâncias do Edge, você poderá adicionar outro Core ao ambiente de trabalho.
+
+Ao implantar instâncias do Edge, você configurará algumas para se conetar ao primeiro núcleo e outras ao segundo núcleo. Ambas as instâncias principais acessam o mesmo storage de back-end (sua instância do Cloud Volumes ONTAP) no ambiente de trabalho.
+
+. No Painel Global File Cache, clique em *Add Core Instance*.
++
+image:screenshot_gfc_add_another_core.png["Uma captura de tela do Painel do GFC e o botão para adicionar uma instância principal adicional."]
+
+. Insira as credenciais de usuário admin para ingressar no domínio ative Directory e as credenciais de usuário da conta de serviço. Em seguida, clique em *continuar*.
++
+** A instância central do cache de arquivos global deve estar no mesmo domínio do ative Directory que a instância do Cloud Volumes ONTAP.
+** A conta de serviço é um usuário de domínio e faz parte do grupo operadores de backup na instância do Cloud Volumes ONTAP.
++
+image:screenshot_gfc_install6.png["Uma captura de tela mostrando as informações de configuração necessárias para configurar o diretório ativo Global File Cache Core e a conta de serviço."]
+
+
+
+. Insira as credenciais de administrador que você usará para acessar a VM Global File Cache Core e clique em *Deploy GFC Core*. Para o Azure, insira as credenciais como nome de usuário e senha; para a AWS, selecione o par de chaves apropriado. Você pode alterar o nome da VM, se desejar.
++
+image:screenshot_gfc_install7.png["Uma captura de tela mostrando as informações de configuração necessárias para configurar a instância Global File Cache Core."]
+
+. Depois que o Global File Cache Core for implantado com sucesso, clique em *Go to Dashboard*.
++
+image:screenshot_gfc_dashboard_2cores.png["Uma captura de tela mostrando o painel Global File Cache após a instalação estar concluída."]
+
+
+
+O Dashboard reflete a segunda instância do Core para o ambiente de trabalho.

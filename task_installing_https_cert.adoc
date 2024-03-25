@@ -1,0 +1,88 @@
+---
+sidebar: sidebar 
+permalink: task_installing_https_cert.html 
+keywords: https certificate, certificate, adding, installing, ca, certificate authority, format, encoding, renewing 
+summary: 'Por padrão, o Cloud Manager usa um certificado autoassinado para acesso HTTPS ao console da Web. Você pode instalar um certificado assinado por uma autoridade de certificação (CA), que fornece melhor proteção de segurança do que um certificado autoassinado.' 
+---
+= Gerenciamento de um certificado HTTPS para acesso seguro
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Por padrão, o Cloud Manager usa um certificado autoassinado para acesso HTTPS ao console da Web. Você pode instalar um certificado assinado por uma autoridade de certificação (CA), que fornece melhor proteção de segurança do que um certificado autoassinado.
+
+
+
+== Antes de começar
+
+Você precisa criar um conetor antes de alterar as configurações do Cloud Manager. link:concept_connectors.html#how-to-create-a-connector["Saiba como"].
+
+
+
+== Instalar um certificado HTTPS
+
+Instale um certificado assinado por uma CA para acesso seguro.
+
+.Passos
+. No canto superior direito do console do Cloud Manager, clique no ícone Configurações e selecione *Configuração HTTPS*.
++
+image:screenshot_settings_icon.gif["Uma captura de tela que mostra o ícone Configurações no canto superior direito do console do Cloud Manager."]
+
+. Na página Configuração HTTPS, instale um certificado gerando uma solicitação de assinatura de certificado (CSR) ou instalando seu próprio certificado assinado pela CA:
++
+[cols="25,75"]
+|===
+| Opção | Descrição 
+
+
+| Gerar um CSR  a| 
+.. Insira o nome do host ou DNS do host do conetor (seu Nome Comum) e clique em *Generate CSR*.
++
+O Cloud Manager exibe uma solicitação de assinatura de certificado.
+
+.. Use o CSR para enviar uma solicitação de certificado SSL a uma CA.
++
+O certificado deve usar o formato X,509 codificado base-64 de Email Avançado de Privacidade (PEM).
+
+.. Copie o conteúdo do certificado assinado, cole-o no campo certificado e clique em *Instalar*.
+
+
+
+
+| Instale o seu próprio certificado assinado pela CA  a| 
+.. Selecione *Instalar certificado assinado pela CA*.
+.. Carregue o arquivo de certificado e a chave privada e, em seguida, clique em *Install*.
++
+O certificado deve usar o formato X,509 codificado base-64 de Email Avançado de Privacidade (PEM).
+
+
+
+|===
+
+
+.Resultado
+O Cloud Manager agora usa o certificado assinado pela CA para fornecer acesso HTTPS seguro. A imagem a seguir mostra um sistema do Cloud Manager configurado para acesso seguro:
+
+image:screenshot_https_cert.gif["Captura de tela: Mostra a página Configuração HTTPS depois de instalar um certificado assinado. A página mostra as propriedades do certificado e uma opção para renovar o certificado."]
+
+
+
+== Renovando o certificado HTTPS do Cloud Manager
+
+Você deve renovar o certificado HTTPS do Cloud Manager antes de expirar para garantir acesso seguro ao console da Web do Cloud Manager. Se você não renovar o certificado antes que ele expire, um aviso será exibido quando os usuários acessarem o console da Web usando HTTPS.
+
+.Passos
+. No canto superior direito do console do Cloud Manager, clique no ícone Configurações e selecione *Configuração HTTPS*.
++
+Detalhes sobre os relatórios do certificado do Cloud Manager, incluindo a data de expiração.
+
+. Clique em *renovar certificado HTTPS* e siga as etapas para gerar um CSR ou instalar seu próprio certificado assinado pela CA.
+
+
+.Resultado
+O Cloud Manager usa o novo certificado assinado pela CA para fornecer acesso HTTPS seguro.

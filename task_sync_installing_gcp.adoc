@@ -1,0 +1,106 @@
+---
+sidebar: sidebar 
+permalink: task_sync_installing_gcp.html 
+keywords: data broker, install, gcp, google, networking, permissions, regions, install data broker in gcp, install in gcp, deploy in gcp, deploy data broker in gcp, install data broker in google, install in google, deploy in google, deploy data broker in google, networking requirements, port, ports, 443, port 443, ntp, network time protocol, gcp data broker, service account 
+summary: Quando você cria um relacionamento de sincronização, escolha a opção Data Broker do GCP para implantar o software de agente de dados em uma nova instância de máquina virtual em uma VPC. O Cloud Sync orienta você pelo processo de instalação, mas os requisitos e etapas são repetidos nesta página para ajudá-lo a se preparar para a instalação. 
+---
+= Instalar o agente de dados no Google Cloud Platform
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Quando você cria um relacionamento de sincronização, escolha a opção Data Broker do GCP para implantar o software de agente de dados em uma nova instância de máquina virtual em uma VPC. O Cloud Sync orienta você pelo processo de instalação, mas os requisitos e etapas são repetidos nesta página para ajudá-lo a se preparar para a instalação.
+
+Você também tem a opção de instalar o agente de dados em um host Linux existente na nuvem ou no local. link:task_sync_installing_linux.html["Saiba mais"].
+
+
+
+== Regiões GCP compatíveis
+
+Todas as regiões são suportadas.
+
+
+
+== Requisitos de rede
+
+* O corretor de dados precisa de uma conexão de saída de Internet para que possa pesquisar o serviço Cloud Sync para tarefas na porta 443.
++
+Quando o Cloud Sync implanta o agente de dados no GCP, ele cria um grupo de segurança que ativa a comunicação de saída necessária.
+
++
+Se precisar limitar a conetividade de saída, link:reference_sync_networking.html["a lista de endpoints que o corretor de dados entra em contato"]consulte .
+
+* A NetApp recomenda configurar o agente de origem, destino e dados para usar um serviço de protocolo de tempo de rede (NTP). A diferença de tempo entre os três componentes não deve exceder 5 minutos.
+
+
+
+
+== Permissões necessárias para implantar o agente de dados na GCP
+
+Certifique-se de que o usuário do GCP que implanta o agente de dados tenha as seguintes permissões:
+
+[source, yaml]
+----
+- compute.networks.list
+- compute.regions.list
+- deploymentmanager.deployments.create
+- deploymentmanager.deployments.delete
+- deploymentmanager.operations.get
+- iam.serviceAccounts.list
+----
+
+
+== Permissões necessárias para a conta de serviço
+
+Ao implantar o agente de dados, você precisa selecionar uma conta de serviço que tenha as seguintes permissões:
+
+[source, yaml]
+----
+- logging.logEntries.create
+- resourcemanager.projects.get
+- storage.buckets.get
+- storage.buckets.list
+- storage.objects.*
+----
+
+
+== Instalar o agente de dados
+
+É possível instalar um agente de dados no GCP ao criar um relacionamento de sincronização.
+
+.Passos
+. Clique em *criar nova sincronização*.
+. Na página *Definir relação de sincronização*, escolha uma fonte e destino e clique em *continuar*.
++
+Conclua as etapas até chegar à página *Data Broker*.
+
+. Na página *Data Broker*, clique em *Create Data Broker* e selecione *Google Cloud Platform*.
++
+Se você já tem um corretor de dados, você precisará clicar no image:screenshot_plus_icon.gif["Uma captura de tela se o ícone de mais"] ícone primeiro.
+
++
+image:screenshot_create_data_broker.gif["Uma captura de tela da página Data Broker que permite escolher entre um agente de dados AWS, Azure, GCP e no local."]
+
+. Digite um nome para o corretor de dados e clique em *continuar*.
+. Se você for solicitado, faça login com sua conta do Google.
++
+O formulário é de propriedade e hospedado pelo Google. Suas credenciais não são fornecidas ao NetApp.
+
+. Selecione uma conta de projeto e serviço e escolha um local para o corretor de dados.
++
+image:screenshot_data_broker_gcp.gif["Uma captura de tela que mostra as informações necessárias para implantar um corretor de dados no Google Cloud."]
+
+. Quando o corretor de dados estiver disponível, clique em *continuar* no Cloud Sync.
++
+A instância leva aproximadamente 5 a 10 minutos para implantar. Você pode monitorar o andamento do serviço Cloud Sync, que é atualizado automaticamente quando a instância está disponível.
+
+. Complete as páginas no assistente para criar a nova relação de sincronização.
+
+
+.Resultado
+Você implantou um agente de dados no GCP e criou uma nova relação de sincronização. Você pode usar esse corretor de dados com relações de sincronização adicionais.

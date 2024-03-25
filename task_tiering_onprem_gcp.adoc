@@ -1,0 +1,207 @@
+---
+sidebar: sidebar 
+permalink: task_tiering_onprem_gcp.html 
+keywords: data tiering, fabricpool, cloud tiering, tiering cold data, tiering inactive data, tiering aff, tiering fas, tiering ontap, tiering volumes, tier data, tier cold data, tier fas, tier aff, tier ontap, google, gcp, google cloud storage 
+summary: Libere espaço nos clusters do ONTAP no local ao dispor os dados em camadas no Google Cloud Storage. A disposição em camadas de dados é baseada no serviço de disposição em camadas na nuvem do NetApp. 
+---
+= Disposição de dados em camadas de clusters ONTAP on-premises para o Google Cloud Storage
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Libere espaço nos clusters do ONTAP no local ao dispor os dados em camadas no Google Cloud Storage. A disposição em camadas de dados é baseada no serviço de disposição em camadas na nuvem do NetApp.
+
+
+
+== Início rápido
+
+Comece rapidamente seguindo estas etapas ou role para baixo até as seções restantes para obter detalhes completos.
+
+
+
+==== image:number1.png["número 1"] Prepare-se para categorizar dados no Google Cloud Storage
+
+[role="quick-margin-para"]
+Você precisa do seguinte:
+
+[role="quick-margin-list"]
+* Um sistema AFF ou FAS com agregados all-SSD executando o ONTAP 9.6 ou posterior e com conexão HTTPS ao Google Cloud Storage.
+* Uma conta de serviço que tem a função de administrador de armazenamento predefinida e as chaves de acesso ao armazenamento.
+* Um conetor instalado em uma VPC do Google Cloud Platform.
+* Rede para o conetor que permite uma conexão HTTPS de saída ao cluster do ONTAP no data center, ao Google Cloud Storage e ao serviço de disposição em camadas na nuvem.
+
+
+
+
+==== image:number2.png["number2"] Configurar a disposição em camadas
+
+[role="quick-margin-para"]
+No Cloud Manager, selecione um ambiente de trabalho local, clique em *Configuração de categorias* e siga as instruções para colocar dados em camadas no Google Cloud Storage.
+
+
+
+==== image:number3.png["número 3"] Configure o licenciamento
+
+[role="quick-margin-para"]
+Após o término da avaliação gratuita, pague pelo Cloud Tiering por meio de uma assinatura com pagamento conforme o uso, de uma licença de disposição em camadas do ONTAP ou de uma combinação de ambos:
+
+[role="quick-margin-list"]
+* Para se inscrever no GCP Marketplace, clique em *Categorização > Licenciamento*, clique em *Subscrever* e siga as instruções.
+* Para adicionar uma licença de disposição em camadas, mailto:ng-cloud-Tiering em NetApp.com?subject:Licensing [entre em Contato conosco se precisar comprar uma] e, em seguidalink:task_licensing_cloud_tiering.html["Adicione-o ao cluster a partir do Cloud Tiering"], .
+
+
+
+
+== Requisitos
+
+Verifique o suporte para o cluster ONTAP, configure a rede e prepare o armazenamento de objetos.
+
+A imagem a seguir mostra cada componente e as conexões que você precisa preparar entre eles:
+
+image:diagram_cloud_tiering_google.png["Uma imagem de arquitetura que mostra o serviço disposição em camadas na nuvem com uma conexão ao conetor de serviço no seu provedor de nuvem, o conetor de serviço com uma conexão ao cluster ONTAP e uma conexão entre o cluster ONTAP e o storage de objetos no seu provedor de nuvem. Os dados ativos residem no cluster do ONTAP, enquanto os dados inativos residem no storage de objetos."]
+
+
+NOTE: A comunicação entre o conetor e o Google Cloud Storage destina-se apenas à configuração de armazenamento de objetos.
+
+
+
+=== Preparando os clusters do ONTAP
+
+Os clusters do ONTAP precisam atender aos requisitos a seguir ao categorizar dados no Google Cloud Storage.
+
+Plataformas ONTAP compatíveis:: O Cloud Tiering dá suporte a sistemas AFF e agregados all-SSD em sistemas FAS.
+Versões de ONTAP compatíveis:: ONTAP 9 .6 ou posterior
+Requisitos de rede de cluster::
++
+--
+* O cluster do ONTAP inicia uma conexão HTTPS pela porta 443 para o Google Cloud Storage.
++
+O ONTAP lê e grava dados no storage de objetos. O armazenamento de objetos nunca inicia, ele apenas responde.
+
++
+Embora o Google Cloud Interconnect ofereça melhor desempenho e menores taxas de transferência de dados, isso não é necessário entre o cluster do ONTAP e o Google Cloud Storage. Como o desempenho é significativamente melhor ao usar o Google Cloud Interconnect, isso é a melhor prática recomendada.
+
+* Uma conexão de entrada é necessária no NetApp Service Connector, que reside em uma VPC do Google Cloud Platform.
++
+Não é necessária uma conexão entre o cluster e o serviço Cloud Tiering.
+
+* É necessário um LIF entre clusters em cada nó do ONTAP que hospeda volumes dispostos em camadas. O LIF deve estar associado ao _IPspace_ que o ONTAP deve usar para se conetar ao armazenamento de objetos.
++
+Os IPspaces permitem a segregação de tráfego de rede, permitindo a separação do tráfego de clientes para privacidade e segurança. http://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-nmg/GUID-69120CF0-F188-434F-913E-33ACB8751A5D.html["Saiba mais sobre IPspaces"^].
+
++
+Quando você configura a disposição de dados em categorias, o Cloud Tiering solicita que você use o espaço IPspace. Você deve escolher o espaço IPspace ao qual cada LIF está associado. Esse pode ser o espaço IPspace "padrão" ou um espaço IPspace personalizado que você criou.
+
+
+
+--
+Volumes e agregados compatíveis:: O número total de volumes em que o Cloud Tiering pode ser menor que o número de volumes no sistema ONTAP. Isso porque os volumes não podem ser dispostos em camadas de alguns agregados. Por exemplo, você não pode categorizar dados de volumes do SnapLock ou de configurações do MetroCluster. Consulte a documentação do ONTAP para obter link:http://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-psmg/GUID-8E421CC9-1DE1-492F-A84C-9EB1B0177807.html["Funcionalidade ou recursos não suportados pelo FabricPool"^]informações sobre .
+
+
+
+NOTE: O Cloud Tiering é compatível com FlexGroup volumes. A configuração funciona da mesma forma que qualquer outro volume.
+
+
+
+=== Criação ou comutação de conetores
+
+Um conector é necessário para categorizar dados na nuvem. Ao categorizar dados no Google Cloud Storage, um conetor deve estar disponível em uma VPC do Google Cloud Platform. Você precisará criar um novo conetor ou certificar-se de que o conetor selecionado atualmente reside no GCP.
+
+* link:concept_connectors.html["Saiba mais sobre conetores"]
+* link:task_creating_connectors_gcp.html["Criando um conetor no GCP"]
+* link:task_managing_connectors.html["Comutação entre conetores"]
+
+
+
+
+=== Preparar a rede para o conetor
+
+Certifique-se de que o conetor tem as ligações de rede necessárias.
+
+.Passos
+. Verifique se a VPC onde o conetor está instalado habilita as seguintes conexões:
++
+** Uma conexão de saída à Internet para o serviço Cloud Tiering pela porta 443 (HTTPS)
+** Uma conexão HTTPS pela porta 443 ao Google Cloud Storage
+** Uma conexão HTTPS pela porta 443 aos clusters do ONTAP
+
+
+. Opcional: Ative o acesso privado do Google na sub-rede onde pretende implementar o Service Connector.
++
+https://cloud.google.com/vpc/docs/configure-private-google-access["Acesso privado ao Google"^] O é recomendado se você tiver uma conexão direta do cluster do ONTAP com a VPC e quiser que a comunicação entre o conetor e o Google Cloud Storage permaneça em sua rede virtual privada. Observe que o Private Google Access funciona com instâncias de VM que possuem apenas endereços IP internos (privados) (sem endereços IP externos).
+
+
+
+
+
+=== Preparação do Google Cloud Storage para categorização de dados
+
+Ao configurar a disposição em camadas, você precisa fornecer chaves de acesso ao storage para uma conta de serviço que tenha permissões de administrador do storage. Uma conta de serviço permite que o Cloud Tiering autentique e acesse buckets do Cloud Storage usados para categorização de dados. As chaves são necessárias para que o Google Cloud Storage saiba quem está fazendo a solicitação.
+
+.Passos
+. https://cloud.google.com/iam/docs/creating-managing-service-accounts#creating_a_service_account["Crie uma conta de serviço que tenha a função de administrador de storage predefinida"^].
+. Vá para https://console.cloud.google.com/storage/settings["Configurações de armazenamento do GCP"^] e crie chaves de acesso para a conta de serviço:
++
+.. Selecione um projeto e clique em *interoperabilidade*. Se ainda não o fez, clique em *Ativar acesso à interoperabilidade*.
+.. Em *chaves de acesso para contas de serviço*, clique em *criar uma chave para uma conta de serviço*, selecione a conta de serviço que acabou de criar e clique em *criar chave*.
++
+Você precisará link:task_tiering_google.html#tiering-inactive-data-to-a-google-cloud-storage-bucket["Insira as chaves no Cloud Tiering"] mais tarde quando configurar a disposição em camadas.
+
+
+
+
+
+
+
+== Disposição em camadas dos dados inativos do primeiro cluster para o Google Cloud Storage
+
+Depois de preparar seu ambiente do Google Cloud, comece a categorizar os dados inativos no primeiro cluster.
+
+.O que você vai precisar
+* link:task_discovering_ontap.html["Um ambiente de trabalho no local"].
+* Chaves de acesso de armazenamento para uma conta de serviço que tem a função Administrador de armazenamento.
+
+
+.Passos
+. Selecione um cluster no local.
+. Clique em *Configuração em categorias*.
++
+image:screenshot_setup_tiering_onprem.gif["Uma captura de tela que mostra a opção disposição em camadas de configuração que aparece no lado direito da tela depois de selecionar um ambiente de trabalho ONTAP local."]
+
++
+Agora você está no painel de disposição em camadas.
+
+. Clique em *Configurar disposição em camadas* ao lado do cluster.
+. Conclua as etapas na página *Configuração de categorias*:
++
+.. *Bucket*: Adicione um novo bucket do Google Cloud Storage ou selecione um bucket existente e clique em *continuar*.
+.. *Classe de armazenamento*: Selecione a classe de armazenamento que deseja usar para os dados em camadas e clique em *continuar*.
+.. *Credenciais*: Insira a chave de acesso ao armazenamento e a chave secreta para uma conta de serviço que tenha a função Administrador do armazenamento.
+.. *Rede de cluster*: Selecione o espaço IPspace que o ONTAP deve usar para se conetar ao armazenamento de objetos e clique em *continuar*.
++
+A seleção do espaço de IPspace correto garante que a disposição em camadas na nuvem possa configurar uma conexão do ONTAP ao armazenamento de objetos do seu provedor de nuvem.
+
+
+
+. Clique em *continuar* para selecionar os volumes que deseja categorizar.
+. Na página *volumes de nível*, configure a disposição em categorias para cada volume. Clique no image:screenshot_edit_icon.gif["Uma captura de tela do ícone de edição que aparece no final de cada linha na tabela para separar volumes"] ícone, selecione uma política de disposição em camadas, ajuste opcionalmente os dias de resfriamento e clique em *aplicar*.
++
+link:concept_cloud_tiering.html#volume-tiering-policies["Saiba mais sobre as políticas de disposição em camadas de volume"].
+
++
+image:https://docs.netapp.com/us-en/cloud-tiering/media/screenshot_volumes_select.gif["Uma captura de tela que mostra os volumes selecionados na página Selecionar volumes de origem."]
+
+
+
+.Resultado
+Você configurou com sucesso a disposição de dados em categorias de volumes no cluster para o storage de objetos do Google Cloud.
+
+.O que se segue?
+link:task_licensing_cloud_tiering.html["Certifique-se de se inscrever no serviço Cloud Tiering"].
+
+Você também pode adicionar clusters adicionais ou analisar informações sobre os dados ativos e inativos no cluster. Para obter detalhes, link:task_managing_tiering.html["Gerenciamento de categorização de dados nos clusters"]consulte .

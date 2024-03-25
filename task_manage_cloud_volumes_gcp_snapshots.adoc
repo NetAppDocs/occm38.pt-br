@@ -1,0 +1,120 @@
+---
+sidebar: sidebar 
+permalink: task_manage_cloud_volumes_gcp_snapshots.html 
+keywords: Cloud Volumes Service for Google Cloud, gcp, snapshots, on-demand, snapshot schedule 
+summary: Você pode criar uma política de snapshot para cada volume para que você possa recuperar ou restaurar todo o conteúdo de um volume de um tempo anterior. Você também pode criar um snapshot sob demanda de um volume de nuvem quando necessário. 
+---
+= Gerenciar snapshots do Cloud volumes
+:hardbreaks:
+:allow-uri-read: 
+:nofooter: 
+:icons: font
+:linkattrs: 
+:imagesdir: ./media/
+
+
+[role="lead"]
+Você pode criar uma política de snapshot para cada volume para que você possa recuperar ou restaurar todo o conteúdo de um volume de um tempo anterior. Você também pode criar um snapshot sob demanda de um volume de nuvem quando necessário.
+
+
+
+== Crie um snapshot sob demanda
+
+Você pode criar um snapshot sob demanda de um volume de nuvem se quiser criar um snapshot com o estado do volume atual.
+
+.Passos
+. Abra o ambiente de trabalho.
+. Passe o Mouse sobre o volume e clique em *criar uma cópia instantânea*.
+. Insira um nome para o instantâneo ou use o nome gerado automaticamente e clique em *criar*.
++
+image:screenshot_cvs_ondemand_snapshot.png["Captura de tela da seleção da cópia instantânea a ser restaurada para um novo volume"]
+
++
+O instantâneo é criado.
+
+
+
+
+
+== Criar ou modificar uma política de instantâneos
+
+Você pode criar ou modificar uma política de snapshot conforme necessário para um volume de nuvem. Você define a política de snapshot na guia _Política de snapshot_ ao criar um volume ou ao editar um volume.
+
+.Passos
+. Abra o ambiente de trabalho.
+. Passe o Mouse sobre o volume e clique em *Editar*.
+. Na guia _Política de instantâneos_, mova o controle deslizante Ativar snapshots para a direita.
+. Definir a programação para instantâneos:
++
+.. Selecione a frequência: *Hourly*, *Daily*, *Weekly* ou *Monthly*
+.. Selecione o número de instantâneos que pretende manter.
+.. Selecione o dia, a hora e o minuto em que o instantâneo deve ser obtido.
++
+image:screenshot_cvs_aws_snapshot_policy.png["Captura de tela de uma política Snapshot configurada"]
+
+
+
+. Clique em *Adicionar volume* ou *Atualizar volume* para salvar suas configurações de política.
+
+
+
+
+== Desativar uma política de instantâneos
+
+Pode desativar uma política de instantâneos para impedir que os instantâneos sejam criados durante um curto período de tempo, mantendo as definições da política de instantâneos.
+
+.Passos
+. Abra o ambiente de trabalho.
+. Passe o Mouse sobre o volume e clique em *Editar*.
+. Na guia _Política de instantâneos_, mova o controle deslizante Ativar snapshots para a esquerda.
++
+image:screenshot_cvs_aws_snapshot_policy_button_off.png["Captura de tela do botão de política de snapshot na posição desativada"]
+
+. Clique em *Atualizar volume*.
+
+
+Quando quiser reativar a política de instantâneos, mova o controle deslizante Ativar instantâneos para a direita e clique em *Atualizar volume*.
+
+
+
+== Eliminar um instantâneo
+
+Você pode excluir um instantâneo se ele não for mais necessário.
+
+.Passos
+. Abra o ambiente de trabalho.
+. Passe o Mouse sobre o volume e clique em *Excluir uma cópia Snapshot*.
+. Selecione o instantâneo na lista suspensa e clique em *Excluir*.
++
+image:screenshot_cvs_delete_snapshot.png["Captura de tela da seleção da cópia instantânea a ser excluída"]
+
+. Na caixa de diálogo de confirmação, clique em *Excluir*.
+
+
+
+
+== Restaurar um snapshot para um novo volume
+
+Você pode restaurar um snapshot para um novo volume, conforme necessário.
+
+.Passos
+. Abra o ambiente de trabalho.
+. Passe o Mouse sobre o volume e clique em *Restaurar para um novo volume*.
+. Selecione o instantâneo que pretende utilizar para criar o novo volume a partir da lista pendente.
+. Digite um nome para o novo volume e clique em *Restore*.
++
+image:screenshot_cvs_restore_snapshot.png["Captura de tela da seleção da cópia instantânea a ser restaurada para um novo volume"]
+
++
+O volume é criado no ambiente de trabalho.
+
+. Se você precisar alterar qualquer um dos atributos de volume, como caminho de volume ou nível de serviço:
++
+.. Passe o Mouse sobre o volume e clique em *Editar*.
+.. Faça suas alterações e clique em *Atualizar volume*.
+
+
+
+
+.Depois de terminar
+Continue com link:task_manage_cvs_gcp.html#mount-cloud-volumes["Montagem do volume de nuvem"^].
