@@ -100,8 +100,9 @@ Quando você configura a disposição de dados em categorias, o Cloud Tiering so
 
 
 --
-Volumes e agregados compatíveis:: O número total de volumes em que o Cloud Tiering pode ser menor que o número de volumes no sistema ONTAP. Isso porque os volumes não podem ser dispostos em camadas de alguns agregados. Por exemplo, você não pode categorizar dados de volumes do SnapLock ou de configurações do MetroCluster. Consulte a documentação do ONTAP para obter link:http://docs.netapp.com/ontap-9/topic/com.netapp.doc.dot-cm-psmg/GUID-8E421CC9-1DE1-492F-A84C-9EB1B0177807.html["Funcionalidade ou recursos não suportados pelo FabricPool"^]informações sobre .
 
+
+Diretiva não resolvida em <stdin> - include:: https://raw.githubusercontent.com/NetAppDocs/cloud-tiering/master/_include/supported_volumes.adoc []
 
 
 NOTE: O Cloud Tiering é compatível com volumes FlexGroup, a partir do ONTAP 9.5. A configuração funciona da mesma forma que qualquer outro volume.

@@ -7747,9 +7747,6 @@
   <block id="c11c35c69f52a72c03891a6bd06ddb07" category="list-text">É necessário um LIF entre clusters em cada nó do ONTAP que hospeda volumes dispostos em camadas. O LIF deve estar associado ao _IPspace_ que o ONTAP deve usar para se conetar ao armazenamento de objetos.</block>
   <block id="cfff9c55ea85b0db9b604bdef2f48d4d" category="paragraph">Os IPspaces permitem a segregação de tráfego de rede, permitindo a separação do tráfego de clientes para privacidade e segurança.<block ref="099fdf6e8ad70f15bd41fe67513de18c" category="inline-link-rx"></block>.</block>
   <block id="96788f015626d24d63f6f02843be51c3" category="paragraph">Quando você configura a disposição de dados em categorias, o Cloud Tiering solicita que você use o espaço IPspace. Você deve escolher o espaço IPspace ao qual cada LIF está associado. Esse pode ser o espaço IPspace "padrão" ou um espaço IPspace personalizado que você criou.</block>
-  <block id="ac711435545c1b14c721179de8ab94a0" category="list-text">Volumes e agregados compatíveis</block>
-  <block id="cbd3171b775ecc9b275479726c41ccec" category="inline-link-macro">Funcionalidade ou recursos não suportados pelo FabricPool</block>
-  <block id="80be9dc982f371739dd1f289a1ea008c" category="list-text">O número total de volumes em que o Cloud Tiering pode ser menor que o número de volumes no sistema ONTAP. Isso porque os volumes não podem ser dispostos em camadas de alguns agregados. Por exemplo, você não pode categorizar dados de volumes do SnapLock ou de configurações do MetroCluster. Consulte a documentação do ONTAP para obter <block ref="735d4f7c28454cb31dcb5e7ad1dd69d6" category="inline-link-macro-rx"></block>informações sobre .</block>
   <block id="3cb09efd98df836314cbd254dcf63296" category="admonition">O Cloud Tiering é compatível com volumes FlexGroup, a partir do ONTAP 9.5. A configuração funciona da mesma forma que qualquer outro volume.</block>
   <block id="d32e4305e9f04e1cbc37d3e892619ee7" category="section-title">Criação ou comutação de conetores</block>
   <block id="5ad4258277127a9462d68a41564a449f" category="paragraph">Um conector é necessário para categorizar dados na nuvem. Ao categorizar dados no AWS S3, você pode usar um conetor em uma VPC da AWS ou no local. Você precisará criar um novo conetor ou garantir que o conetor selecionado atualmente reside na AWS ou no local.</block>
@@ -8133,4 +8130,5 @@
   <block id="20bcee4b46f64e2ca105ae61831c7509" category="sidebar">Automatize com as ferramentas de DevOps</block>
   <block id="7a4e5e5bc542eae2d10e3506f839f2ae" category="sidebar">Solucionar problemas</block>
   <block id="93168a8084b3e838d2932c4734bd234e" category="sidebar">Versões anteriores</block>
+  <block id="c20c1f7ac23768f21f88dd6e7ca4456d" category="paragraph">Diretiva não resolvida em &lt;stdin&gt; - include:: https://raw.githubusercontent.com/NetAppDocs/cloud-tiering/master/_include/supported_volumes.adoc []</block>
 </blocks>
